@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Ticket {
+  id                Int       @id @default(autoincrement())
+  title             String
+  message           String
+  backgroundColor   String?
+  backgroundImage   String?
+  creatorId         Int
+  holderId          Int?
+  isUsed            Boolean   @default(false)
+  availableDateFrom DateTime?
+  expiredDate       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  creator           User      @relation("author", fields: [creatorId], references: [id])
+  holder            User?     @relation("holder", fields: [holderId], references: [id])
+}
+
+model Group {
+  id        Int      @id @default(autoincrement())
+  name      String
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]   @relation("userGroup")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  name           String
+  authId         String
+  groupId        Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  ticketsCreated Ticket[] @relation("author")
+  ticketsOwned   Ticket[] @relation("holder")
+  group          Group?   @relation("userGroup", fields: [groupId], references: [id])
+}
