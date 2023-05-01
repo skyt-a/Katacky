@@ -22,7 +22,12 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = (p) => {
   const [queryClient] = useState(
     () =>
       new QueryClient({
-        defaultOptions: { queries: { suspense: true } },
+        defaultOptions: {
+          queries: {
+            suspense: true,
+            refetchOnWindowFocus: false,
+          },
+        },
       })
   );
   const [trpcClient] = useState(() =>

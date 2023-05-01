@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { Button, Input as TextInput } from "~/components/common";
 import { Label } from "~/components/common/label";
 import { useUser } from "~/lib/auth/hooks/useUser";
@@ -16,6 +17,14 @@ export const CreateUserForm = () => {
     },
   });
   const user = useUser();
+  const [isGroupRegister, setIsGroupRegister] = useState<boolean>();
+  const [groupToken, setGroupToken] = useState<string>();
+  const { isFetching, data: group } = trpc.group.groupByToken.useQuery(
+    {
+      token: groupToken!,
+    },
+    { enabled: !!groupToken }
+  );
   const onClickButton = async (e: any) => {
     e.preventDefault();
     if (!user?.data?.email || !user?.data?.id) {
@@ -25,6 +34,7 @@ export const CreateUserForm = () => {
       name: userNameInput.value,
       authId: user.data.id,
       email: user.data.email,
+      groupId: group?.id,
     });
     console.log(userCreated);
   };
@@ -42,7 +52,14 @@ export const CreateUserForm = () => {
           {...userNameInput}
         />
       </div>
-      <QRCodeScanner />
+      <Button type="button" onClick={() => setIsGroupRegister(true)}>
+        グループを登録する
+      </Button>
+      {isFetching && <p>グループを検索中...</p>}
+      {group && <p>グループ名: {group.name}</p>}
+      {isGroupRegister && !isFetching && !group && (
+        <QRCodeScanner setData={setGroupToken} />
+      )}
       <Button type="submit" onClick={onClickButton}>
         登録
       </Button>

@@ -1,3 +1,4 @@
+import superJson from "superjson";
 import { z } from "zod";
 import { prisma } from "~/lib/prisma";
 import { publicProcedure, router } from "~/lib/trpc";
@@ -41,6 +42,33 @@ export const ticketRouter = router({
     .mutation(async ({ input }) => {
       const user = await prisma.ticket.create({
         data: input,
+      });
+      return user;
+    }),
+  use: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input: { id } }) => {
+      const user = await prisma.ticket.update({
+        where: {
+          id,
+        },
+        data: {
+          isUsed: true,
+          usedDate: new Date(),
+        },
+      });
+      return user;
+    }),
+  send: publicProcedure
+    .input(z.object({ id: z.number(), userId: z.number() }))
+    .mutation(async ({ input: { id, userId } }) => {
+      const user = await prisma.ticket.update({
+        where: {
+          id,
+        },
+        data: {
+          holderId: userId,
+        },
       });
       return user;
     }),

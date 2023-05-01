@@ -1,6 +1,5 @@
-import { TicketList } from "~/app/authed/ticket/list/components/TicketList";
+import { TicketListWrapper } from "~/app/authed/ticket/list/components/TicketListWrapper";
 
 export default function TicketListPage() {
-  /** @ts-expect-error Async Component  */
-  return <TicketList />;
+  return <TicketListWrapper />;
 }

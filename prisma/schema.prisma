@@ -21,6 +21,7 @@ model Ticket {
   expiredDate       DateTime?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
+  usedDate          DateTime? @updatedAt()
   from              String
   to                String
   creator           User      @relation("author", fields: [creatorId], references: [id])
@@ -33,7 +34,7 @@ model Group {
   token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  users     User[]   @relation("userGroup")
+  user     User[]   @relation("userGroup")
 }
 
 model User {
