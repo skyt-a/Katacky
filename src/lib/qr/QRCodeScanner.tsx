@@ -100,8 +100,12 @@ export const QRCodeScanner: React.VFC = () => {
           <p>{qrCodeData.join("\n")}</p>
         </div>
         <div>
-          <button onClick={handleStart}>Start Scan</button>
-          <button onClick={handleStop}>Stop Scan</button>
+          <button onClick={handleStart} type="button">
+            Start Scan
+          </button>
+          <button onClick={handleStop} type="button">
+            Stop Scan
+          </button>
         </div>
       </div>
     </div>
