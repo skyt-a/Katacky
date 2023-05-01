@@ -2,14 +2,16 @@ type TicketProps = {
   to: string;
   title: string;
   message: string;
-  backgroundColor: `#${string}`;
+  backgroundColor?: `#${string}`;
+  from: string;
 };
 
 export const Ticket = ({
   to,
   title,
   message,
-  backgroundColor,
+  backgroundColor = "#ffffff",
+  from,
 }: TicketProps) => {
   return (
     <div className="flex flex-col">
@@ -24,15 +26,12 @@ export const Ticket = ({
           <div className="flex-auto justify-evenly">
             <div className="flex items-center justify-between">
               <div className="flex items-center  my-1">
-                <h2 className="font-medium">{title}</h2>
+                <h2 className="font-bold">{title}</h2>
               </div>
             </div>
             <div className="border-b-2 my-5"></div>
             <div className="">
-              <div className="w-full flex-none text-lg  font-bold leading-none">
-                {to}
-              </div>
-              <div className="font-semibold mt-2">{message}</div>
+              <div className="w-full flex-none text-lg leading-none">{to}</div>
             </div>
             <div
               className="border-b border-dashed my-5 pt-5 w-[calc(100%_+_2rem)] relative -left-4"
@@ -40,10 +39,9 @@ export const Ticket = ({
                 borderColor: getTextColorFromBackgroundColor(backgroundColor),
               }}
             ></div>
-            <div className="flex items-center px-5 pt-3 text-sm">
-              <div className="flex flex-col">
-                <span className="">Passanger</span>
-              </div>
+            <div className="pt-1 ">
+              <div className="mt-2 text-sm">{message}</div>
+              <div className="mt-2 text-xs text-right">from: {from}</div>
             </div>
           </div>
         </div>

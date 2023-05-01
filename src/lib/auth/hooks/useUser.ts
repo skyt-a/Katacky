@@ -16,7 +16,8 @@ export const useUser = () => {
   );
 };
 
-export const useUserInfo = (authId: string | undefined) => {
+export const useUserInfo = () => {
+  const authId = useUser()?.data?.id;
   const { data: userInfo } = trpc.user.user.useQuery(
     { authId },
     { suspense: true, enabled: !!authId }

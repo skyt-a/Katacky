@@ -1,10 +1,14 @@
 import { createMiddlewareSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "~/lib/prisma";
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
+  console.log("styarta", req.nextUrl.pathname);
+
+  if (!req.nextUrl.pathname.startsWith("/api")) {
+    return res;
+  }
   const supabase = createMiddlewareSupabaseClient(
     { req, res },
     {
@@ -16,21 +20,21 @@ export async function middleware(req: NextRequest) {
   const {
     data: { session },
   } = await supabase.auth.getSession();
-  console.log("middleware", session);
-  res.cookies.set("authId", session?.user.id ?? "");
-  console.log(req.nextUrl.pathname);
   if (!session) {
     if (!req.nextUrl.pathname.startsWith("/auth/login")) {
       return NextResponse.redirect(new URL("/auth/login", req.url));
     }
     return res;
   }
+  if (["", "/"].includes(req.nextUrl.pathname)) {
+    return NextResponse.redirect(new URL("/authed/profile", req.url));
+  }
   if (req.nextUrl.pathname.startsWith("/auth/login")) {
-    return NextResponse.redirect(new URL("/profile", req.url));
+    return NextResponse.redirect(new URL("/authed/profile", req.url));
   }
   return res;
 }
 
 export const config = {
-  matcher: ["/auth/:path*", "/profile/:path*"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

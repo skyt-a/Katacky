@@ -34,6 +34,9 @@
     --ring: 215 20.2% 65.1%;
 
     --radius: 0.5rem;
+
+    --error: 0 80% 50%;
+    --error-foreground: 0 0% 100%;
   }
 
   .dark {

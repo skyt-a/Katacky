@@ -5,11 +5,11 @@ export const useLoginWithEmail = () => {
   const supabase = useSupabase();
   const login = useCallback(
     async (email: string, password: string) => {
-      const { error } = await supabase.auth.signInWithPassword({
+      const res = await supabase.auth.signInWithPassword({
         email,
         password,
       });
-      if (error) throw error;
+      return res;
     },
     [supabase]
   );

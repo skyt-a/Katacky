@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -17,9 +16,14 @@ import { ja } from "date-fns/locale";
 type DatePickerProps = {
   value: Date | undefined;
   onChange: (date: Date | undefined) => void;
+  placeHolder?: string;
 };
 
-export function CalendarDatePicker({ value, onChange }: DatePickerProps) {
+export function CalendarDatePicker({
+  value,
+  onChange,
+  placeHolder,
+}: DatePickerProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -31,11 +35,7 @@ export function CalendarDatePicker({ value, onChange }: DatePickerProps) {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {value ? (
-            format(value, "yyyy年MM月dd日")
-          ) : (
-            <span>有効期限を選択してください</span>
-          )}
+          {value ? format(value, "yyyy年MM月dd日") : <span>{placeHolder}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

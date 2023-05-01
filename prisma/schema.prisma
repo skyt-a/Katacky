@@ -21,6 +21,8 @@ model Ticket {
   expiredDate       DateTime?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
+  from              String
+  to                String
   creator           User      @relation("author", fields: [creatorId], references: [id])
   holder            User?     @relation("holder", fields: [holderId], references: [id])
 }

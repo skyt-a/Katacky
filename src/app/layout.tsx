@@ -1,11 +1,13 @@
 import { GTProviders } from "~/providers";
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Inter, Noto_Sans_Javanese } from "next/font/google";
 import supabase from "~/lib/supabase";
 import { Suspense } from "react";
-import BottomNav from "~/components/layout/BottomNav";
-
-const inter = Inter({ subsets: ["latin"] });
+import { Toaster } from "~/components/common/toater";
+import { cn } from "~/lib/ui/utils";
+const notoSansJp = Noto_Sans_Javanese({
+  subsets: ["latin"],
+});
 
 export const metadata = {
   title: "Ticketer",
@@ -21,13 +23,15 @@ export default async function RootLayout({
   console.log(data);
   return (
     <html lang="ja">
-      <body className="h-screen w-screen bg-primary">
-        <main className="container bg-gray-50 p-8 box-border pb-24">
+      <body
+        className={cn("h-screen w-screen bg-primary", notoSansJp.className)}
+      >
+        <main className="container bg-gray-50 h-full p-8 box-border pb-24">
           <GTProviders>
             <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+            <Toaster />
           </GTProviders>
         </main>
-        <BottomNav />
       </body>
     </html>
   );
