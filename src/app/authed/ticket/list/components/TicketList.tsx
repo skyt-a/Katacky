@@ -1,8 +1,8 @@
-import { Ticket } from "~/components/domain/tickets/Ticket";
+import { Ticket } from "@prisma/client";
 import { TicketCard } from "~/app/authed/ticket/list/components/TicketCard";
 import { getUserInfo } from "~/lib/auth/getUser";
 import { prisma } from "~/lib/prisma";
-import supabase from "~/lib/supabase";
+import { UnionNullToUndefined } from "~/util/types";
 
 export const TicketList = async () => {
   const user = await getUserInfo();
@@ -16,7 +16,10 @@ export const TicketList = async () => {
     <ul>
       {ticket.map((ticket) => (
         <li key={ticket.id} className="[&:not(:first-of-type)]:mt-2">
-          <TicketCard key={ticket.id} ticket={ticket} />
+          <TicketCard
+            key={ticket.id}
+            ticket={ticket as UnionNullToUndefined<Ticket>}
+          />
         </li>
       ))}
     </ul>

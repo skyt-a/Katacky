@@ -1,4 +1,4 @@
-import type { Ticket } from "@prisma/client";
+import type { Ticket as TicketType } from "@prisma/client";
 import { format } from "date-fns";
 import {
   Card,
@@ -17,9 +17,10 @@ import {
   SheetTrigger,
 } from "~/components/common/sheet";
 import { Ticket } from "~/components/domain/tickets/Ticket";
+import { UnionNullToUndefined } from "~/util/types";
 
 type TicketCardProps = {
-  ticket: Ticket;
+  ticket: UnionNullToUndefined<TicketType>;
 };
 
 export const TicketCard = ({ ticket }: TicketCardProps) => {

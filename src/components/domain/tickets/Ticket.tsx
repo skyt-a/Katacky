@@ -1,9 +1,9 @@
 type TicketProps = {
-  to: string;
-  title: string;
-  message: string;
-  backgroundColor?: `#${string}`;
-  from: string;
+  to?: string;
+  title?: string;
+  message?: string;
+  backgroundColor?: string;
+  from?: string;
 };
 
 export const Ticket = ({
@@ -57,7 +57,10 @@ export const Ticket = ({
  * @param hex 対象のHEXカラーコード
  * @returns 対象のHEXカラーコードに対するテキストカラー
  */
-const getTextColorFromBackgroundColor = (hex: `#${string}`) => {
+const getTextColorFromBackgroundColor = (hex: string) => {
+  if (!hex.startsWith("#")) {
+    throw new Error("hex must start with #");
+  }
   const r = parseInt(hex.substring(1, 3), 16);
   const g = parseInt(hex.substring(3, 5), 16);
   const b = parseInt(hex.substring(5, 7), 16);

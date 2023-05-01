@@ -26,7 +26,7 @@ export const TicketForm = (props: TicketFormProps) => {
 
   const { toast } = useToast();
   const createTicket = trpc.ticket.create.useMutation();
-  const onClickButton = async (e) => {
+  const onClickButton = async (e: any) => {
     e.preventDefault();
     if (!props.user) {
       return;
