@@ -20,6 +20,7 @@ export const TicketHistory = async () => {
       {ticket.length === 0 && <p>利用履歴はありません</p>}
       {ticket.map((ticket) => (
         <li key={ticket.id} className="[&:not(:first-of-type)]:mt-2">
+          {/** @ts-expect-error Async Component  */}
           <TicketCard
             key={ticket.id}
             ticket={ticket as UnionNullToUndefined<Ticket>}

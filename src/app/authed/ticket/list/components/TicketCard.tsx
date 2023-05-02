@@ -2,7 +2,6 @@ import type { Ticket as TicketType } from "@prisma/client";
 import { format } from "date-fns";
 import { TicketPopupContent } from "~/app/authed/ticket/list/components/TicketPopupContent";
 import {
-  Button,
   Card,
   CardContent,
   CardDescription,
@@ -11,15 +10,8 @@ import {
   CardTitle,
 } from "~/components/common";
 import { Badge } from "~/components/common/badge";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "~/components/common/sheet";
-import { Ticket } from "~/components/domain/tickets/Ticket";
+import { Sheet, SheetContent, SheetTrigger } from "~/components/common/sheet";
+import { getUserInfo } from "~/lib/auth/getUser";
 import { UnionNullToUndefined } from "~/util/types";
 
 type TicketCardProps = {
@@ -27,7 +19,8 @@ type TicketCardProps = {
   isMine?: boolean;
 };
 
-export const TicketCard = ({ ticket, isMine }: TicketCardProps) => {
+export const TicketCard = async ({ ticket, isMine }: TicketCardProps) => {
+  const user = await getUserInfo();
   return (
     <Sheet>
       <SheetTrigger className="w-full">
@@ -44,7 +37,7 @@ export const TicketCard = ({ ticket, isMine }: TicketCardProps) => {
           <CardContent className="text-left">{ticket.message}</CardContent>
           <CardFooter className="text-right text-sm">
             {ticket.isUsed && ticket.usedDate ? (
-              <>利用日時: {format(ticket.usedDate, "yyyy年MM月dd日")}</>
+              <>使用日時: {format(ticket.usedDate, "yyyy年MM月dd日")}</>
             ) : (
               <>
                 有効期限:
@@ -57,7 +50,7 @@ export const TicketCard = ({ ticket, isMine }: TicketCardProps) => {
         </Card>
       </SheetTrigger>
       <SheetContent position="bottom" size="content">
-        <TicketPopupContent ticket={ticket} />
+        {user && <TicketPopupContent ticket={ticket} user={user} />}
       </SheetContent>
     </Sheet>
   );

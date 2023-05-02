@@ -2,14 +2,13 @@ import { Suspense } from "react";
 import { LogoutButton } from "~/app/authed/profile/components/LogoutButton";
 import { ProfileUserInfo } from "~/app/authed/profile/components/ProfileUserInfo";
 import { Card } from "~/components/common";
-import { Spinner } from "~/components/common/spinner";
-import { LoadingSpinner } from "~/components/layout/LoadingSpinner";
+import { CardSkelton } from "~/components/layout/CardSkelton";
 
 export const Profile = () => {
   return (
     <div>
       <Card className="w-full">
-        <Suspense fallback={<LoadingSpinner />}>
+        <Suspense fallback={<CardSkelton />}>
           {/** @ts-expect-error Async Component  */}
           <ProfileUserInfo />
         </Suspense>

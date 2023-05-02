@@ -1,14 +1,17 @@
 "use client";
+import { User } from "@prisma/client";
 import { useState } from "react";
 import { Button, Input as TextInput } from "~/components/common";
 import { Label } from "~/components/common/label";
-import { useUser, useUserInfo } from "~/lib/auth/hooks/useUser";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
 import { trpc } from "~/lib/trpc/connectNext";
 import { useInput } from "~/util/form";
 
-export const GroupsForm = () => {
-  const user = useUserInfo();
+type GroupFormProps = {
+  user: User;
+};
+
+export const GroupsForm = ({ user }: GroupFormProps) => {
   const groupNameInput = useInput("");
   const createGroup = trpc.group.create.useMutation();
   const updateUser = trpc.user.update.useMutation();
@@ -57,7 +60,7 @@ export const GroupsForm = () => {
           {!isFetching && !group && <QRCodeScanner setData={setGroupToken} />}
         </>
       )}
-      <Button type="submit" onClick={onClickButton}>
+      <Button type="button" onClick={onClickButton}>
         登録
       </Button>
       <Button type="button" onClick={() => setIsGroupRegister((now) => !now)}>

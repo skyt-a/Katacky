@@ -6,8 +6,11 @@ import { prisma } from "~/lib/prisma";
 
 export const GroupsWrapper = async () => {
   const user = await getUserInfo();
-  if (!user?.groupId) {
-    return <GroupsForm />;
+  if (!user) {
+    throw new Error("User not found");
+  }
+  if (!user.groupId) {
+    return <GroupsForm user={user} />;
   }
   const group = await prisma.group.findFirst({
     where: {
@@ -15,7 +18,7 @@ export const GroupsWrapper = async () => {
     },
   });
   if (!group) {
-    return <GroupsForm />;
+    return <GroupsForm user={user} />;
   }
   return <GroupInfo group={group} />;
 };

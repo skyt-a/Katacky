@@ -1,11 +1,14 @@
+import { Suspense } from "react";
 import { TicketHistory } from "~/app/authed/ticket/list/components/TicketHistory";
 import { TicketList } from "~/app/authed/ticket/list/components/TicketList";
+import { Skeleton } from "~/components/common/skeleton";
 import {
   Tabs,
   TabsList,
   TabsTrigger,
   TabsContent,
 } from "~/components/common/tabs";
+import { CardSkelton } from "~/components/layout/CardSkelton";
 
 export const TicketListWrapper = () => {
   return (
@@ -15,12 +18,16 @@ export const TicketListWrapper = () => {
         <TabsTrigger value="history">使用履歴</TabsTrigger>
       </TabsList>
       <TabsContent value="list">
-        {/** @ts-expect-error Async Component  */}
-        <TicketList />
+        <Suspense fallback={<CardSkelton />}>
+          {/** @ts-expect-error Async Component  */}
+          <TicketList />
+        </Suspense>
       </TabsContent>
       <TabsContent value="history">
-        {/** @ts-expect-error Async Component  */}
-        <TicketHistory />
+        <Suspense fallback={<CardSkelton />}>
+          {/** @ts-expect-error Async Component  */}
+          <TicketHistory />
+        </Suspense>
       </TabsContent>
     </Tabs>
   );

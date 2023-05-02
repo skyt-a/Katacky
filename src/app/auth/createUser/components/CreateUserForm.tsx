@@ -1,22 +1,19 @@
 "use client";
+import { User } from "@supabase/supabase-js";
 import { useState } from "react";
 import { Button, Input as TextInput } from "~/components/common";
 import { Label } from "~/components/common/label";
-import { useUser } from "~/lib/auth/hooks/useUser";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
 import { trpc } from "~/lib/trpc/connectNext";
 import { useInput } from "~/util/form";
 
-export const CreateUserForm = () => {
-  // const utils = trpc.useContext();
+type CreateUserFormProps = {
+  user: User;
+};
+
+export const CreateUserForm = ({ user }: CreateUserFormProps) => {
   const userNameInput = useInput("");
-  const createUser = trpc.user.create.useMutation({
-    async onSuccess() {
-      // refetches posts after a post is added
-      // await utils.user.list.invalidate();
-    },
-  });
-  const user = useUser();
+  const createUser = trpc.user.create.useMutation();
   const [isGroupRegister, setIsGroupRegister] = useState<boolean>();
   const [groupToken, setGroupToken] = useState<string>();
   const { isFetching, data: group } = trpc.group.groupByToken.useQuery(
@@ -27,16 +24,15 @@ export const CreateUserForm = () => {
   );
   const onClickButton = async (e: any) => {
     e.preventDefault();
-    if (!user?.data?.email || !user?.data?.id) {
+    if (!user?.email || !user?.id) {
       return;
     }
     const userCreated = await createUser.mutateAsync({
       name: userNameInput.value,
-      authId: user.data.id,
-      email: user.data.email,
+      authId: user.id,
+      email: user.email,
       groupId: group?.id,
     });
-    console.log(userCreated);
   };
   return (
     <form className="flex flex-col gap-4">

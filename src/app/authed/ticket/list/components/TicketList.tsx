@@ -19,6 +19,7 @@ export const TicketList = async () => {
     <ul>
       {ticket.map((ticket) => (
         <li key={ticket.id} className="[&:not(:first-of-type)]:mt-2">
+          {/** @ts-expect-error Async Component */}
           <TicketCard
             key={ticket.id}
             ticket={ticket as UnionNullToUndefined<Ticket>}

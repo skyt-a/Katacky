@@ -1,5 +1,5 @@
 "use client";
-import { Ticket as TicketType } from "@prisma/client";
+import { Ticket as TicketType, User } from "@prisma/client";
 import { Suspense } from "react";
 import { TicketAssignDialog } from "~/app/authed/ticket/list/components/TicketAssignDialog";
 import { Button } from "~/components/common";
@@ -9,10 +9,19 @@ import { UnionNullToUndefined } from "~/util/types";
 
 type TicketPopupContentProps = {
   ticket: UnionNullToUndefined<TicketType>;
+  user: User;
 };
 
-export const TicketPopupContent = ({ ticket }: TicketPopupContentProps) => {
-  const useTicket = trpc.ticket.use.useMutation();
+export const TicketPopupContent = ({
+  ticket,
+  user,
+}: TicketPopupContentProps) => {
+  const utils = trpc.useContext();
+  const useTicket = trpc.ticket.use.useMutation({
+    onSuccess: async () => {
+      await utils.ticket.invalidate();
+    },
+  });
   const onClickUseTicket = async () => {
     if (!ticket.id) {
       return;
@@ -30,7 +39,7 @@ export const TicketPopupContent = ({ ticket }: TicketPopupContentProps) => {
             チケットを使う
           </Button>
           <Suspense fallback={<p>Loading...</p>}>
-            <TicketAssignDialog ticket={ticket} />
+            <TicketAssignDialog ticket={ticket} user={user} />
           </Suspense>
         </>
       )}

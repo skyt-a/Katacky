@@ -8,24 +8,46 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum TicketManageType {
+  ONCE_YEAR
+  ONCE_MONTH
+  ONCE_WEEK
+  ONCE_DAY
+}
+
+model TicketManager {
+  id             Int              @id @default(autoincrement())
+  name           String
+  count          Int
+  type           TicketManageType
+  retrieveUserId Int
+  retrieveUser   User             @relation(fields: [retrieveUserId], references: [id])
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  ticketId       Int
+  ticket         Ticket           @relation(fields: [ticketId], references: [id])
+}
+
 model Ticket {
-  id                Int       @id @default(autoincrement())
+  id                Int             @id @default(autoincrement())
   title             String
   message           String
   backgroundColor   String?
   backgroundImage   String?
   creatorId         Int
   holderId          Int?
-  isUsed            Boolean   @default(false)
+  isUsed            Boolean         @default(false)
+  isScheduled       Boolean         @default(false)
   availableDateFrom DateTime?
   expiredDate       DateTime?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  usedDate          DateTime? @updatedAt()
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  usedDate          DateTime?       @updatedAt()
   from              String
   to                String
-  creator           User      @relation("author", fields: [creatorId], references: [id])
-  holder            User?     @relation("holder", fields: [holderId], references: [id])
+  creator           User            @relation("author", fields: [creatorId], references: [id])
+  holder            User?           @relation("holder", fields: [holderId], references: [id])
+  TicketManager     TicketManager[]
 }
 
 model Group {
@@ -34,18 +56,19 @@ model Group {
   token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user     User[]   @relation("userGroup")
+  user      User[]   @relation("userGroup")
 }
 
 model User {
-  id             Int      @id @default(autoincrement())
-  email          String   @unique
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
   name           String
   authId         String
   groupId        Int?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  ticketsCreated Ticket[] @relation("author")
-  ticketsOwned   Ticket[] @relation("holder")
-  group          Group?   @relation("userGroup", fields: [groupId], references: [id])
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  ticketsCreated Ticket[]        @relation("author")
+  ticketsOwned   Ticket[]        @relation("holder")
+  group          Group?          @relation("userGroup", fields: [groupId], references: [id])
+  TicketManager  TicketManager[]
 }

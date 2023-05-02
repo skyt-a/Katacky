@@ -1,9 +1,11 @@
 "use client";
 import { User } from "@prisma/client";
 import { Suspense, useState } from "react";
+import { ScheduleForm } from "~/app/authed/ticket/create/components/ScheduleForm";
 import { Button, Input as TextInput } from "~/components/common";
 import { CalendarDatePicker } from "~/components/common/datePicker";
 import { Label } from "~/components/common/label";
+import { Sheet, SheetContent, SheetTrigger } from "~/components/common/sheet";
 import { Spinner } from "~/components/common/spinner";
 import { useToast } from "~/components/common/use-toast";
 import { Ticket } from "~/components/domain/tickets/Ticket";
@@ -25,13 +27,17 @@ export const TicketForm = (props: TicketFormProps) => {
   const [startDate, setStartDate] = useState<Date>();
 
   const { toast } = useToast();
-  const createTicket = trpc.ticket.create.useMutation();
-  const onClickButton = async (e: any) => {
-    e.preventDefault();
+  const utils = trpc.useContext();
+  const createTicketMutation = trpc.ticket.create.useMutation({
+    onSuccess: async () => {
+      await utils.ticket.invalidate();
+    },
+  });
+  const createTicket = async () => {
     if (!props.user) {
       return;
     }
-    const result = await createTicket.mutateAsync({
+    const ticket = await createTicketMutation.mutateAsync({
       title: titleInput.value,
       message: messageInput.value,
       backgroundColor: colorInput.value,
@@ -41,6 +47,14 @@ export const TicketForm = (props: TicketFormProps) => {
       from: fromNameInput.value,
       to: toNameInput.value,
     });
+    if (!ticket) {
+      throw new Error("チケットの作成に失敗しました");
+    }
+    return ticket;
+  };
+  const onClickButton = async (e: any) => {
+    e.preventDefault();
+    await createTicket();
     toast({
       content: "チケットを作成しました",
     });
@@ -140,6 +154,12 @@ export const TicketForm = (props: TicketFormProps) => {
       <Button type="submit" onClick={onClickButton} disabled={isDisabledButton}>
         チケット作成
       </Button>
+      <Sheet>
+        <SheetTrigger>スケジュール作成</SheetTrigger>
+        <SheetContent position="bottom">
+          <ScheduleForm createTicket={createTicket} user={props.user} />
+        </SheetContent>
+      </Sheet>
     </form>
   );
 };

@@ -1,5 +1,5 @@
 "use client";
-import { Ticket } from "@prisma/client";
+import { Ticket, User } from "@prisma/client";
 import { useState } from "react";
 import { Button } from "~/components/common";
 import {
@@ -17,22 +17,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/common/select";
-import { useUserInfo } from "~/lib/auth/hooks/useUser";
 import { trpc } from "~/lib/trpc/connectNext";
-import { useInput } from "~/util/form";
 import { UnionNullToUndefined } from "~/util/types";
 
 type TicketAssignDialogProps = {
+  user: User;
   ticket: UnionNullToUndefined<Ticket>;
 };
 
-export const TicketAssignDialog = ({ ticket }: TicketAssignDialogProps) => {
-  const userInfo = useUserInfo();
+export const TicketAssignDialog = ({
+  ticket,
+  user,
+}: TicketAssignDialogProps) => {
   const { data: users } = trpc.user.byGroup.useQuery(
     {
-      groupId: userInfo?.groupId!,
+      groupId: user?.groupId!,
     },
-    { enabled: Boolean(userInfo?.groupId) }
+    { enabled: Boolean(user?.groupId) }
   );
   const sendTicket = trpc.ticket.send.useMutation();
   const [userId, setUserId] = useState<string>();

@@ -3,8 +3,8 @@ import { useRouter } from "next/navigation";
 import { Button, Input as TextInput } from "~/components/common";
 import { Label } from "~/components/common/label";
 import { useToast } from "~/components/common/use-toast";
-import { useLoginWithEmail } from "~/lib/auth/hooks/useLoginWithEmail";
-import { useSignup } from "~/lib/auth/hooks/useSignup";
+import { useLoginWithEmail } from "~/app/auth/hooks/useLoginWithEmail";
+import { useSignup } from "~/app/auth/hooks/useSignup";
 import { useInput } from "~/util/form";
 
 export const LoginForm = () => {
@@ -16,9 +16,8 @@ export const LoginForm = () => {
 
   const onClickButton = async (e: any) => {
     e.preventDefault();
-    const result = await login(emailInput.value, passwordInput.value);
-    console.log(result);
-    if (result.error?.status === 400) {
+    const { error } = await login(emailInput.value, passwordInput.value);
+    if (error?.status === 400) {
       toast({
         toastType: "error",
         description: "メールアドレスまたはパスワードが間違っています",

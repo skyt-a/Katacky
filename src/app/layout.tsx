@@ -1,8 +1,6 @@
 import { GTProviders } from "~/providers";
 import "./globals.css";
-import { Inter, Noto_Sans_Javanese } from "next/font/google";
-import supabase from "~/lib/supabase";
-import { Suspense } from "react";
+import { Noto_Sans_Javanese } from "next/font/google";
 import { Toaster } from "~/components/common/toater";
 import { cn } from "~/lib/ui/utils";
 const notoSansJp = Noto_Sans_Javanese({
@@ -19,8 +17,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { data } = await supabase.auth.getSession();
-  console.log(data);
   return (
     <html lang="ja">
       <body
@@ -28,7 +24,7 @@ export default async function RootLayout({
       >
         <main className="container bg-gray-50 m-h-full p-8 box-border pb-24">
           <GTProviders>
-            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+            {children}
             <Toaster />
           </GTProviders>
         </main>
