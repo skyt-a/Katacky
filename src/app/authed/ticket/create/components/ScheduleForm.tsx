@@ -14,7 +14,7 @@ import { trpc } from "~/lib/trpc/connectNext";
 
 type ScheduleFormProps = {
   user: User | null;
-  createTicket: () => Promise<Ticket>;
+  createTicket: () => Promise<Ticket | undefined>;
 };
 
 export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
@@ -32,6 +32,9 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
   const createTicketManager = trpc.ticketManager.create.useMutation();
   const onConfirm = async () => {
     const ticket = await createTicket();
+    if (!ticket) {
+      return;
+    }
     await createTicketManager.mutateAsync({
       retrieveUserId: Number(userId),
       type: selectedType as TicketManageType,
