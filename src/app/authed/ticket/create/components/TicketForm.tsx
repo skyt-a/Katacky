@@ -155,8 +155,8 @@ export const TicketForm = (props: TicketFormProps) => {
         チケット作成
       </Button>
       <Sheet>
-        <SheetTrigger>スケジュール作成</SheetTrigger>
-        <SheetContent position="bottom">
+        <SheetTrigger>このチケットをスケジュール発行する</SheetTrigger>
+        <SheetContent position="bottom" size="content">
           <ScheduleForm createTicket={createTicket} user={props.user} />
         </SheetContent>
       </Sheet>

@@ -20,5 +20,5 @@ export const GroupsWrapper = async () => {
   if (!group) {
     return <GroupsForm user={user} />;
   }
-  return <GroupInfo group={group} />;
+  return <GroupInfo group={group} user={user} />;
 };

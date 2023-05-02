@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/common/select";
+import { useUsersInTargetGroup } from "~/hooks/domain/useUsersInTargetGroup";
 import { trpc } from "~/lib/trpc/connectNext";
 import { UnionNullToUndefined } from "~/util/types";
 
@@ -29,12 +30,7 @@ export const TicketAssignDialog = ({
   ticket,
   user,
 }: TicketAssignDialogProps) => {
-  const { data: users } = trpc.user.byGroup.useQuery(
-    {
-      groupId: user?.groupId!,
-    },
-    { enabled: Boolean(user?.groupId) }
-  );
+  const { data: users } = useUsersInTargetGroup(user?.groupId);
   const sendTicket = trpc.ticket.send.useMutation();
   const [userId, setUserId] = useState<string>();
   const onClickSendTicket = async () => {

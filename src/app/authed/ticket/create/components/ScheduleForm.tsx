@@ -11,6 +11,7 @@ import { Button, Input } from "~/components/common";
 import { useInput } from "~/util/form";
 import { Label } from "~/components/common/label";
 import { trpc } from "~/lib/trpc/connectNext";
+import { useUsersInTargetGroup } from "~/hooks/domain/useUsersInTargetGroup";
 
 type ScheduleFormProps = {
   user: User | null;
@@ -18,15 +19,12 @@ type ScheduleFormProps = {
 };
 
 export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
-  const [selectedType, setSelectedType] = useState<string>();
+  const [selectedType, setSelectedType] = useState<string>(
+    TicketManageType.ONCE_MONTH
+  );
   const countInput = useInput(1);
   const nameInput = useInput("");
-  const { data: users } = trpc.user.byGroup.useQuery(
-    {
-      groupId: user?.groupId!,
-    },
-    { enabled: Boolean(user?.groupId) }
-  );
+  const { data: users } = useUsersInTargetGroup(user?.groupId);
   const [userId, setUserId] = useState<string>();
 
   const createTicketManager = trpc.ticketManager.create.useMutation();
@@ -52,9 +50,12 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
           </div>
           <Input id="count" type="text" {...nameInput} />
         </div>
+        <div className="mt-4 mb-2 block">
+          <Label htmlFor="frequency">受け取るユーザー</Label>
+        </div>
         <Select value={userId} onValueChange={setUserId}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Theme" />
+            <SelectValue placeholder="" />
           </SelectTrigger>
           <SelectContent>
             {users?.map((user) => (
@@ -64,12 +65,12 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
             ))}
           </SelectContent>
         </Select>
-        <div className="mb-2 block">
+        <div className="mt-4 mb-2 block">
           <Label htmlFor="frequency">発行頻度</Label>
         </div>
         <Select value={selectedType} onValueChange={setSelectedType}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Theme" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={TicketManageType.ONCE_DAY}>1日ごと</SelectItem>
@@ -84,7 +85,7 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
         </Select>
       </div>
       <div>
-        <div className="mb-2 block">
+        <div className="mt-4 mb-2 block">
           <Label htmlFor="count">1回の発行枚数</Label>
         </div>
         <Input id="count" type="number" {...countInput} />
