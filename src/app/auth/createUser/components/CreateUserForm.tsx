@@ -9,7 +9,7 @@ import { trpc } from "~/lib/trpc/connectNext";
 import { useInput } from "~/util/form";
 
 type CreateUserFormProps = {
-  user: User;
+  user: User | null;
 };
 
 export const CreateUserForm = ({ user }: CreateUserFormProps) => {

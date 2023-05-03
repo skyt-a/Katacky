@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { createClientBrowser } from "~/lib/supabase/browser";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "~/lib/firebase/browser";
 

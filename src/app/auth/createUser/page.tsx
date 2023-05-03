@@ -15,7 +15,7 @@ export default async function CreateUserPage() {
 
   return (
     <>
-      <CreateUserForm user={user} />
+      <CreateUserForm user={user as any} />
     </>
   );
 }
