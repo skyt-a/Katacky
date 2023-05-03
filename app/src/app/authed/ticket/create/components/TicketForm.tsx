@@ -33,7 +33,7 @@ export const TicketForm = (props: TicketFormProps) => {
       await utils.ticket.invalidate();
     },
   });
-  const createTicket = async () => {
+  const createTicket = async (isScheduled = false) => {
     if (!props.user) {
       return;
     }
@@ -46,6 +46,8 @@ export const TicketForm = (props: TicketFormProps) => {
       creatorId: props.user?.id,
       from: fromNameInput.value,
       to: toNameInput.value,
+      holderId: props.user?.id,
+      isScheduled,
     });
     if (!ticket) {
       throw new Error("チケットの作成に失敗しました");

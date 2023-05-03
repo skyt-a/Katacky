@@ -15,7 +15,7 @@ import { useUsersInTargetGroup } from "~/hooks/domain/useUsersInTargetGroup";
 
 type ScheduleFormProps = {
   user: User | null;
-  createTicket: () => Promise<Ticket | undefined>;
+  createTicket: (isScheduled: boolean) => Promise<Ticket | undefined>;
 };
 
 export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
@@ -29,7 +29,7 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
 
   const createTicketManager = trpc.ticketManager.create.useMutation();
   const onConfirm = async () => {
-    const ticket = await createTicket();
+    const ticket = await createTicket(true);
     if (!ticket) {
       return;
     }

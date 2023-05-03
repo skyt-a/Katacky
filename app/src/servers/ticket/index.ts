@@ -37,6 +37,8 @@ export const ticketRouter = router({
         from: z.string(),
         to: z.string(),
         availableDateFrom: z.date().optional(),
+        isScheduled: z.boolean().optional(),
+        holderId: z.number(),
       })
     )
     .mutation(async ({ input }) => {

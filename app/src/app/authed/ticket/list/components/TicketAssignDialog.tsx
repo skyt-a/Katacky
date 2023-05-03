@@ -58,11 +58,13 @@ export const TicketAssignDialog = ({
                 <SelectValue placeholder="Theme" />
               </SelectTrigger>
               <SelectContent>
-                {users?.map((user) => (
-                  <SelectItem key={user.id} value={String(user.id)}>
-                    {user.name}
-                  </SelectItem>
-                ))}
+                {users
+                  ?.filter((u) => user.id !== u.id)
+                  .map((user) => (
+                    <SelectItem key={user.id} value={String(user.id)}>
+                      {user.name}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
             <Button

@@ -10,7 +10,7 @@ export const TicketList = async () => {
     return null;
   }
   const ticket = await prisma.ticket.findMany({
-    where: { creatorId: user.id, isUsed: false },
+    where: { holderId: user.id, isUsed: false, isScheduled: false },
     orderBy: {
       updatedAt: "desc",
     },
