@@ -13,7 +13,7 @@ export const authOptions: NextAuthOptions = {
           try {
             const decoded = await auth.verifyIdToken(idToken);
 
-            return { ...decoded };
+            return { ...decoded } as any;
           } catch (err) {
             console.error(err);
           }
@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      return { ...token, ...user };
+      return { ...token, ...user } as any;
     },
     // sessionにJWTトークンからのユーザ情報を格納
     async session({ session, token }) {
