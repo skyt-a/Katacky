@@ -29,6 +29,7 @@ export const groupRouter = router({
     .input(
       z.object({
         name: z.string(),
+        creatorId: z.number(),
       })
     )
     .mutation(async ({ input }) => {

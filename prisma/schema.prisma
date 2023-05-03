@@ -57,6 +57,7 @@ model Group {
   token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  creatorId Int
   user      User[]   @relation("userGroup")
 }
 

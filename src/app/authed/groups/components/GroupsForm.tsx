@@ -33,6 +33,7 @@ export const GroupsForm = ({ user }: GroupFormProps) => {
       ? group
       : await createGroup.mutateAsync({
           name: groupNameInput.value,
+          creatorId: user.id,
         });
     if (!targetGroup) {
       return;
