@@ -1,6 +1,7 @@
 "use client";
 import { Group, User } from "@prisma/client";
 import { useQRCode } from "next-qrcode";
+import { useRouter } from "next/navigation";
 import { Button } from "~/components/common";
 import { useUsersInTargetGroup } from "~/hooks/domain/useUsersInTargetGroup";
 import { trpc } from "~/lib/trpc/connectNext";
@@ -14,9 +15,10 @@ export const GroupInfo = ({ group, user }: GroupInfoProps) => {
   const { Canvas } = useQRCode();
   const deleteGroup = trpc.group.delete.useMutation();
   const { data: users } = useUsersInTargetGroup(user?.groupId);
-
+  const router = useRouter();
   const onClickDelete = async () => {
     await deleteGroup.mutateAsync({ groupId: group.id });
+    router.refresh();
   };
   return (
     <>

@@ -1,5 +1,6 @@
 "use client";
 import { User } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, Input as TextInput } from "~/components/common";
 import { Label } from "~/components/common/label";
@@ -23,6 +24,7 @@ export const GroupsForm = ({ user }: GroupFormProps) => {
     },
     { enabled: !!groupToken }
   );
+  const router = useRouter();
   const onClickButton = async () => {
     if (!user) {
       return;
@@ -36,6 +38,7 @@ export const GroupsForm = ({ user }: GroupFormProps) => {
       return;
     }
     await updateUser.mutateAsync({ id: user?.id, groupId: targetGroup.id });
+    router.refresh();
   };
 
   return (
