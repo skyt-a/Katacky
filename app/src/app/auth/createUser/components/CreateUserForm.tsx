@@ -1,5 +1,6 @@
 "use client";
-import { User } from "@supabase/supabase-js";
+import { User } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, Input as TextInput } from "~/components/common";
 import { Label } from "~/components/common/label";
@@ -22,17 +23,19 @@ export const CreateUserForm = ({ user }: CreateUserFormProps) => {
     },
     { enabled: !!groupToken }
   );
+  const router = useRouter();
   const onClickButton = async (e: any) => {
     e.preventDefault();
-    if (!user?.email || !user?.id) {
+    if (!user?.email || !user?.uid) {
       return;
     }
     const userCreated = await createUser.mutateAsync({
       name: userNameInput.value,
-      authId: user.id,
+      authId: user.uid,
       email: user.email,
       groupId: group?.id,
     });
+    router.push("/authed/profile");
   };
   return (
     <form className="flex flex-col gap-4">

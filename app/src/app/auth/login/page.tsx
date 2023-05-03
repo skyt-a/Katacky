@@ -1,17 +1,12 @@
-"use client";
-import { useSession } from "@supabase/auth-helpers-react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { LoginForm } from "~/app/auth/login/components/LoginForm";
+import { getUser } from "~/lib/auth/getUser";
 
-export default function LoginPage() {
-  const session = useSession();
-  const router = useRouter();
-
+export default async function LoginPage() {
+  const session = await getUser();
   if (session) {
-    router.replace("/authed/profile");
-    return null;
+    redirect("/authed/profile");
   }
-
   return (
     <>
       <LoginForm />

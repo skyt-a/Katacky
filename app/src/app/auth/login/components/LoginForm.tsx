@@ -16,8 +16,9 @@ export const LoginForm = () => {
 
   const onClickButton = async (e: any) => {
     e.preventDefault();
-    const { error } = await login(emailInput.value, passwordInput.value);
-    if (error?.status === 400) {
+    const result = await login(emailInput.value, passwordInput.value);
+    console.log(result);
+    if (result === "auth/user-not-found") {
       toast({
         toastType: "error",
         description: "メールアドレスまたはパスワードが間違っています",

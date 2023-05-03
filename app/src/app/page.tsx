@@ -1,12 +1,9 @@
 import { redirect } from "next/navigation";
-import { createClientServer } from "~/lib/supabase/server";
+import { getUser } from "~/lib/auth/getUser";
 
 export default async function Root() {
-  const supabase = createClientServer();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (session) {
+  const user = await getUser();
+  if (user) {
     redirect("/authed/profile");
   } else {
     redirect("/auth/login");

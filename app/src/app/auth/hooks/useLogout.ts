@@ -1,8 +1,9 @@
+import { signOut } from "firebase/auth";
 import { useCallback } from "react";
-import { createClientBrowser } from "~/lib/supabase/browser";
+import { auth } from "~/lib/firebase/browser";
+import { signOut as signOutNextAuth } from "next-auth/react";
 
 export const useLogout = () => {
-  const supabase = createClientBrowser();
   const logout = useCallback(async () => {
     // fetch("/api/auth/logout", {
     //   method: "POST",
@@ -10,9 +11,9 @@ export const useLogout = () => {
     //     "Content-Type": "application/json",
     //   },
     // });
-    const { error } = await supabase.auth.signOut();
-    console.error(error);
-  }, [supabase]);
+    await signOut(auth);
+    await signOutNextAuth();
+  }, []);
 
   return logout;
 };

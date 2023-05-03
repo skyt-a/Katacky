@@ -58,7 +58,8 @@ export const TicketForm = (props: TicketFormProps) => {
     e.preventDefault();
     await createTicket();
     toast({
-      content: "チケットを作成しました",
+      toastType: "info",
+      description: "チケットを作成しました",
     });
   };
   const isDisabledButton =

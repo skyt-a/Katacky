@@ -9,7 +9,7 @@ app/node_modules
 /coverage
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production
@@ -37,3 +37,8 @@ next-env.d.ts
 
 ./app/public/sw.js*
 ./app/public/workbox-*.js*
+
+# firebaseの秘密鍵
+firebase-adminsdk.json
+
+.vscode
