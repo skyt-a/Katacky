@@ -1,11 +1,10 @@
 import { Suspense } from "react";
 import { CreateTicket } from "~/app/authed/ticket/create/components/CreateTicket";
-import { Profile } from "~/app/authed/profile/components/Profile";
-import { Spinner } from "~/components/common/spinner";
+import { LoadingSpinner } from "~/components/layout/LoadingSpinner";
 
 export default function CreateTicketPage() {
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense fallback={<LoadingSpinner />}>
       {/** @ts-expect-error Async Component  */}
       <CreateTicket />
     </Suspense>

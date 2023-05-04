@@ -93,7 +93,7 @@ export default async function RootLayout({
       <body
         className={cn("h-screen w-screen bg-primary", notoSansJp.className)}
       >
-        <main className="container bg-gray-50 m-h-full p-8 box-border pb-24">
+        <main className="container bg-gray-50 min-h-full p-8 box-border pb-24">
           <GTProviders>
             {children}
             <Toaster />

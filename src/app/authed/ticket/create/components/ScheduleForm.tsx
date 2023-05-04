@@ -30,7 +30,7 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
   const createTicketManager = trpc.ticketManager.create.useMutation();
   const onConfirm = async () => {
     const ticket = await createTicket(true);
-    if (!ticket) {
+    if (!ticket || !user) {
       return;
     }
     await createTicketManager.mutateAsync({
@@ -39,6 +39,7 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
       count: Number(countInput.value),
       ticketId: ticket.id,
       name: nameInput.value,
+      creatorId: user.id,
     });
   };
   return (

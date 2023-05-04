@@ -87,4 +87,21 @@ export const userRouter = router({
       });
       return updatedUser;
     }),
+  updateName: publicProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ input: { name } }) => {
+      const user = await getUserInfo();
+      if (!user) {
+        return null;
+      }
+      const updatedUser = await prisma.user.update({
+        data: {
+          name,
+        },
+        where: {
+          id: user.id,
+        },
+      });
+      return updatedUser;
+    }),
 });

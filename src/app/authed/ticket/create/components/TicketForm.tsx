@@ -158,7 +158,11 @@ export const TicketForm = (props: TicketFormProps) => {
         チケット作成
       </Button>
       <Sheet>
-        <SheetTrigger>このチケットをスケジュール発行する</SheetTrigger>
+        <SheetTrigger
+          disabled={isDisabledButton || !Boolean(props.user?.groupId)}
+        >
+          このチケットをスケジュール発行する
+        </SheetTrigger>
         <SheetContent position="bottom" size="content">
           <ScheduleForm createTicket={createTicket} user={props.user} />
         </SheetContent>

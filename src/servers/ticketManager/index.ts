@@ -29,6 +29,7 @@ export const ticketManagerRouter = router({
         ]),
         retrieveUserId: z.number(),
         ticketId: z.number(),
+        creatorId: z.number(),
       })
     )
     .mutation(async ({ input }) => {

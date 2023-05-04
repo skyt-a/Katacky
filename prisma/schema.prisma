@@ -20,6 +20,7 @@ model TicketManager {
   name           String
   count          Int
   type           TicketManageType
+  creatorId      Int
   retrieveUserId Int
   retrieveUser   User             @relation(fields: [retrieveUserId], references: [id])
   createdAt      DateTime         @default(now())
