@@ -21,10 +21,11 @@ async function Handler() {
         where: { id: manager.ticketId },
       });
       if (ticket) {
+        const { id, ...ticketUse } = ticket;
         for (let i = 0; i < manager.count; i++) {
           await prisma.ticket.create({
             data: {
-              ...ticket,
+              ...ticketUse,
               holderId: manager.retrieveUserId,
             },
           });
