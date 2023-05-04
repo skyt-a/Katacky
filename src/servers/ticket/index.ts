@@ -2,20 +2,8 @@ import { BatchResponse } from "firebase-admin/lib/messaging/messaging-api";
 import { z } from "zod";
 import { prisma } from "~/lib/prisma";
 import { publicProcedure, router } from "~/lib/trpc";
-import * as firebaseAdmin from "firebase-admin";
 import { getUserInfo } from "~/lib/auth/getUser";
-
-const sendMessage = async (
-  notification: { title: string; body: string },
-  tokens: string[]
-): Promise<BatchResponse> => {
-  const params = {
-    notification,
-    tokens,
-  };
-
-  return await firebaseAdmin.messaging().sendEachForMulticast(params);
-};
+import { sendFirebaseCloudMessage } from "~/lib/firebase/sendMessage";
 
 export const ticketRouter = router({
   createList: publicProcedure
@@ -93,7 +81,7 @@ export const ticketRouter = router({
         },
       });
       if (retrieveUser?.deviceToken) {
-        const response = await sendMessage(
+        const response = await sendFirebaseCloudMessage(
           {
             title: "チケットが届きました",
             body: `${user?.name}からチケット「${ticket.title}」が届きました！`,
