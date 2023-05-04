@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getUserInfo } from "~/lib/auth/getUser";
 import { prisma } from "~/lib/prisma";
 import { publicProcedure, router } from "~/lib/trpc";
 
@@ -30,11 +31,11 @@ export const userRouter = router({
       });
       return user;
     }),
-  update: publicProcedure
+  joinGroup: publicProcedure
     .input(
       z.object({
         id: z.number(),
-        groupId: z.number().optional(),
+        groupId: z.number(),
       })
     )
     .mutation(async ({ input: { id, ...rest } }) => {
@@ -55,5 +56,35 @@ export const userRouter = router({
         },
       });
       return user;
+    }),
+  leaveGroup: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input: { id } }) => {
+      const user = await prisma.user.update({
+        data: {
+          groupId: null,
+        },
+        where: {
+          id,
+        },
+      });
+      return user;
+    }),
+  updateDeviceToken: publicProcedure
+    .input(z.object({ deviceToken: z.string() }))
+    .mutation(async ({ input: { deviceToken } }) => {
+      const user = await getUserInfo();
+      if (!user) {
+        return null;
+      }
+      const updatedUser = await prisma.user.update({
+        data: {
+          deviceToken,
+        },
+        where: {
+          id: user.id,
+        },
+      });
+      return updatedUser;
     }),
 });

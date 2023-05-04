@@ -27,8 +27,7 @@
     "app/next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "envChecker.js"
+    ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

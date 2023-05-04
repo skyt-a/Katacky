@@ -14,10 +14,18 @@ type GroupInfoProps = {
 export const GroupInfo = ({ group, user }: GroupInfoProps) => {
   const { Canvas } = useQRCode();
   const deleteGroup = trpc.group.delete.useMutation();
+  const leaveGroup = trpc.user.leaveGroup.useMutation();
   const { data: users } = useUsersInTargetGroup(user?.groupId);
   const router = useRouter();
   const onClickDelete = async () => {
     await deleteGroup.mutateAsync({ groupId: group.id });
+    router.refresh();
+  };
+  const onClickLeave = async () => {
+    if (!user) {
+      return;
+    }
+    await leaveGroup.mutateAsync({ id: user?.id });
     router.refresh();
   };
   return (
@@ -33,13 +41,23 @@ export const GroupInfo = ({ group, user }: GroupInfoProps) => {
           <li key={user.id}>{user.name}</li>
         ))}
       </ul>
-      <Button
-        onClick={onClickDelete}
-        className="mt-4 w-full"
-        variant="destructive"
-      >
-        このグループを削除する
-      </Button>
+      {group.creatorId === user?.id ? (
+        <Button
+          onClick={onClickDelete}
+          className="mt-4 w-full"
+          variant="destructive"
+        >
+          このグループを削除する
+        </Button>
+      ) : (
+        <Button
+          onClick={onClickLeave}
+          className="mt-4 w-full"
+          variant="destructive"
+        >
+          このグループから脱退する
+        </Button>
+      )}
       <p className="mt-4">
         以下のQRコードを読み取ると他の人がグループに参加できます
       </p>

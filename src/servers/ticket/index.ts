@@ -1,7 +1,24 @@
+import { BatchResponse } from "firebase-admin/lib/messaging/messaging-api";
 import superJson from "superjson";
 import { z } from "zod";
 import { prisma } from "~/lib/prisma";
 import { publicProcedure, router } from "~/lib/trpc";
+import * as firebaseAdmin from "firebase-admin";
+
+const sendMessage = async (
+  chat: string,
+  tokens: string[]
+): Promise<BatchResponse> => {
+  const params = {
+    notification: {
+      title: "テストタイトル",
+      body: chat,
+    },
+    tokens,
+  };
+
+  return await firebaseAdmin.messaging().sendEachForMulticast(params);
+};
 
 export const ticketRouter = router({
   createList: publicProcedure
@@ -64,7 +81,7 @@ export const ticketRouter = router({
   send: publicProcedure
     .input(z.object({ id: z.number(), userId: z.number() }))
     .mutation(async ({ input: { id, userId } }) => {
-      const user = await prisma.ticket.update({
+      const ticket = await prisma.ticket.update({
         where: {
           id,
         },
@@ -72,6 +89,17 @@ export const ticketRouter = router({
           holderId: userId,
         },
       });
-      return user;
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+      if (user?.deviceToken) {
+        const response = await sendMessage("チケットが届きました", [
+          user.deviceToken,
+        ]);
+        console.log(response.responses[0].error);
+      }
+      return ticket;
     }),
 });

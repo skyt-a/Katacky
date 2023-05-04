@@ -2,8 +2,10 @@ import { GTProviders } from "~/providers";
 import "./globals.css";
 import { Noto_Sans_Javanese } from "next/font/google";
 import { Toaster } from "~/components/common/toater";
+import { Notification } from "~/components/domain/notification/Notification";
 import { cn } from "~/lib/ui/utils";
 import { getBaseUrl } from "~/util/api";
+
 const notoSansJp = Noto_Sans_Javanese({
   subsets: ["latin"],
 });
@@ -95,6 +97,7 @@ export default async function RootLayout({
           <GTProviders>
             {children}
             <Toaster />
+            <Notification />
           </GTProviders>
         </main>
       </body>

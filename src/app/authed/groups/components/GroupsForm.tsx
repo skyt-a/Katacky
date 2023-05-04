@@ -15,7 +15,7 @@ type GroupFormProps = {
 export const GroupsForm = ({ user }: GroupFormProps) => {
   const groupNameInput = useInput("");
   const createGroup = trpc.group.create.useMutation();
-  const updateUser = trpc.user.update.useMutation();
+  const joinGroup = trpc.user.joinGroup.useMutation();
   const [isGroupRegister, setIsGroupRegister] = useState<boolean>(false);
   const [groupToken, setGroupToken] = useState<string>();
   const { isFetching, data: group } = trpc.group.groupByToken.useQuery(
@@ -38,7 +38,7 @@ export const GroupsForm = ({ user }: GroupFormProps) => {
     if (!targetGroup) {
       return;
     }
-    await updateUser.mutateAsync({ id: user?.id, groupId: targetGroup.id });
+    await joinGroup.mutateAsync({ id: user?.id, groupId: targetGroup.id });
     router.refresh();
   };
 
