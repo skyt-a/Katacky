@@ -30,17 +30,23 @@ export const QRCodeScanner = ({ setData }: QRCodeScannerProps) => {
   const [qrCodeData, setQrCodeData] = useState<string[]>([]);
 
   useEffect(() => {
+    let stream: MediaStream;
     const openCamera = async () => {
       const video = videoRef.current;
       if (video) {
         video.autoplay = true;
         video.muted = true;
         video.playsInline = true;
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
         video.srcObject = stream;
       }
     };
     openCamera();
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    };
   }, []);
 
   useEffect(() => {
