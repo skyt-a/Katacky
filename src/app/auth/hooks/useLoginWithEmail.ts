@@ -1,11 +1,14 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useCallback } from "react";
 import { auth } from "~/lib/firebase/browser";
-import { signIn as signInByNextAuth } from "next-auth/react";
+import { SignInResponse, signIn as signInByNextAuth } from "next-auth/react";
+import { FirebaseError } from "firebase/app";
+import { TAuthError } from "~/lib/auth/authError";
 
-type ErrorCode = "auth/user-not-found";
-
-export const useLoginWithEmail = () => {
+export const useLoginWithEmail: () => (
+  email: string,
+  password: string
+) => Promise<SignInResponse | TAuthError | undefined> = () => {
   const login = useCallback(async (email: string, password: string) => {
     // const res = await fetch("/api/auth/login", {
     //   method: "POST",
@@ -27,8 +30,11 @@ export const useLoginWithEmail = () => {
       });
       console.log(result);
       return result;
-    } catch (e: any) {
-      return e.code as ErrorCode;
+    } catch (e) {
+      if (e instanceof FirebaseError) {
+        return { error: true, code: e.code };
+      }
+      throw e;
     }
   }, []);
   return login;

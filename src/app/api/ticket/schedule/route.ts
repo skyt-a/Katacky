@@ -42,7 +42,7 @@ async function Handler() {
         .then((user) => user?.deviceToken)
     )
   );
-  await sendFirebaseCloudMessage(
+  const result = await sendFirebaseCloudMessage(
     {
       title: "チケットが届きました",
       body: "今回のチケットが届きました",
@@ -52,7 +52,7 @@ async function Handler() {
     )
   );
 
-  return NextResponse.next();
+  return NextResponse.json({ result });
 }
 
 export { Handler as GET, Handler as POST };

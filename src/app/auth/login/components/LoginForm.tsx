@@ -6,6 +6,7 @@ import { useToast } from "~/components/common/use-toast";
 import { useLoginWithEmail } from "~/app/auth/hooks/useLoginWithEmail";
 import { useSignup } from "~/app/auth/hooks/useSignup";
 import { useInput } from "~/util/form";
+import { checkAuthError, getMessageFromErrorCode } from "~/lib/auth/authError";
 
 export const LoginForm = () => {
   const emailInput = useInput("");
@@ -17,11 +18,10 @@ export const LoginForm = () => {
   const onClickButton = async (e: any) => {
     e.preventDefault();
     const result = await login(emailInput.value, passwordInput.value);
-    console.log(result);
-    if (result === "auth/user-not-found") {
+    if (checkAuthError(result)) {
       toast({
         toastType: "error",
-        description: "メールアドレスまたはパスワードが間違っています",
+        description: getMessageFromErrorCode(result.code),
       });
       return;
     }
