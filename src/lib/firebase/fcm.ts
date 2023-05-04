@@ -1,9 +1,17 @@
 "use client";
-import { MessagePayload, getToken, onMessage } from "firebase/messaging";
-import { messaging } from "~/lib/firebase/browser";
+import {
+  MessagePayload,
+  getMessaging,
+  getToken,
+  onMessage,
+} from "firebase/messaging";
 import { trpc } from "~/lib/trpc/connectNext";
 
-export const requestForToken = async () => {
+export const requestForToken = async (isSupported: boolean) => {
+  if (!isSupported) {
+    return null;
+  }
+  const messaging = getMessaging();
   const updateDeviceToken = trpc.user.updateDeviceToken.useMutation();
   const tokenInLocalForage = localStorage.getItem("fcm_token");
   if (tokenInLocalForage) {
@@ -31,10 +39,17 @@ export const requestForToken = async () => {
   return token;
 };
 
-export const onMessageListener: () => Promise<MessagePayload> = () =>
-  new Promise((resolve) => {
+export const onMessageListener: (
+  isSupported: boolean
+) => Promise<MessagePayload | undefined> = async (isSupported: boolean) => {
+  if (!isSupported) {
+    return;
+  }
+  const messaging = getMessaging();
+  return new Promise((resolve) => {
     onMessage(messaging, (payload) => {
       console.log("payload", payload);
       resolve(payload);
     });
   });
+};

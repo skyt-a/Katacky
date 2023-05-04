@@ -2,7 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { prisma } from "~/lib/prisma";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "~/app/api/auth/[...nextauth]/route";
+import { authOptions } from "~/lib/auth/authOption";
 
 export const getUser = cache(async () => {
   const session = await getServerSession(authOptions);

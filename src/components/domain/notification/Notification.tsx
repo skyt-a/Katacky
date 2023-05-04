@@ -1,4 +1,6 @@
 "use client";
+import { useQuery } from "@tanstack/react-query";
+import { isSupported } from "firebase/messaging";
 import { useState, useEffect } from "react";
 import { requestForToken, onMessageListener } from "~/lib/firebase/fcm";
 
@@ -13,9 +15,10 @@ export const Notification = () => {
     }
   }, [notification]);
 
-  requestForToken();
+  const { data: isSupportedThis } = useQuery(["notification"], isSupported);
 
-  onMessageListener()
+  requestForToken(Boolean(isSupportedThis));
+  onMessageListener(Boolean(isSupportedThis))
     .then((payload) => {
       setNotification({
         title: payload?.notification?.title,
