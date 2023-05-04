@@ -7,6 +7,7 @@ export const LogoutButton = () => {
   const logout = useLogout();
   const router = useRouter();
   const onLogout = async () => {
+    console.log("logout");
     await logout();
     globalThis.location.href = "/auth/login";
   };

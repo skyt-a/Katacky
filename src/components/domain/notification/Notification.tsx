@@ -4,6 +4,11 @@ import { isSupported } from "firebase/messaging";
 import { useState, useEffect } from "react";
 import { requestForToken, onMessageListener } from "~/lib/firebase/fcm";
 
+const checkSupport = async () => {
+  const isSupportedThis = await isSupported();
+  return isSupportedThis;
+};
+
 export const Notification = () => {
   const [notification, setNotification] = useState<{
     title: string | undefined;
@@ -15,10 +20,15 @@ export const Notification = () => {
     }
   }, [notification]);
 
-  const { data: isSupportedThis } = useQuery(["notification"], isSupported);
+  const [isSupportedMessage, setIsSupportedMessage] = useState<Boolean>(false);
+  useEffect(() => {
+    checkSupport().then((isSupportedThis) => {
+      setIsSupportedMessage(isSupportedThis);
+    });
+  }, []);
 
-  requestForToken(Boolean(isSupportedThis));
-  onMessageListener(Boolean(isSupportedThis))
+  requestForToken(Boolean(isSupportedMessage));
+  onMessageListener(Boolean(isSupportedMessage))
     .then((payload) => {
       setNotification({
         title: payload?.notification?.title,

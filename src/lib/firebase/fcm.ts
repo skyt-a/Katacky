@@ -8,11 +8,11 @@ import {
 import { trpc } from "~/lib/trpc/connectNext";
 
 export const requestForToken = async (isSupported: boolean) => {
+  const updateDeviceToken = trpc.user.updateDeviceToken.useMutation();
   if (!isSupported) {
     return null;
   }
   const messaging = getMessaging();
-  const updateDeviceToken = trpc.user.updateDeviceToken.useMutation();
   const tokenInLocalForage = localStorage.getItem("fcm_token");
   if (tokenInLocalForage) {
     return tokenInLocalForage;
