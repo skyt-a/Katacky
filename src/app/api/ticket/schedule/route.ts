@@ -11,7 +11,7 @@ const targetDateFunc = {
   [TicketManageType.ONCE_WEEK]: (date: Date) => endOfWeek(date),
 };
 
-export async function POST() {
+async function Handler() {
   const managers = await prisma.ticketManager.findMany();
   const date = new Date();
   const holderIds = new Set<number>();
@@ -53,3 +53,5 @@ export async function POST() {
 
   return NextResponse.next();
 }
+
+export { Handler as GET, Handler as POST };

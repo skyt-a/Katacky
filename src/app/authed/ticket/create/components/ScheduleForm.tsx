@@ -80,7 +80,7 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
             <SelectItem value={TicketManageType.ONCE_MONTH}>
               1ヶ月ごと
             </SelectItem>
-            <SelectItem value={TicketManageType.ONCE_DAY}>1年ごと</SelectItem>
+            <SelectItem value={TicketManageType.ONCE_YEAR}>1年ごと</SelectItem>
           </SelectContent>
         </Select>
       </div>
