@@ -33,6 +33,9 @@ export const QRCodeScanner = ({ setData }: QRCodeScannerProps) => {
     const openCamera = async () => {
       const video = videoRef.current;
       if (video) {
+        video.autoplay = true;
+        video.muted = true;
+        video.playsInline = true;
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         video.srcObject = stream;
       }
@@ -75,7 +78,7 @@ export const QRCodeScanner = ({ setData }: QRCodeScannerProps) => {
     <div>
       <div className="grid">
         <div>
-          <video autoPlay playsInline={true} ref={videoRef} className="w-full">
+          <video autoPlay muted playsInline ref={videoRef} className="w-full">
             <canvas width={videoWidth} height={videoHeight} ref={canvasRef} />
           </video>
         </div>

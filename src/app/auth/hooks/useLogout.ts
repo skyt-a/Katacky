@@ -11,8 +11,8 @@ export const useLogout = () => {
     //     "Content-Type": "application/json",
     //   },
     // });
-    await signOut(auth);
     await signOutNextAuth();
+    await signOut(auth);
   }, []);
 
   return logout;
