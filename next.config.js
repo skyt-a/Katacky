@@ -15,18 +15,12 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
-      // {
-      //   protocol: "https",
-      //   hostname: "image.winudf.com",
-      //   port: "",
-      //   pathname: "/**",
-      // },
-      // {
-      //   protocol: "https",
-      //   hostname: "tailwindcomponents.com",
-      //   port: "",
-      //   pathname: "/**",
-      // },
+      {
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

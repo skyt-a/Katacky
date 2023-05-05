@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { PropsWithChildren } from "react";
 import { GroupIcon } from "~/components/icons/group";
 import { PlusIcon } from "~/components/icons/plus";
 import { ProfileIcon } from "~/components/icons/profile";
@@ -17,86 +18,46 @@ const navigation = [
 export default function Menu() {
   const router = useRouter();
   return (
-    <div className="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600">
+    <div className="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-secondary border border-gray-200 rounded-full bottom-4 left-1/2">
       <div className="grid h-full max-w-lg grid-cols-5 mx-auto">
-        <Link
-          className="inline-flex flex-col items-center justify-center px-5 rounded-l-full  group"
-          href="/authed/manager"
-        >
+        <MenuLink href="/authed/manager">
           <TimerIcon />
-          <span className="sr-only">New item</span>
-        </Link>
-        <div
-          id="tooltip-home"
-          role="tooltip"
-          className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-        >
-          Timer
-          <div className="tooltip-arrow" data-popper-arrow></div>
-        </div>
-        <Link
-          className="inline-flex flex-col items-center justify-center px-5 rounded-l-full  group"
-          href="/authed/ticket/list"
-        >
+          <span className="sr-only">チケットスケジュール一覧</span>
+        </MenuLink>
+        <MenuLink href="/authed/ticket/list">
           <TicketIcon />
-          <span className="sr-only">New item</span>
-        </Link>
-        <div
-          id="tooltip-wallet"
-          role="tooltip"
-          className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-        >
-          Wallet
-          <div className="tooltip-arrow" data-popper-arrow></div>
-        </div>
+          <span className="sr-only">チケット一覧</span>
+        </MenuLink>
+
         <div className="flex items-center justify-center">
           <Link
-            className="inline-flex items-center justify-center w-10 h-10 font-medium bg-blue-600 rounded-full hover:bg-blue-700 group focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800"
+            className="inline-flex items-center justify-center w-10 h-10 font-medium bg-primary text-secondary rounded-full hover:bg-primary group focus:ring-4 focus:ring-secondary-300 focus:outline-none"
             href="/authed/ticket/create"
           >
             <PlusIcon />
-            <span className="sr-only">New item</span>
+            <span className="sr-only">チケット作成</span>
           </Link>
         </div>
-        <div
-          id="tooltip-new"
-          role="tooltip"
-          className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-        >
-          Create new item
-          <div className="tooltip-arrow" data-popper-arrow></div>
-        </div>
-        <Link
-          className="inline-flex flex-col items-center justify-center px-5 rounded-l-full  group"
-          href="/authed/groups"
-        >
+        <MenuLink href="/authed/groups">
           <GroupIcon />
-          <span className="sr-only">New item</span>
-        </Link>
-        <div
-          id="tooltip-settings"
-          role="tooltip"
-          className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-        >
-          Groups
-          <div className="tooltip-arrow" data-popper-arrow></div>
-        </div>
-        <Link
-          className="inline-flex flex-col items-center justify-center px-5 rounded-l-full"
-          href="/authed/profile"
-        >
+          <span className="sr-only">グループ</span>
+        </MenuLink>
+        <MenuLink href="/authed/profile">
           <ProfileIcon />
-          <span className="sr-only">New item</span>
-        </Link>
-        <div
-          id="tooltip-profile"
-          role="tooltip"
-          className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-        >
-          Profile
-          <div className="tooltip-arrow" data-popper-arrow></div>
-        </div>
+          <span className="sr-only">プロフィール</span>
+        </MenuLink>
       </div>
     </div>
   );
 }
+
+const MenuLink = ({ children, href }: PropsWithChildren<{ href: string }>) => {
+  return (
+    <Link
+      className="inline-flex flex-col items-center justify-center px-5 rounded-l-full group text-primary"
+      href={href}
+    >
+      {children}
+    </Link>
+  );
+};

@@ -1,3 +1,4 @@
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { Suspense } from "react";
 import { ChangeSettingButton } from "~/app/authed/profile/components/ChangeSettingButton";
 import { LogoutButton } from "~/app/authed/profile/components/LogoutButton";

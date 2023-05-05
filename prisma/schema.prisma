@@ -62,16 +62,17 @@ model Group {
 }
 
 model User {
-  id             Int             @id @default(autoincrement())
-  email          String          @unique
-  name           String
-  authId         String
-  groupId        Int?
-  deviceToken    String?         @unique
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  ticketsCreated Ticket[]        @relation("author")
-  ticketsOwned   Ticket[]        @relation("holder")
-  group          Group?          @relation("userGroup", fields: [groupId], references: [id])
-  TicketManager  TicketManager[]
+  id              Int             @id @default(autoincrement())
+  email           String          @unique
+  name            String
+  authId          String
+  groupId         Int?
+  deviceToken     String?         @unique
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  profileImageUrl String?
+  ticketsCreated  Ticket[]        @relation("author")
+  ticketsOwned    Ticket[]        @relation("holder")
+  group           Group?          @relation("userGroup", fields: [groupId], references: [id])
+  TicketManager   TicketManager[]
 }

@@ -7,7 +7,6 @@ import { Button, Input as TextInput } from "~/components/common";
 import { CalendarDatePicker } from "~/components/common/datePicker";
 import { Label } from "~/components/common/label";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/common/sheet";
-import { Spinner } from "~/components/common/spinner";
 import { useToast } from "~/components/common/use-toast";
 import { Ticket } from "~/components/domain/tickets/Ticket";
 import { LoadingSpinner } from "~/components/layout/LoadingSpinner";

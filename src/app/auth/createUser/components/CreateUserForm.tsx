@@ -3,7 +3,11 @@ import { User } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, Input as TextInput } from "~/components/common";
+import { FileUploadButton } from "~/components/common/fileUpload";
 import { Label } from "~/components/common/label";
+import { useToast } from "~/components/common/use-toast";
+import { AvatarImage } from "~/components/domain/profile/AvatarImage";
+import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
 import { trpc } from "~/lib/trpc/connectNext";
 import { useInput } from "~/util/form";
@@ -24,16 +28,24 @@ export const CreateUserForm = ({ user }: CreateUserFormProps) => {
     { enabled: !!groupToken }
   );
   const router = useRouter();
+  const [imageUrl, setImageUrl] = useState<string>();
+  const { toast } = useToast();
   const onClickButton = async (e: any) => {
     e.preventDefault();
     if (!user?.email || !user?.uid) {
       return;
     }
-    const userCreated = await createUser.mutateAsync({
+    const profileImageUrl = await uploadFileToStorage(user.uid, imageUrl!);
+    await createUser.mutateAsync({
       name: userNameInput.value,
       authId: user.uid,
       email: user.email,
       groupId: group?.id,
+      profileImageUrl,
+    });
+    toast({
+      toastType: "info",
+      description: "ユーザー登録が完了しました",
     });
     router.push("/authed/profile");
   };
@@ -59,6 +71,10 @@ export const CreateUserForm = ({ user }: CreateUserFormProps) => {
       {isGroupRegister && !isFetching && !group && (
         <QRCodeScanner setData={setGroupToken} />
       )}
+      <FileUploadButton setValue={setImageUrl}>
+        プロフィール画像アップロード
+      </FileUploadButton>
+      <AvatarImage imageUrl={imageUrl} />
       <Button type="submit" onClick={onClickButton}>
         登録
       </Button>

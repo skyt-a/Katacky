@@ -23,6 +23,7 @@ export const userRouter = router({
         authId: z.string(),
         email: z.string().email(),
         groupId: z.number().optional(),
+        profileImageUrl: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
@@ -97,6 +98,23 @@ export const userRouter = router({
       const updatedUser = await prisma.user.update({
         data: {
           name,
+        },
+        where: {
+          id: user.id,
+        },
+      });
+      return updatedUser;
+    }),
+  updateProfileImage: publicProcedure
+    .input(z.object({ url: z.string() }))
+    .mutation(async ({ input: { url } }) => {
+      const user = await getUserInfo();
+      if (!user) {
+        return null;
+      }
+      const updatedUser = await prisma.user.update({
+        data: {
+          profileImageUrl: url,
         },
         where: {
           id: user.id,

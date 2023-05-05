@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import BottomNav from "~/components/layout/BottomNav";
+import { TopNav } from "~/components/layout/TopNav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,7 +16,8 @@ export default async function RootLayout({
 }) {
   return (
     <>
-      {children}
+      <TopNav />
+      <main className="relative top-12">{children}</main>
       <BottomNav />
     </>
   );

@@ -31,6 +31,10 @@ export const LoginForm = () => {
   const onClickButtonSignup = async (e: any) => {
     e.preventDefault();
     await signup(emailInput.value, passwordInput.value);
+    toast({
+      toastType: "info",
+      description: "ユーザー仮登録が完了しました。メールを確認してください",
+    });
   };
   return (
     <form className="flex flex-col gap-4">

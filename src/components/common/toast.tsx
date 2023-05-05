@@ -42,7 +42,7 @@ const toastVariants = cva(
 const typeVariants = cva("", {
   variants: {
     toastType: {
-      info: "bg-primary border text-slate-50",
+      info: "bg-primary border text-secondary",
       error: "bg-error border-error text-error-foreground",
     },
   },

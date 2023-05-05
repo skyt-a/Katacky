@@ -28,7 +28,11 @@ export const TicketCard = async ({ ticket, isMine }: TicketCardProps) => {
           <CardHeader>
             <CardTitle className="flex justify-between items-center">
               <div>{ticket.title}</div>
-              {isMine && <Badge variant="secondary">自作</Badge>}
+              {isMine && (
+                <Badge variant="secondary">
+                  <p>自作</p>
+                </Badge>
+              )}
             </CardTitle>
             <CardDescription className="text-right">
               送り主: {ticket.from}
