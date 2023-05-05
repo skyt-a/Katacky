@@ -1,5 +1,6 @@
 "use client";
 import { User } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import { ScheduleForm } from "~/app/authed/ticket/create/components/ScheduleForm";
 import { Button, Input as TextInput } from "~/components/common";
@@ -18,6 +19,7 @@ type TicketFormProps = {
 };
 
 export const TicketForm = (props: TicketFormProps) => {
+  const router = useRouter();
   const titleInput = useInput("");
   const messageInput = useInput("");
   const colorInput = useInput<`#${string}`>("#ffffff");
@@ -30,6 +32,10 @@ export const TicketForm = (props: TicketFormProps) => {
   const utils = trpc.useContext();
   const createTicketMutation = trpc.ticket.create.useMutation({
     onSuccess: async () => {
+      toast({
+        toastType: "info",
+        description: "チケットを作成しました",
+      });
       await utils.ticket.invalidate();
     },
   });
@@ -57,10 +63,7 @@ export const TicketForm = (props: TicketFormProps) => {
   const onClickButton = async (e: any) => {
     e.preventDefault();
     await createTicket();
-    toast({
-      toastType: "info",
-      description: "チケットを作成しました",
-    });
+    router.push("/authed/ticket/list");
   };
   const isDisabledButton =
     titleInput.value.length === 0 ||

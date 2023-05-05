@@ -1,5 +1,6 @@
 "use client";
 import { Ticket as TicketType, User } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { TicketAssignDialog } from "~/app/authed/ticket/list/components/TicketAssignDialog";
 import { Button } from "~/components/common";
@@ -16,6 +17,7 @@ export const TicketPopupContent = ({
   ticket,
   user,
 }: TicketPopupContentProps) => {
+  const router = useRouter();
   const utils = trpc.useContext();
   const useTicket = trpc.ticket.use.useMutation({
     onSuccess: async () => {
@@ -27,6 +29,7 @@ export const TicketPopupContent = ({
       return;
     }
     await useTicket.mutateAsync({ id: ticket.id });
+    router.refresh();
   };
   return (
     <div>

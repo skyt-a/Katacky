@@ -1,5 +1,6 @@
 "use client";
 import { Ticket, User } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "~/components/common";
 import {
@@ -30,6 +31,7 @@ export const TicketAssignDialog = ({
   ticket,
   user,
 }: TicketAssignDialogProps) => {
+  const router = useRouter();
   const { data: users } = useUsersInTargetGroup(user?.groupId);
   const sendTicket = trpc.ticket.send.useMutation();
   const [userId, setUserId] = useState<string>();
@@ -38,6 +40,7 @@ export const TicketAssignDialog = ({
       return;
     }
     await sendTicket.mutateAsync({ id: ticket.id, userId: Number(userId) });
+    router.refresh();
   };
 
   return (

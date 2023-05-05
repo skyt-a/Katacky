@@ -12,6 +12,9 @@ import { useInput } from "~/util/form";
 import { Label } from "~/components/common/label";
 import { trpc } from "~/lib/trpc/connectNext";
 import { useUsersInTargetGroup } from "~/hooks/domain/useUsersInTargetGroup";
+import { manageTypeToText } from "~/util/setting";
+import { useRouter } from "next/navigation";
+import { useToast } from "~/components/common/use-toast";
 
 type ScheduleFormProps = {
   user: User | null;
@@ -19,6 +22,7 @@ type ScheduleFormProps = {
 };
 
 export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
+  const router = useRouter();
   const [selectedType, setSelectedType] = useState<string>(
     TicketManageType.ONCE_MONTH
   );
@@ -27,7 +31,17 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
   const { data: users } = useUsersInTargetGroup(user?.groupId);
   const [userId, setUserId] = useState<string>();
 
-  const createTicketManager = trpc.ticketManager.create.useMutation();
+  const util = trpc.useContext();
+  const { toast } = useToast();
+  const createTicketManager = trpc.ticketManager.create.useMutation({
+    onSuccess() {
+      toast({
+        toastType: "info",
+        description: "チケットスケジュールを作成しました",
+      });
+      util.ticketManager.invalidate();
+    },
+  });
   const onConfirm = async () => {
     const ticket = await createTicket(true);
     if (!ticket || !user) {
@@ -41,6 +55,7 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
       name: nameInput.value,
       creatorId: user.id,
     });
+    router.push("/authed/manager");
   };
   return (
     <form className="flex flex-col gap-4">
@@ -74,14 +89,11 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={TicketManageType.ONCE_DAY}>1日ごと</SelectItem>
-            <SelectItem value={TicketManageType.ONCE_WEEK}>
-              1週間ごと
-            </SelectItem>
-            <SelectItem value={TicketManageType.ONCE_MONTH}>
-              1ヶ月ごと
-            </SelectItem>
-            <SelectItem value={TicketManageType.ONCE_YEAR}>1年ごと</SelectItem>
+            {Object.keys(manageTypeToText).map((type) => (
+              <SelectItem key={type} value={type}>
+                {manageTypeToText[type as keyof typeof manageTypeToText]}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

@@ -15,7 +15,9 @@ export default async function ManagerPage() {
   return (
     <ul>
       {managers.map((manager) => (
-        <ManagerCard key={manager.id} manager={manager} />
+        <div key={manager.id} className="mt-2">
+          <ManagerCard manager={manager} />
+        </div>
       ))}
     </ul>
   );
