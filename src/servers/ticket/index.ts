@@ -31,8 +31,8 @@ export const ticketRouter = router({
   create: publicProcedure
     .input(
       z.object({
-        title: z.string(),
-        message: z.string(),
+        title: z.string().max(30),
+        message: z.string().max(100),
         backgroundColor: z.string(),
         creatorId: z.number(),
         expiredDate: z.date().optional(),

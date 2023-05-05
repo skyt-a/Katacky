@@ -1,9 +1,12 @@
+import { format } from "date-fns";
+
 type TicketProps = {
   to?: string;
   title?: string;
   message?: string;
   backgroundColor?: string;
   from?: string;
+  expired?: Date;
 };
 
 export const Ticket = ({
@@ -12,41 +15,69 @@ export const Ticket = ({
   message,
   backgroundColor = "#ffffff",
   from,
+  expired,
 }: TicketProps) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center">
       <div
-        className="bg-white relative drop-shadow-2xl p-4 m-4"
+        className="bg-white text-[darkslategray] rounded-lg animate-bouncingCard w-full"
         style={{
           backgroundColor,
           color: getTextColorFromBackgroundColor(backgroundColor),
         }}
       >
-        <div className="flex-none sm:flex">
-          <div className="flex-auto justify-evenly">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center  my-1">
-                <h2 className="font-bold">{title}</h2>
-              </div>
-            </div>
-            <div className="border-b-2 my-5"></div>
-            <div className="">
-              <div className="w-full flex-none text-lg leading-none">{to}</div>
-            </div>
-            <div
-              className="border-b border-dashed my-5 pt-5 w-[calc(100%_+_2rem)] relative -left-4"
-              style={{
-                borderColor: getTextColorFromBackgroundColor(backgroundColor),
-              }}
-            ></div>
-            <div className="pt-1 ">
-              <div className="mt-2 text-sm">{message}</div>
-              <div className="mt-2 text-xs text-right">from: {from}</div>
-            </div>
+        <div className="font-semibold font-poppins text-lg px-4 py-3">{to}</div>
+        <hr className="w-full border-[#efefef] mx-auto" />
+        <div className="font-poppins text-base px-4 py-2">
+          <div className="font-medium ">{title}</div>
+          <div className="text-sm">{message}</div>
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="bg-secondary w-3 h-6 rounded-r-md"></div>
+          <div className="w-full border-t-[2px] border-secondary border-dashed"></div>
+          <div className="bg-secondary w-3 h-6 rounded-l-md"></div>
+        </div>
+        <div className="flex justify-between font-poppins text-sm px-4 py-3">
+          <div className="mr-6">from: {from}</div>
+          <div>
+            {expired && `expired: ${format(expired, "yyyy年MM月dd日")}`}
           </div>
         </div>
       </div>
     </div>
+    // <div className="flex flex-col">
+    //   <div
+    //     className="bg-white relative drop-shadow-2xl p-4 m-4"
+    //     style={{
+    //       backgroundColor,
+    //       color: getTextColorFromBackgroundColor(backgroundColor),
+    //     }}
+    //   >
+    //     <div className="flex-none sm:flex">
+    //       <div className="flex-auto justify-evenly">
+    //         <div className="flex items-center justify-between">
+    //           <div className="flex items-center  my-1">
+    //             <h2 className="font-bold">{title}</h2>
+    //           </div>
+    //         </div>
+    //         <div className="border-b-2 my-5"></div>
+    //         <div className="">
+    //           <div className="w-full flex-none text-lg leading-none">{to}</div>
+    //         </div>
+    //         <div
+    //           className="border-b border-dashed my-5 pt-5 w-[calc(100%_+_2rem)] relative -left-4"
+    //           style={{
+    //             borderColor: getTextColorFromBackgroundColor(backgroundColor),
+    //           }}
+    //         ></div>
+    //         <div className="pt-1 ">
+    //           <div className="mt-2 text-sm">{message}</div>
+    //           <div className="mt-2 text-xs text-right">from: {from}</div>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
   );
 };
 

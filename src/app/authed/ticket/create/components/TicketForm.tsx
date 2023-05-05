@@ -1,5 +1,6 @@
 "use client";
 import { User } from "@prisma/client";
+import { isBefore } from "date-fns";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import { ScheduleForm } from "~/app/authed/ticket/create/components/ScheduleForm";
@@ -40,6 +41,27 @@ export const TicketForm = (props: TicketFormProps) => {
   });
   const createTicket = async (isScheduled = false) => {
     if (!props.user) {
+      return;
+    }
+    if (expiredDate && isBefore(expiredDate, new Date())) {
+      toast({
+        toastType: "error",
+        description: "有効期限が過去になっています",
+      });
+      return;
+    }
+    if (startDate && isBefore(startDate, new Date())) {
+      toast({
+        toastType: "error",
+        description: "利用開始日時が過去になっています",
+      });
+      return;
+    }
+    if (expiredDate && startDate && isBefore(expiredDate, startDate)) {
+      toast({
+        toastType: "error",
+        description: "利用開始日時が有効期限より後になっています",
+      });
       return;
     }
     const ticket = await createTicketMutation.mutateAsync({
@@ -105,6 +127,7 @@ export const TicketForm = (props: TicketFormProps) => {
           id="title"
           type="text"
           placeholder="タイトルを入力してください"
+          maxLength={30}
           required={true}
           {...titleInput}
         />
@@ -117,6 +140,7 @@ export const TicketForm = (props: TicketFormProps) => {
           id="message"
           type="text"
           placeholder="メッセージを入力してください"
+          maxLength={100}
           required={true}
           {...messageInput}
         />
@@ -154,8 +178,10 @@ export const TicketForm = (props: TicketFormProps) => {
           message={ph(messageInput.value, "メッセージが入ります")}
           backgroundColor={colorInput.value}
           from={props.user?.name ?? ""}
+          expired={expiredDate}
         />
       </Suspense>
+
       <Button type="submit" onClick={onClickButton} disabled={isDisabledButton}>
         チケット作成
       </Button>
