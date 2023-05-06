@@ -9,6 +9,7 @@ import { trpc } from "~/lib/trpc/connectNext";
 type GroupInfoProps = {
   group: Group;
   user: User | null;
+  imageUrl?: string;
 };
 
 export const GroupInfo = ({ group, user }: GroupInfoProps) => {
@@ -64,14 +65,22 @@ export const GroupInfo = ({ group, user }: GroupInfoProps) => {
       <div className="flex justify-center mt-4">
         <Canvas
           text={`${group?.token}`}
+          // logo={{
+          //   src: imageUrl ?? "",
+          //   options: {
+          //     width: 50,
+          //     x: 75,
+          //     y: 75,
+          //   },
+          // }}
           options={{
             level: "M",
             margin: 3,
             scale: 4,
             width: 200,
             color: {
-              dark: "#010599FF",
-              light: "#FFBF60FF",
+              dark: "#fff",
+              light: "#89c4ff",
             },
           }}
         />
