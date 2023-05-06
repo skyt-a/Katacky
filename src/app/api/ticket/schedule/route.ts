@@ -27,6 +27,7 @@ async function Handler() {
             data: {
               ...ticketUse,
               holderId: manager.retrieveUserId,
+              isScheduled: false,
             },
           });
           holderIds.add(manager.retrieveUserId);

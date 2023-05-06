@@ -33,10 +33,6 @@ export const TicketForm = (props: TicketFormProps) => {
   const utils = trpc.useContext();
   const createTicketMutation = trpc.ticket.create.useMutation({
     onSuccess: async () => {
-      toast({
-        toastType: "info",
-        description: "チケットを作成しました",
-      });
       await utils.ticket.invalidate();
     },
   });
@@ -85,6 +81,10 @@ export const TicketForm = (props: TicketFormProps) => {
   const onClickButton = async (e: any) => {
     e.preventDefault();
     await createTicket();
+    toast({
+      toastType: "info",
+      description: "チケットを作成しました",
+    });
     router.push("/authed/ticket/list");
   };
   const isDisabledButton =
@@ -192,6 +192,7 @@ export const TicketForm = (props: TicketFormProps) => {
       </Button>
       <Sheet>
         <SheetTrigger
+          className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-10 py-2 px-4"
           disabled={isDisabledButton || !Boolean(props.user?.groupId)}
         >
           このチケットをスケジュール発行する

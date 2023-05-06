@@ -32,16 +32,12 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
   const [userId, setUserId] = useState<string>();
 
   const util = trpc.useContext();
-  const { toast } = useToast();
   const createTicketManager = trpc.ticketManager.create.useMutation({
     onSuccess() {
-      toast({
-        toastType: "info",
-        description: "チケットスケジュールを作成しました",
-      });
       util.ticketManager.invalidate();
     },
   });
+  const { toast } = useToast();
   const onConfirm = async () => {
     const ticket = await createTicket(true);
     if (!ticket || !user) {
@@ -55,6 +51,11 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
       name: nameInput.value,
       creatorId: user.id,
     });
+    toast({
+      toastType: "info",
+      description: "チケットスケジュールを作成しました",
+    });
+    router.refresh();
     router.push("/authed/manager");
   };
   return (

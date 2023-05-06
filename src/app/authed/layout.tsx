@@ -17,7 +17,7 @@ export default async function RootLayout({
   return (
     <>
       <TopNav />
-      <main className="relative top-12">{children}</main>
+      <main className="relative top-12 pb-12">{children}</main>
       <BottomNav />
     </>
   );

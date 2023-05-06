@@ -1,8 +1,6 @@
-import { randomUUID } from "crypto";
 import { z } from "zod";
 import { prisma } from "~/lib/prisma";
 import { publicProcedure, router } from "~/lib/trpc";
-import { v4 } from "uuid";
 import { TicketManageType } from "@prisma/client";
 
 export const ticketManagerRouter = router({
@@ -37,5 +35,15 @@ export const ticketManagerRouter = router({
         data: input,
       });
       return group;
+    }),
+  delete: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input: { id } }) => {
+      const manager = await prisma.ticketManager.delete({
+        where: {
+          id,
+        },
+      });
+      return manager;
     }),
 });

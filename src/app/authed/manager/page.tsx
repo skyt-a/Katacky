@@ -19,6 +19,9 @@ export default async function ManagerPage() {
 
   return (
     <ul>
+      {managers.length === 0 && (
+        <p className="mt-4 text-center">チケットスケジュールはありません</p>
+      )}
       {managers.map((manager) => (
         <div key={manager.id} className="mt-2">
           <ManagerCard

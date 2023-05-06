@@ -21,6 +21,7 @@ export const Ticket = ({
   expiredDate,
   className,
 }: TicketProps) => {
+  const color = getTextColorFromBackgroundColor(backgroundColor);
   return (
     <div
       className={cn(
@@ -32,7 +33,7 @@ export const Ticket = ({
         className="bg-white text-[darkslategray] rounded-lg animate-bouncingCard w-full"
         style={{
           backgroundColor,
-          color: getTextColorFromBackgroundColor(backgroundColor),
+          color,
         }}
       >
         <div className="font-semibold font-poppins text-lg px-4 py-3 border-t-[1px] border-x-[1px] rounded-t-lg">
@@ -48,7 +49,9 @@ export const Ticket = ({
         </div>
         <div className="flex justify-between items-center">
           <div className="bg-secondary w-3 h-6 rounded-r-md  border-y-[1px] border-r-[1px]"></div>
-          <div className="w-full border-t-[2px] border-secondary border-dashed"></div>
+          <div
+            className={`w-full border-t-[2px] border-[${color}] border-dashed`}
+          ></div>
           <div className="bg-secondary w-3 h-6 rounded-l-md border-y-[1px] border-l-[1px]"></div>
         </div>
         <div className="flex justify-between font-poppins text-sm px-4 py-3 border-x-[1px] border-b-[1px] rounded-b-lg">
