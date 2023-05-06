@@ -12,7 +12,8 @@ import { useToast } from "~/components/common/use-toast";
 import { Ticket } from "~/components/domain/tickets/Ticket";
 import { LoadingSpinner } from "~/components/layout/LoadingSpinner";
 import { trpc } from "~/lib/trpc/connectNext";
-import { ph, useInput } from "~/util/form";
+import { ph, setDateDayEnd, useInput } from "~/util/form";
+import { ticketFormLength } from "~/util/setting";
 
 type TicketFormProps = {
   user: User | null;
@@ -102,8 +103,9 @@ export const TicketForm = (props: TicketFormProps) => {
         <TextInput
           id="title"
           type="text"
-          placeholder="宛先を入力してください"
+          placeholder={`宛先を入力してください(${ticketFormLength.to}文字以内)`}
           required={true}
+          maxLength={ticketFormLength.to}
           {...toNameInput}
         />
       </div>
@@ -114,8 +116,9 @@ export const TicketForm = (props: TicketFormProps) => {
         <TextInput
           id="title"
           type="text"
-          placeholder="送り主を入力してください"
+          placeholder={`送り主を入力してください(${ticketFormLength.from}文字以内)`}
           required={true}
+          maxLength={ticketFormLength.from}
           {...fromNameInput}
         />
       </div>
@@ -126,8 +129,8 @@ export const TicketForm = (props: TicketFormProps) => {
         <TextInput
           id="title"
           type="text"
-          placeholder="タイトルを入力してください"
-          maxLength={30}
+          placeholder={`タイトルを入力してください(${ticketFormLength.title}文字以内)`}
+          maxLength={ticketFormLength.title}
           required={true}
           {...titleInput}
         />
@@ -139,8 +142,8 @@ export const TicketForm = (props: TicketFormProps) => {
         <TextInput
           id="message"
           type="text"
-          placeholder="メッセージを入力してください"
-          maxLength={100}
+          placeholder={`メッセージを入力してください(${ticketFormLength.message}文字以内)`}
+          maxLength={ticketFormLength.message}
           required={true}
           {...messageInput}
         />
@@ -157,8 +160,9 @@ export const TicketForm = (props: TicketFormProps) => {
         </div>
         <CalendarDatePicker
           value={expiredDate}
-          onChange={setExpiredDate}
+          onChange={setDateDayEnd(setExpiredDate)}
           placeHolder="有効期限を選択してください"
+          fromDate={new Date()}
         />
       </div>
       <div>
@@ -167,8 +171,9 @@ export const TicketForm = (props: TicketFormProps) => {
         </div>
         <CalendarDatePicker
           value={startDate}
-          onChange={setStartDate}
+          onChange={setDateDayEnd(setStartDate)}
           placeHolder="利用開始日時を選択してください"
+          fromDate={new Date()}
         />
       </div>
       <Suspense fallback={<LoadingSpinner />}>
@@ -178,7 +183,7 @@ export const TicketForm = (props: TicketFormProps) => {
           message={ph(messageInput.value, "メッセージが入ります")}
           backgroundColor={colorInput.value}
           from={props.user?.name ?? ""}
-          expired={expiredDate}
+          expiredDate={expiredDate}
         />
       </Suspense>
 

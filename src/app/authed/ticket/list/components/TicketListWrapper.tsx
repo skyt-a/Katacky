@@ -1,34 +1,34 @@
-import { Suspense } from "react";
-import { TicketHistory } from "~/app/authed/ticket/list/components/TicketHistory";
 import { TicketList } from "~/app/authed/ticket/list/components/TicketList";
-import { Skeleton } from "~/components/common/skeleton";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "~/components/common/tabs";
-import { CardSkelton } from "~/components/layout/CardSkelton";
+import "./ticketAnimation.css";
+import { TicketCard } from "~/app/authed/ticket/list/components/TicketCard";
+import { Ticket } from "~/components/domain/tickets/Ticket";
+import { getUserInfo } from "~/lib/auth/getUser";
+import { prisma } from "~/lib/prisma";
 
-export const TicketListWrapper = () => {
-  return (
-    <Tabs defaultValue="list" className="w-full">
-      <TabsList className="w-full">
-        <TabsTrigger value="list">所持チケット</TabsTrigger>
-        <TabsTrigger value="history">使用履歴</TabsTrigger>
-      </TabsList>
-      <TabsContent value="list">
-        <Suspense fallback={<CardSkelton />}>
-          {/** @ts-expect-error Async Component  */}
-          <TicketList />
-        </Suspense>
-      </TabsContent>
-      <TabsContent value="history">
-        <Suspense fallback={<CardSkelton />}>
-          {/** @ts-expect-error Async Component  */}
-          <TicketHistory />
-        </Suspense>
-      </TabsContent>
-    </Tabs>
-  );
+export const TicketListWrapper = async () => {
+  const user = await getUserInfo();
+  if (!user) {
+    return null;
+  }
+  const ticket = await prisma.ticket.findMany({
+    where: {
+      holderId: user.id,
+      isUsed: false,
+      isScheduled: false,
+      OR: [
+        {
+          expiredDate: null,
+        },
+        {
+          expiredDate: {
+            gte: new Date(),
+          },
+        },
+      ],
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+  return <TicketList tickets={ticket} user={user} />;
 };

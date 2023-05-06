@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { TicketAssignDialog } from "~/app/authed/ticket/list/components/TicketAssignDialog";
 import { Button } from "~/components/common";
-import { Ticket } from "~/components/domain/tickets/Ticket";
 import { trpc } from "~/lib/trpc/connectNext";
 import { UnionNullToUndefined } from "~/util/types";
 
@@ -33,9 +32,6 @@ export const TicketPopupContent = ({
   };
   return (
     <div>
-      <div>
-        <Ticket {...ticket} />
-      </div>
       {!ticket.isUsed && (
         <>
           <Button type="button" className="w-full" onClick={onClickUseTicket}>

@@ -1,4 +1,6 @@
+import { Ticket as TicketType } from "@prisma/client";
 import { format } from "date-fns";
+import { cn } from "~/lib/ui/utils";
 
 type TicketProps = {
   to?: string;
@@ -6,7 +8,8 @@ type TicketProps = {
   message?: string;
   backgroundColor?: string;
   from?: string;
-  expired?: Date;
+  expiredDate?: Date;
+  className?: string;
 };
 
 export const Ticket = ({
@@ -15,10 +18,16 @@ export const Ticket = ({
   message,
   backgroundColor = "#ffffff",
   from,
-  expired,
+  expiredDate,
+  className,
 }: TicketProps) => {
   return (
-    <div className="flex flex-col items-center">
+    <div
+      className={cn(
+        "flex flex-col items-center border-gray-700 box-border",
+        className
+      )}
+    >
       <div
         className="bg-white text-[darkslategray] rounded-lg animate-bouncingCard w-full"
         style={{
@@ -26,22 +35,24 @@ export const Ticket = ({
           color: getTextColorFromBackgroundColor(backgroundColor),
         }}
       >
-        <div className="font-semibold font-poppins text-lg px-4 py-3">{to}</div>
+        <div className="font-semibold font-poppins text-lg px-4 py-3 border-t-[1px] border-x-[1px] rounded-t-lg">
+          {title}
+          <div className="text-xs font-medium text-right">
+            {expiredDate && `expired: ${format(expiredDate, "yyyy年MM月dd日")}`}
+          </div>
+        </div>
         <hr className="w-full border-[#efefef] mx-auto" />
-        <div className="font-poppins text-base px-4 py-2">
-          <div className="font-medium ">{title}</div>
-          <div className="text-sm">{message}</div>
+        <div className="font-poppins text-base px-4 py-2  border-x-[1px]">
+          <div className="font-medium break-all	">to: {to}</div>
+          <div className="text-sm break-all">{message}</div>
         </div>
         <div className="flex justify-between items-center">
-          <div className="bg-secondary w-3 h-6 rounded-r-md"></div>
+          <div className="bg-secondary w-3 h-6 rounded-r-md  border-y-[1px] border-r-[1px]"></div>
           <div className="w-full border-t-[2px] border-secondary border-dashed"></div>
-          <div className="bg-secondary w-3 h-6 rounded-l-md"></div>
+          <div className="bg-secondary w-3 h-6 rounded-l-md border-y-[1px] border-l-[1px]"></div>
         </div>
-        <div className="flex justify-between font-poppins text-sm px-4 py-3">
+        <div className="flex justify-between font-poppins text-sm px-4 py-3 border-x-[1px] border-b-[1px] rounded-b-lg">
           <div className="mr-6">from: {from}</div>
-          <div>
-            {expired && `expired: ${format(expired, "yyyy年MM月dd日")}`}
-          </div>
         </div>
       </div>
     </div>

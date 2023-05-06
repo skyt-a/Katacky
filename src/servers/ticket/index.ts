@@ -4,6 +4,7 @@ import { prisma } from "~/lib/prisma";
 import { publicProcedure, router } from "~/lib/trpc";
 import { getUserInfo } from "~/lib/auth/getUser";
 import { sendFirebaseCloudMessage } from "~/lib/firebase/sendMessage";
+import { ticketFormLength } from "~/util/setting";
 
 export const ticketRouter = router({
   createList: publicProcedure
@@ -31,13 +32,13 @@ export const ticketRouter = router({
   create: publicProcedure
     .input(
       z.object({
-        title: z.string().max(30),
-        message: z.string().max(100),
+        title: z.string().max(ticketFormLength.title),
+        message: z.string().max(ticketFormLength.message),
         backgroundColor: z.string(),
         creatorId: z.number(),
         expiredDate: z.date().optional(),
-        from: z.string(),
-        to: z.string(),
+        from: z.string().max(ticketFormLength.from),
+        to: z.string().max(ticketFormLength.to),
         availableDateFrom: z.date().optional(),
         isScheduled: z.boolean().optional(),
         holderId: z.number(),

@@ -5,7 +5,7 @@ import { Calendar as CalendarIcon } from "lucide-react";
 
 import { cn } from "~/lib/ui/utils";
 import { Button } from "~/components/common/button";
-import { Calendar } from "~/components/common/calendar";
+import { Calendar, CalendarProps } from "~/components/common/calendar";
 import {
   Popover,
   PopoverContent,
@@ -17,12 +17,13 @@ type DatePickerProps = {
   value: Date | undefined;
   onChange: (date: Date | undefined) => void;
   placeHolder?: string;
-};
+} & CalendarProps;
 
 export function CalendarDatePicker({
   value,
   onChange,
   placeHolder,
+  ...rest
 }: DatePickerProps) {
   return (
     <Popover>
@@ -40,6 +41,7 @@ export function CalendarDatePicker({
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
+          {...rest}
           mode="single"
           selected={value}
           onSelect={onChange}

@@ -1,0 +1,31 @@
+@keyframes goToScreenOut {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes goToScreenIn {
+  0% {
+    transform: translateY(100vh);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes goTop {
+  to {
+    top: 0;
+  }
+}
+
+.ticket-enter-active {
+  animation: goToScreenIn 0.3s ease-in-out forwards;
+}
+
+.ticket-exit-active {
+  animation: goToScreenOut 0.3s ease-in-out forwards;
+}

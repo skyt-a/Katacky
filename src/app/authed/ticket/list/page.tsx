@@ -1,5 +1,5 @@
-import { TicketListWrapper } from "~/app/authed/ticket/list/components/TicketListWrapper";
+import { TicketsWrapper } from "~/app/authed/ticket/list/components/TicketsWrapper";
 
 export default function TicketListPage() {
-  return <TicketListWrapper />;
+  return <TicketsWrapper />;
 }

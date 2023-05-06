@@ -12,3 +12,14 @@ export const useInput = <T>(initialValue: T) => {
 
 export const ph = (target: string, placeholder: string) =>
   !target || target.length === 0 ? placeholder : target;
+
+export const setDateDayEnd =
+  (setDate: (date: Date | undefined) => void) => (date: Date | undefined) => {
+    if (!date) {
+      setDate(date);
+      return;
+    }
+    const newDate = new Date(date);
+    newDate.setHours(23, 59, 59, 999);
+    setDate(newDate);
+  };
