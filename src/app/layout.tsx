@@ -45,12 +45,12 @@ export default async function RootLayout({
           color="#5bbad5"
         />
 
-        <meta name="twitter:card" content="summary" />
+        {/* <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content={getBaseUrl()} />
         <meta name="twitter:title" content="katacky" />
         <meta name="twitter:description" content="チケット発行アプリ" />
         <meta name="twitter:image" content="/android-chrome-192x192.png" />
-        <meta name="twitter:creator" content="@skyt" />
+        <meta name="twitter:creator" content="@skyt" /> */}
         {/* <meta property="og:type" content="website" />
         <meta property="og:title" content="katacky" />
         <meta property="og:description" content="チケット発行アプリ" />
