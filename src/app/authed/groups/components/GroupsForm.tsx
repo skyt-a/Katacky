@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, Input as TextInput } from "~/components/common";
 import { Label } from "~/components/common/label";
+import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
 import { trpc } from "~/lib/trpc/connectNext";
 import { useInput } from "~/util/form";
@@ -45,10 +46,7 @@ export const GroupsForm = ({ user }: GroupFormProps) => {
   return (
     <form className="flex flex-col gap-4">
       {!isGroupRegister ? (
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="groupName">グループ名</Label>
-          </div>
+        <FormControlWrapper label="グループ名" id="groupName">
           <TextInput
             id="groupName"
             type="text"
@@ -56,7 +54,7 @@ export const GroupsForm = ({ user }: GroupFormProps) => {
             required={true}
             {...groupNameInput}
           />
-        </div>
+        </FormControlWrapper>
       ) : (
         <>
           {isFetching && <p>グループを検索中...</p>}

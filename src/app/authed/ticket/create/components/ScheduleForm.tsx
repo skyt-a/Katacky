@@ -15,6 +15,7 @@ import { useUsersInTargetGroup } from "~/hooks/domain/useUsersInTargetGroup";
 import { manageTypeToText } from "~/util/setting";
 import { useRouter } from "next/navigation";
 import { useToast } from "~/components/common/use-toast";
+import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
 
 type ScheduleFormProps = {
   user: User | null;
@@ -60,16 +61,14 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
   };
   return (
     <form className="flex flex-col gap-4">
-      <div>
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="count">スケジュール名</Label>
-          </div>
-          <Input id="count" type="text" {...nameInput} />
-        </div>
-        <div className="mt-4 mb-2 block">
-          <Label htmlFor="frequency">受け取るユーザー</Label>
-        </div>
+      <FormControlWrapper id="name" label="スケジュール名">
+        <Input id="name" type="text" {...nameInput} />
+      </FormControlWrapper>
+      <FormControlWrapper
+        id="retrieve"
+        label="受け取るユーザー"
+        className="mt-2"
+      >
         <Select value={userId} onValueChange={setUserId}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="" />
@@ -82,9 +81,8 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
             ))}
           </SelectContent>
         </Select>
-        <div className="mt-4 mb-2 block">
-          <Label htmlFor="frequency">発行頻度</Label>
-        </div>
+      </FormControlWrapper>
+      <FormControlWrapper id="frequency" label="発行頻度" className="mt-2">
         <Select value={selectedType} onValueChange={setSelectedType}>
           <SelectTrigger className="w-[180px]">
             <SelectValue />
@@ -97,14 +95,11 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
             ))}
           </SelectContent>
         </Select>
-      </div>
-      <div>
-        <div className="mt-4 mb-2 block">
-          <Label htmlFor="count">1回の発行枚数</Label>
-        </div>
+      </FormControlWrapper>
+      <FormControlWrapper id="count" label="1回の発行枚数" className="mt-2">
         <Input id="count" type="number" {...countInput} />
-      </div>
-      <Button type="button" className="w-full" onClick={onConfirm}>
+      </FormControlWrapper>
+      <Button type="button" className="w-full mt-2" onClick={onConfirm}>
         スケジュール確定
       </Button>
     </form>

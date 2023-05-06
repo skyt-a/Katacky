@@ -6,7 +6,11 @@ import { useToast } from "~/components/common/use-toast";
 import { useLoginWithEmail } from "~/app/auth/hooks/useLoginWithEmail";
 import { useSignup } from "~/app/auth/hooks/useSignup";
 import { useInput } from "~/util/form";
-import { checkAuthError, getMessageFromErrorCode } from "~/lib/auth/authError";
+import { checkAuthError } from "~/lib/auth/authError";
+import Link from "next/link";
+import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
+import { ZodError, z } from "zod";
+import { passwordSchema } from "~/util/setting";
 
 export const LoginForm = () => {
   const emailInput = useInput("");
@@ -21,7 +25,7 @@ export const LoginForm = () => {
     if (checkAuthError(result)) {
       toast({
         toastType: "error",
-        description: getMessageFromErrorCode(result.code),
+        description: result.description,
       });
       return;
     }
@@ -30,7 +34,25 @@ export const LoginForm = () => {
   const signup = useSignup();
   const onClickButtonSignup = async (e: any) => {
     e.preventDefault();
-    await signup(emailInput.value, passwordInput.value);
+    try {
+      passwordSchema.parse(passwordInput.value);
+    } catch (e) {
+      if (e instanceof ZodError) {
+        toast({
+          toastType: "error",
+          description: e.errors[0].message,
+        });
+        return;
+      }
+    }
+    const result = await signup(emailInput.value, passwordInput.value);
+    if (checkAuthError(result)) {
+      toast({
+        toastType: "error",
+        description: result.description,
+      });
+      return;
+    }
     toast({
       toastType: "info",
       description: "ユーザー仮登録が完了しました。メールを確認してください",
@@ -38,10 +60,7 @@ export const LoginForm = () => {
   };
   return (
     <form className="flex flex-col gap-4">
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="email">メールアドレス</Label>
-        </div>
+      <FormControlWrapper label="メールアドレス" id="email">
         <TextInput
           id="email"
           type="email"
@@ -49,24 +68,27 @@ export const LoginForm = () => {
           required={true}
           {...emailInput}
         />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="password">パスワード</Label>
-        </div>
+      </FormControlWrapper>
+      <FormControlWrapper label="パスワード" id="password" className="mt-2">
         <TextInput
           id="password"
           type="password"
           required={true}
           {...passwordInput}
         />
-      </div>
+      </FormControlWrapper>
       <Button type="submit" onClick={onClickButton}>
         ログイン
       </Button>
       <Button type="submit" onClick={onClickButtonSignup}>
         新規登録
       </Button>
+      <p className="text-center mt-2">
+        ログインパスワードを忘れた方は
+        <Link href="/auth/login/forgotPassword" className="underline">
+          こちら
+        </Link>
+      </p>
     </form>
   );
 };

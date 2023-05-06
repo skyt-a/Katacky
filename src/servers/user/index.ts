@@ -13,7 +13,6 @@ export const userRouter = router({
           authId,
         },
       });
-      console.log("user", user);
       return user;
     }),
   create: publicProcedure

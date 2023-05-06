@@ -9,6 +9,7 @@ import { CalendarDatePicker } from "~/components/common/datePicker";
 import { Label } from "~/components/common/label";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/common/sheet";
 import { useToast } from "~/components/common/use-toast";
+import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
 import { Ticket } from "~/components/domain/tickets/Ticket";
 import { LoadingSpinner } from "~/components/layout/LoadingSpinner";
 import { trpc } from "~/lib/trpc/connectNext";
@@ -96,36 +97,27 @@ export const TicketForm = (props: TicketFormProps) => {
     colorInput.value.length === 0;
   return (
     <form className="flex flex-col gap-4">
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="title">宛先</Label>
-        </div>
+      <FormControlWrapper label="宛先" id="to">
         <TextInput
-          id="title"
+          id="to"
           type="text"
           placeholder={`宛先を入力してください(${ticketFormLength.to}文字以内)`}
           required={true}
           maxLength={ticketFormLength.to}
           {...toNameInput}
         />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="title">送り主</Label>
-        </div>
+      </FormControlWrapper>
+      <FormControlWrapper id="from" label="送り主" className="mt-2">
         <TextInput
-          id="title"
+          id="from"
           type="text"
           placeholder={`送り主を入力してください(${ticketFormLength.from}文字以内)`}
           required={true}
           maxLength={ticketFormLength.from}
           {...fromNameInput}
         />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="title">タイトル</Label>
-        </div>
+      </FormControlWrapper>
+      <FormControlWrapper label="タイトル" id="title" className="mt-2">
         <TextInput
           id="title"
           type="text"
@@ -134,11 +126,8 @@ export const TicketForm = (props: TicketFormProps) => {
           required={true}
           {...titleInput}
         />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="message">メッセージ</Label>
-        </div>
+      </FormControlWrapper>
+      <FormControlWrapper id="message" label="メッセージ" className="mt-2">
         <TextInput
           id="message"
           type="text"
@@ -147,35 +136,28 @@ export const TicketForm = (props: TicketFormProps) => {
           required={true}
           {...messageInput}
         />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="color">背景色</Label>
-        </div>
+      </FormControlWrapper>
+      <FormControlWrapper id="color" label="背景色" className="mt-2">
         <TextInput id="color" type="color" required={true} {...colorInput} />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="color">有効期限</Label>
-        </div>
+      </FormControlWrapper>
+      <FormControlWrapper id="expired" label="有効期限" className="mt-2">
         <CalendarDatePicker
+          id="expired"
           value={expiredDate}
           onChange={setDateDayEnd(setExpiredDate)}
           placeHolder="有効期限を選択してください"
           fromDate={new Date()}
         />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="color">利用開始日時</Label>
-        </div>
+      </FormControlWrapper>
+      <FormControlWrapper id="startDate" label="利用開始日" className="mt-2">
         <CalendarDatePicker
+          id="startDate"
           value={startDate}
           onChange={setDateDayEnd(setStartDate)}
           placeHolder="利用開始日時を選択してください"
           fromDate={new Date()}
         />
-      </div>
+      </FormControlWrapper>
       <Suspense fallback={<LoadingSpinner />}>
         <Ticket
           to={ph(toNameInput.value, "宛先が入ります")}
