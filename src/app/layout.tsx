@@ -27,7 +27,10 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="katacky" />
-        <meta name="description" content="チケット発行アプリ" />
+        <meta
+          name="description"
+          content="オリジナルチケットを発行して使用したり、他の人に渡すことができるアプリです"
+        />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         {/* <meta name="msapplication-config" content="/icons/browserconfig.xml" /> */}
