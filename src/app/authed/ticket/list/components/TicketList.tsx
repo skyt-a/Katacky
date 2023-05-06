@@ -5,7 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import { TicketPopupContent } from "~/app/authed/ticket/list/components/TicketPopupContent";
 import { Button } from "~/components/common";
 import { Ticket } from "~/components/domain/tickets/Ticket";
-import { cn } from "~/lib/ui/utils";
+import { UnionNullToUndefined } from "~/util/types";
 
 type TicketListProps = {
   tickets: TicketType[];
@@ -13,8 +13,9 @@ type TicketListProps = {
 };
 
 export const TicketList = ({ tickets, user }: TicketListProps) => {
-  const [selectedTicket, setSelectedTicket] = useState<TicketType>();
-  const onClickTicket = (ticket: TicketType) => () => {
+  const [selectedTicket, setSelectedTicket] =
+    useState<UnionNullToUndefined<TicketType>>();
+  const onClickTicket = (ticket: UnionNullToUndefined<TicketType>) => () => {
     setSelectedTicket(ticket);
   };
   console.log(selectedTicket);
@@ -41,7 +42,11 @@ export const TicketList = ({ tickets, user }: TicketListProps) => {
               } as React.CSSProperties
             }
           >
-            <li onClick={onClickTicket(ticket)}>
+            <li
+              onClick={onClickTicket(
+                ticket as UnionNullToUndefined<TicketType>
+              )}
+            >
               {/** @ts-expect-error Async Component */}
               <Ticket key={ticket.id} {...ticket} />
               {selectedTicket && selectedTicket?.id === ticket.id && (
