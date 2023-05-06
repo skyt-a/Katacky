@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { TicketAssignDialog } from "~/app/authed/ticket/list/components/TicketAssignDialog";
 import { Button } from "~/components/common";
+import { useToast } from "~/components/common/use-toast";
 import { trpc } from "~/lib/trpc/connectNext";
 import { UnionNullToUndefined } from "~/util/types";
 
@@ -23,12 +24,18 @@ export const TicketPopupContent = ({
       await utils.ticket.invalidate();
     },
   });
+  const { toast } = useToast();
   const onClickUseTicket = async () => {
     if (!ticket.id) {
       return;
     }
     await useTicket.mutateAsync({ id: ticket.id });
+    toast({
+      toastType: "info",
+      description: "チケット🎫を使用しました",
+    });
     router.refresh();
+    router.push("/authed/ticket/list");
   };
   return (
     <div>
