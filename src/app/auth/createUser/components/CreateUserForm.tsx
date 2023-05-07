@@ -9,7 +9,7 @@ import { useToast } from "~/components/common/use-toast";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
 import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
-import { trpc } from "~/providers/TrpcProvider";
+import { trpc } from "~/lib/trpc/connectNext";
 import { useInput } from "~/util/form";
 
 type CreateUserFormProps = {
