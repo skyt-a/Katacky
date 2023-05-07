@@ -4,6 +4,7 @@ import { Noto_Sans_Javanese } from "next/font/google";
 import { Toaster } from "~/components/common/toater";
 import { Notification } from "~/components/domain/notification/Notification";
 import { cn } from "~/lib/ui/utils";
+import { getBaseUrl } from "~/util/api";
 
 const notoSansJp = Noto_Sans_Javanese({
   subsets: ["latin"],
@@ -40,12 +41,15 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           color="#5bbad5"
         />
 
-        {/* <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content={getBaseUrl()} />
-        <meta name="twitter:title" content="katacky" />
-        <meta name="twitter:description" content="チケット発行アプリ" />
-        <meta name="twitter:image" content="/android-chrome-192x192.png" />
-        <meta name="twitter:creator" content="@skyt" /> */}
+        <meta name="twitter:title" content="Katacky" />
+        <meta
+          name="twitter:description"
+          content="オリジナルチケットを発行して使用したり、他の人に渡すことができるアプリです"
+        />
+        <meta name="twitter:image" content="/tw-image.jpeg" />
+        <meta name="twitter:creator" content="@skyt" />
         {/* <meta property="og:type" content="website" />
         <meta property="og:title" content="katacky" />
         <meta property="og:description" content="チケット発行アプリ" />
