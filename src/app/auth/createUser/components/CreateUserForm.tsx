@@ -2,11 +2,13 @@
 import { User } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useLogout } from "~/app/auth/hooks/useLogout";
 import { Button, Input as TextInput } from "~/components/common";
 import { FileUploadButton } from "~/components/common/fileUpload";
 import { Label } from "~/components/common/label";
 import { useToast } from "~/components/common/use-toast";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
+import { reloadSession } from "~/lib/auth/session";
 import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
 import { trpc } from "~/lib/trpc/connectNext";
@@ -30,6 +32,7 @@ export const CreateUserForm = ({ user }: CreateUserFormProps) => {
   const router = useRouter();
   const [imageUrl, setImageUrl] = useState<string>();
   const { toast } = useToast();
+  const logout = useLogout();
   const onClickButton = async (e: any) => {
     e.preventDefault();
     if (!user?.email || !user?.uid) {
@@ -47,7 +50,7 @@ export const CreateUserForm = ({ user }: CreateUserFormProps) => {
       toastType: "info",
       description: "ユーザー登録が完了しました",
     });
-    router.push("/authed/profile");
+    logout();
   };
   return (
     <form className="flex flex-col gap-4">

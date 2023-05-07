@@ -55,8 +55,10 @@ export const LoginForm = () => {
     }
     toast({
       toastType: "info",
-      description: "ユーザー仮登録が完了しました。メールを確認してください",
+      description: "ユーザー仮登録が完了しました。",
     });
+    await login(emailInput.value, passwordInput.value);
+    router.push("/auth/createUser");
   };
   return (
     <form className="flex flex-col gap-4">
