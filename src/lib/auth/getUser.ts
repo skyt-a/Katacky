@@ -3,6 +3,7 @@ import { cache } from "react";
 import { prisma } from "~/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "~/lib/auth/authOption";
+import { createCaller } from "~/servers";
 
 export const getUser = cache(async () => {
   const session = await getServerSession(authOptions);
@@ -14,13 +15,7 @@ export const getUser = cache(async () => {
 });
 
 export const getUserInfo = cache(async () => {
-  const user = await getUser();
-  const authId = user?.uid;
-  if (!authId) {
-    return null;
-  }
-  const userInfo = await prisma.user.findFirst({
-    where: { authId },
-  });
+  const caller = await createCaller();
+  const userInfo = await caller.user.loggedInUser();
   return userInfo;
 });

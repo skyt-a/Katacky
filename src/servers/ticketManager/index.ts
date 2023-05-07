@@ -2,18 +2,20 @@ import { z } from "zod";
 import { prisma } from "~/lib/prisma";
 import { publicProcedure, router } from "~/lib/trpc";
 import { TicketManageType } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 
 export const ticketManagerRouter = router({
-  list: publicProcedure
-    .input(z.object({ authId: z.number() }))
-    .query(async ({ input: { authId } }) => {
-      const ticketManagers = await prisma.ticketManager.findMany({
-        where: {
-          retrieveUserId: authId,
-        },
-      });
-      return ticketManagers;
-    }),
+  list: publicProcedure.query(async ({ ctx }) => {
+    if (ctx.session.user.userInfoId === undefined) {
+      return [];
+    }
+    const ticketManagers = await prisma.ticketManager.findMany({
+      where: {
+        retrieveUserId: ctx.session.user.userInfoId,
+      },
+    });
+    return ticketManagers;
+  }),
   create: publicProcedure
     .input(
       z.object({
@@ -27,12 +29,19 @@ export const ticketManagerRouter = router({
         ]),
         retrieveUserId: z.number(),
         ticketId: z.number(),
-        creatorId: z.number(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      if (ctx.session.user.userInfoId === undefined) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+        });
+      }
       const group = await prisma.ticketManager.create({
-        data: input,
+        data: {
+          ...input,
+          creatorId: ctx.session.user.userInfoId,
+        },
       });
       return group;
     }),

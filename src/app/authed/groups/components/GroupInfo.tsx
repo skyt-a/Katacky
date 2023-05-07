@@ -3,30 +3,26 @@ import { Group, User } from "@prisma/client";
 import { useQRCode } from "next-qrcode";
 import { useRouter } from "next/navigation";
 import { Button } from "~/components/common";
-import { useUsersInTargetGroup } from "~/hooks/domain/useUsersInTargetGroup";
 import { trpc } from "~/lib/trpc/connectNext";
 
 type GroupInfoProps = {
   group: Group;
   user: User | null;
   imageUrl?: string;
+  groupUsers: User[] | undefined;
 };
 
-export const GroupInfo = ({ group, user }: GroupInfoProps) => {
+export const GroupInfo = ({ group, user, groupUsers }: GroupInfoProps) => {
   const { Canvas } = useQRCode();
   const deleteGroup = trpc.group.delete.useMutation();
   const leaveGroup = trpc.user.leaveGroup.useMutation();
-  const { data: users } = useUsersInTargetGroup(user?.groupId);
   const router = useRouter();
   const onClickDelete = async () => {
     await deleteGroup.mutateAsync({ groupId: group.id });
     router.refresh();
   };
   const onClickLeave = async () => {
-    if (!user) {
-      return;
-    }
-    await leaveGroup.mutateAsync({ id: user?.id });
+    await leaveGroup.mutateAsync();
     router.refresh();
   };
   return (
@@ -38,7 +34,7 @@ export const GroupInfo = ({ group, user }: GroupInfoProps) => {
         グループメンバー
       </h4>
       <ul className="mt-2">
-        {users?.map((user) => (
+        {groupUsers?.map((user) => (
           <li key={user.id}>{user.name}</li>
         ))}
       </ul>

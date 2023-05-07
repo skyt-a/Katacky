@@ -18,21 +18,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/common/select";
-import { useUsersInTargetGroup } from "~/hooks/domain/useUsersInTargetGroup";
 import { trpc } from "~/lib/trpc/connectNext";
 import { UnionNullToUndefined } from "~/util/types";
 
-type TicketAssignDialogProps = {
-  user: User;
+type AssignTicketButtonProps = {
+  users: User[];
   ticket: UnionNullToUndefined<Ticket>;
 };
 
-export const TicketAssignDialog = ({
+export const AssignTicketButton = ({
   ticket,
-  user,
-}: TicketAssignDialogProps) => {
+  users,
+}: AssignTicketButtonProps) => {
   const router = useRouter();
-  const { data: users } = useUsersInTargetGroup(user?.groupId);
   const sendTicket = trpc.ticket.send.useMutation();
   const [userId, setUserId] = useState<string>();
   const onClickSendTicket = async () => {
@@ -61,13 +59,11 @@ export const TicketAssignDialog = ({
                 <SelectValue placeholder="送り先" />
               </SelectTrigger>
               <SelectContent>
-                {users
-                  ?.filter((u) => user.id !== u.id)
-                  .map((user) => (
-                    <SelectItem key={user.id} value={String(user.id)}>
-                      {user.name}
-                    </SelectItem>
-                  ))}
+                {users.map((user) => (
+                  <SelectItem key={user.id} value={String(user.id)}>
+                    {user.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Button

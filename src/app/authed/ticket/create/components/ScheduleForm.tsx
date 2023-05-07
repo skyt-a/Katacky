@@ -18,30 +18,24 @@ import { useToast } from "~/components/common/use-toast";
 import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
 
 type ScheduleFormProps = {
-  user: User | null;
+  users: User[];
   createTicket: (isScheduled: boolean) => Promise<Ticket | undefined>;
 };
 
-export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
+export const ScheduleForm = ({ createTicket, users }: ScheduleFormProps) => {
   const router = useRouter();
   const [selectedType, setSelectedType] = useState<string>(
     TicketManageType.ONCE_MONTH
   );
   const countInput = useInput(1);
   const nameInput = useInput("");
-  const { data: users } = useUsersInTargetGroup(user?.groupId);
   const [userId, setUserId] = useState<string>();
 
-  const util = trpc.useContext();
-  const createTicketManager = trpc.ticketManager.create.useMutation({
-    onSuccess() {
-      util.ticketManager.invalidate();
-    },
-  });
+  const createTicketManager = trpc.ticketManager.create.useMutation();
   const { toast } = useToast();
   const onConfirm = async () => {
     const ticket = await createTicket(true);
-    if (!ticket || !user) {
+    if (!ticket) {
       return;
     }
     await createTicketManager.mutateAsync({
@@ -50,7 +44,6 @@ export const ScheduleForm = ({ createTicket, user }: ScheduleFormProps) => {
       count: Number(countInput.value),
       ticketId: ticket.id,
       name: nameInput.value,
-      creatorId: user.id,
     });
     toast({
       toastType: "info",

@@ -1,6 +1,7 @@
 import { auth } from "~/lib/firebase/server";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { prisma } from "~/lib/prisma";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -10,8 +11,10 @@ export const authOptions: NextAuthOptions = {
         if (idToken) {
           try {
             const decoded = await auth.verifyIdToken(idToken);
-
-            return { ...decoded } as any;
+            const userInfo = await prisma.user.findUnique({
+              where: { authId: decoded.uid },
+            });
+            return { ...decoded, userInfoId: userInfo?.id, id: decoded.uid };
           } catch (err) {
             console.error(err);
           }
@@ -25,7 +28,12 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      return { ...token, ...user } as any;
+      if (user) {
+        token.uid = user.id;
+        token.userInfoId = user.userInfoId;
+        token.emailVerified = user.emailVerified as boolean;
+      }
+      return token;
     },
     // sessionにJWTトークンからのユーザ情報を格納
     async session({ session, token }) {
@@ -34,6 +42,7 @@ export const authOptions: NextAuthOptions = {
       }
       session.user.emailVerified = token.emailVerified;
       session.user.uid = token.uid;
+      session.user.userInfoId = token.userInfoId;
       return session;
     },
   },

@@ -1,4 +1,5 @@
 import { router } from "~/lib/trpc";
+import { Context, createContext } from "~/lib/trpc/context";
 import { groupRouter } from "~/servers/group";
 import { ticketRouter } from "~/servers/ticket";
 import { ticketManagerRouter } from "~/servers/ticketManager";
@@ -12,3 +13,7 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
+
+export const trpcServerCaller = appRouter.createCaller;
+
+export const createCaller = async () => trpcServerCaller(await createContext());

@@ -1,53 +1,43 @@
 "use client";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink } from "@trpc/client";
+import { httpBatchLink, loggerLink } from "@trpc/client";
 import { useState } from "react";
-import SuperJSON from "superjson";
+import superjson from "superjson";
 import { trpc } from "~/lib/trpc/connectNext";
-import { getBaseUrl } from "~/util/api";
-import { getIdToken } from "firebase/auth";
-import { auth } from "~/lib/firebase/browser";
 
-const getCurrentUserIdToken = async () => {
-  const currentUser = auth.currentUser;
-  if (!currentUser) return;
-  return await getIdToken(currentUser, true);
-};
+function getBaseUrl() {
+  if (typeof window !== "undefined")
+    // browser should use relative path
+    return "";
+  if (process.env.VERCEL_URL)
+    // reference for vercel.com
+    return `https://${process.env.VERCEL_URL}`;
+  if (process.env.RENDER_INTERNAL_HOSTNAME)
+    // reference for render.com
+    return `http://${process.env.RENDER_INTERNAL_HOSTNAME}:${process.env.PORT}`;
+  // assume localhost
+  return `http://localhost:${process.env.PORT ?? 3000}`;
+}
 
-export const TrpcProvider: React.FC<{ children: React.ReactNode }> = (p) => {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            suspense: true,
-            refetchOnWindowFocus: false,
-          },
-        },
-      })
-  );
+export const TrpcProvider = (props: { children: React.ReactNode }) => {
+  const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      transformer: SuperJSON,
       links: [
+        loggerLink({
+          enabled: () => process.env.NODE_ENV === "development",
+        }),
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
-          async headers() {
-            const idToken = await getCurrentUserIdToken();
-            if (!idToken) return {};
-            return {
-              Authorization: `Bearer ${idToken}`,
-            };
-          },
         }),
       ],
+      transformer: superjson,
     })
   );
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        {p.children}
+        {props.children}
       </QueryClientProvider>
     </trpc.Provider>
   );

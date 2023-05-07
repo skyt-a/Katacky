@@ -7,7 +7,6 @@ export default async function CreateUserPage() {
   if (!user) {
     redirect("/auth/login");
   }
-  console.log("dddddddddddddd", user);
   const userInfo = await getUserInfo();
   if (userInfo) {
     redirect("/authed/profile");

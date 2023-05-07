@@ -5,16 +5,23 @@ import { publicProcedure, router } from "~/lib/trpc";
 import { v4 } from "uuid";
 
 export const groupRouter = router({
-  group: publicProcedure
-    .input(z.object({ groupId: z.number() }))
-    .query(async ({ input: { groupId } }) => {
-      const group = await prisma.group.findUnique({
-        where: {
-          id: groupId,
-        },
-      });
-      return group;
-    }),
+  group: publicProcedure.query(async ({ ctx }) => {
+    if (!ctx?.session?.user?.userInfoId) {
+      return null;
+    }
+    const user = await prisma.user.findUnique({
+      where: { id: ctx?.session?.user?.userInfoId },
+    });
+    if (!user?.groupId) {
+      return null;
+    }
+    const group = await prisma.group.findUnique({
+      where: {
+        id: user?.groupId,
+      },
+    });
+    return group;
+  }),
   groupByToken: publicProcedure
     .input(z.object({ token: z.string() }))
     .query(async ({ input: { token } }) => {

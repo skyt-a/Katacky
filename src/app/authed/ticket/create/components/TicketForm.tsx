@@ -18,27 +18,23 @@ import { ticketFormLength } from "~/util/setting";
 
 type TicketFormProps = {
   user: User | null;
+  groupUsers: User[];
 };
 
-export const TicketForm = (props: TicketFormProps) => {
+export const TicketForm = ({ user, groupUsers }: TicketFormProps) => {
   const router = useRouter();
   const titleInput = useInput("");
   const messageInput = useInput("");
   const colorInput = useInput<`#${string}`>("#ffffff");
-  const fromNameInput = useInput(props.user?.name ?? "");
+  const fromNameInput = useInput(user?.name ?? "");
   const toNameInput = useInput("");
   const [expiredDate, setExpiredDate] = useState<Date>();
   const [startDate, setStartDate] = useState<Date>();
 
   const { toast } = useToast();
-  const utils = trpc.useContext();
-  const createTicketMutation = trpc.ticket.create.useMutation({
-    onSuccess: async () => {
-      await utils.ticket.invalidate();
-    },
-  });
+  const createTicketMutation = trpc.ticket.create.useMutation();
   const createTicket = async (isScheduled = false) => {
-    if (!props.user) {
+    if (!user) {
       return;
     }
     if (expiredDate && isBefore(expiredDate, new Date())) {
@@ -68,10 +64,10 @@ export const TicketForm = (props: TicketFormProps) => {
       backgroundColor: colorInput.value,
       expiredDate: expiredDate,
       availableDateFrom: startDate,
-      creatorId: props.user?.id,
+      creatorId: user?.id,
       from: fromNameInput.value,
       to: toNameInput.value,
-      holderId: props.user?.id,
+      holderId: user?.id,
       isScheduled,
     });
     if (!ticket) {
@@ -86,11 +82,12 @@ export const TicketForm = (props: TicketFormProps) => {
       toastType: "info",
       description: "チケットを作成しました",
     });
+    router.refresh();
     router.push("/authed/ticket/list");
   };
   const isDisabledButton =
     titleInput.value.length === 0 ||
-    !props.user ||
+    !user ||
     fromNameInput.value.length === 0 ||
     toNameInput.value.length === 0 ||
     messageInput.value.length === 0 ||
@@ -164,7 +161,7 @@ export const TicketForm = (props: TicketFormProps) => {
           title={ph(titleInput.value, "タイトルが入ります")}
           message={ph(messageInput.value, "メッセージが入ります")}
           backgroundColor={colorInput.value}
-          from={props.user?.name ?? ""}
+          from={user?.name ?? ""}
           expiredDate={expiredDate}
         />
       </Suspense>
@@ -175,12 +172,12 @@ export const TicketForm = (props: TicketFormProps) => {
       <Sheet>
         <SheetTrigger
           className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-10 py-2 px-4"
-          disabled={isDisabledButton || !Boolean(props.user?.groupId)}
+          disabled={isDisabledButton || !Boolean(user?.groupId)}
         >
           このチケットをスケジュール発行する
         </SheetTrigger>
         <SheetContent position="bottom" size="content">
-          <ScheduleForm createTicket={createTicket} user={props.user} />
+          <ScheduleForm createTicket={createTicket} users={groupUsers} />
         </SheetContent>
       </Sheet>
     </form>

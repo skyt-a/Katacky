@@ -5,6 +5,7 @@ import {
   getToken,
   onMessage,
 } from "firebase/messaging";
+import { app } from "~/lib/firebase/browser";
 import { trpc } from "~/lib/trpc/connectNext";
 
 export const requestForToken = async (isSupported: boolean) => {
@@ -45,7 +46,7 @@ export const onMessageListener: (
   if (!isSupported) {
     return;
   }
-  const messaging = getMessaging();
+  const messaging = getMessaging(app);
   return new Promise((resolve) => {
     onMessage(messaging, (payload) => {
       console.log("payload", payload);

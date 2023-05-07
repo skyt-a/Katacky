@@ -1,34 +1,16 @@
 import { TicketList } from "~/app/authed/ticket/list/components/TicketList";
 import "./ticketAnimation.css";
-import { TicketCard } from "~/app/authed/ticket/list/components/TicketCard";
-import { Ticket } from "~/components/domain/tickets/Ticket";
 import { getUserInfo } from "~/lib/auth/getUser";
-import { prisma } from "~/lib/prisma";
+import { createCaller } from "~/servers";
 
 export const TicketListWrapper = async () => {
   const user = await getUserInfo();
   if (!user) {
     return null;
   }
-  const ticket = await prisma.ticket.findMany({
-    where: {
-      holderId: user.id,
-      isUsed: false,
-      isScheduled: false,
-      OR: [
-        {
-          expiredDate: null,
-        },
-        {
-          expiredDate: {
-            gte: new Date(),
-          },
-        },
-      ],
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-  });
-  return <TicketList tickets={ticket} user={user} />;
+  const caller = await createCaller();
+  const ticket = await caller.ticket.holdList();
+  const group = await caller.group.group();
+  const users = !group ? [] : await caller.user.byGroup({ groupId: group.id });
+  return <TicketList tickets={ticket} groupUsers={users} />;
 };

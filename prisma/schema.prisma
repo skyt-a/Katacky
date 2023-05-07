@@ -65,7 +65,7 @@ model User {
   id              Int             @id @default(autoincrement())
   email           String          @unique
   name            String
-  authId          String
+  authId          String          @unique
   groupId         Int?
   deviceToken     String?         @unique
   createdAt       DateTime        @default(now())

@@ -4,7 +4,6 @@ import { Label } from "~/components/common/label";
 import { useToast } from "~/components/common/use-toast";
 import { useInput } from "~/util/form";
 import { User } from "@prisma/client";
-import { trpc } from "~/lib/trpc/connectNext";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "~/lib/firebase/browser";
 import { ProfileSetting } from "~/app/authed/profile/components/ProfileSetting";
@@ -14,6 +13,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
+import { trpc } from "~/lib/trpc/connectNext";
 type ChangeSettingFormProps = {
   user: User;
   imageUrl: string | undefined;
@@ -25,17 +25,8 @@ export const ChangeSettingForm = ({
 }: ChangeSettingFormProps) => {
   const nameInput = useInput(user.name);
   const { toast } = useToast();
-  const utils = trpc.useContext();
-  const updateName = trpc.user.updateName.useMutation({
-    onSuccess: () => {
-      utils.user.invalidate();
-    },
-  });
-  const updateImage = trpc.user.updateProfileImage.useMutation({
-    onSuccess: () => {
-      utils.user.invalidate();
-    },
-  });
+  const updateName = trpc.user.updateName.useMutation();
+  const updateImage = trpc.user.updateProfileImage.useMutation();
   const [imageUrl, setImageUrl] = useState<string | undefined>(imageUrlNow);
   const router = useRouter();
   const onClickImageChangeButton = async (e: any) => {

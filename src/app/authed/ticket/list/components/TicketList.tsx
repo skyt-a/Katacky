@@ -2,23 +2,23 @@
 import { Ticket as TicketType, User } from "@prisma/client";
 import { useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { TicketPopupContent } from "~/app/authed/ticket/list/components/TicketPopupContent";
+import { AssignTicketButton } from "~/app/authed/ticket/list/components/AssignTicketButton";
+import { UseTicketButton } from "~/app/authed/ticket/list/components/UseTicketButton";
 import { Button } from "~/components/common";
 import { Ticket } from "~/components/domain/tickets/Ticket";
 import { UnionNullToUndefined } from "~/util/types";
 
 type TicketListProps = {
   tickets: TicketType[];
-  user: User;
+  groupUsers: User[];
 };
 
-export const TicketList = ({ tickets, user }: TicketListProps) => {
+export const TicketList = ({ tickets, groupUsers }: TicketListProps) => {
   const [selectedTicket, setSelectedTicket] =
     useState<UnionNullToUndefined<TicketType>>();
   const onClickTicket = (ticket: UnionNullToUndefined<TicketType>) => () => {
     setSelectedTicket(ticket);
   };
-  console.log(selectedTicket);
   return (
     <>
       <ul className="relative">
@@ -51,7 +51,13 @@ export const TicketList = ({ tickets, user }: TicketListProps) => {
               <Ticket key={ticket.id} {...ticket} />
               {selectedTicket && selectedTicket?.id === ticket.id && (
                 <div className="mt-4">
-                  <TicketPopupContent ticket={selectedTicket} user={user} />
+                  <UseTicketButton ticket={selectedTicket} />
+                  <div className="mt-2">
+                    <AssignTicketButton
+                      ticket={selectedTicket}
+                      users={groupUsers}
+                    />
+                  </div>
                   <Button
                     className="w-full mt-2"
                     variant="secondary"

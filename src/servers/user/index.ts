@@ -1,5 +1,5 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { getUserInfo } from "~/lib/auth/getUser";
 import { prisma } from "~/lib/prisma";
 import { publicProcedure, router } from "~/lib/trpc";
 
@@ -15,6 +15,15 @@ export const userRouter = router({
       });
       return user;
     }),
+  loggedInUser: publicProcedure.query(async ({ ctx }) => {
+    const uid = ctx.session.user.uid;
+    const user = await prisma.user.findFirst({
+      where: {
+        authId: uid,
+      },
+    });
+    return user;
+  }),
   create: publicProcedure
     .input(
       z.object({
@@ -57,68 +66,97 @@ export const userRouter = router({
       });
       return user;
     }),
-  leaveGroup: publicProcedure
-    .input(z.object({ id: z.number() }))
-    .mutation(async ({ input: { id } }) => {
+  leaveGroup: publicProcedure.mutation(
+    async ({
+      ctx: {
+        session: {
+          user: { userInfoId },
+        },
+      },
+    }) => {
+      console.log("user", userInfoId);
+      if (!userInfoId) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
       const user = await prisma.user.update({
         data: {
           groupId: null,
         },
         where: {
-          id,
+          id: userInfoId,
         },
       });
       return user;
-    }),
+    }
+  ),
   updateDeviceToken: publicProcedure
     .input(z.object({ deviceToken: z.string() }))
-    .mutation(async ({ input: { deviceToken } }) => {
-      const user = await getUserInfo();
-      if (!user) {
-        return null;
+    .mutation(
+      async ({
+        input: { deviceToken },
+        ctx: {
+          session: {
+            user: { userInfoId },
+          },
+        },
+      }) => {
+        if (!userInfoId) {
+          throw new TRPCError({ code: "UNAUTHORIZED" });
+        }
+        const updatedUser = await prisma.user.update({
+          data: {
+            deviceToken,
+          },
+          where: {
+            id: userInfoId,
+          },
+        });
+        return updatedUser;
       }
-      const updatedUser = await prisma.user.update({
-        data: {
-          deviceToken,
+    ),
+  updateName: publicProcedure.input(z.object({ name: z.string() })).mutation(
+    async ({
+      input: { name },
+      ctx: {
+        session: {
+          user: { userInfoId },
         },
-        where: {
-          id: user.id,
-        },
-      });
-      return updatedUser;
-    }),
-  updateName: publicProcedure
-    .input(z.object({ name: z.string() }))
-    .mutation(async ({ input: { name } }) => {
-      const user = await getUserInfo();
-      if (!user) {
-        return null;
+      },
+    }) => {
+      if (!userInfoId) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
       }
       const updatedUser = await prisma.user.update({
         data: {
           name,
         },
         where: {
-          id: user.id,
+          id: userInfoId,
         },
       });
       return updatedUser;
-    }),
+    }
+  ),
   updateProfileImage: publicProcedure
     .input(z.object({ url: z.string() }))
-    .mutation(async ({ input: { url } }) => {
-      const user = await getUserInfo();
-      if (!user) {
-        return null;
+    .mutation(
+      async ({
+        input: { url },
+        ctx: {
+          session: {
+            user: { userInfoId },
+          },
+        },
+      }) => {
+        const updatedUser = await prisma.user.update({
+          data: {
+            profileImageUrl: url,
+          },
+          where: {
+            id: userInfoId,
+          },
+        });
+        return updatedUser;
       }
-      const updatedUser = await prisma.user.update({
-        data: {
-          profileImageUrl: url,
-        },
-        where: {
-          id: user.id,
-        },
-      });
-      return updatedUser;
-    }),
+    ),
 });

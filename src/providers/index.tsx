@@ -5,10 +5,10 @@ import { TrpcProvider } from "~/providers/TrpcProvider";
 
 export const GTProviders = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <ThemeProvider>
-      <TrpcProvider>
-        <SessionProvider>{children}</SessionProvider>
-      </TrpcProvider>
-    </ThemeProvider>
+    <SessionProvider>
+      <ThemeProvider>
+        <TrpcProvider>{children}</TrpcProvider>
+      </ThemeProvider>
+    </SessionProvider>
   );
 };

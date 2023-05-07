@@ -1,4 +1,3 @@
-import { BatchResponse } from "firebase-admin/lib/messaging/messaging-api";
 import { z } from "zod";
 import { prisma } from "~/lib/prisma";
 import { publicProcedure, router } from "~/lib/trpc";
@@ -15,19 +14,63 @@ export const ticketRouter = router({
           creatorId,
         },
       });
-      console.log("user", user);
       return user;
     }),
-  holdList: publicProcedure
-    .input(z.object({ holderId: z.number() }))
-    .query(async ({ input: { holderId } }) => {
-      const user = await prisma.ticket.findMany({
+  holdList: publicProcedure.query(async ({ ctx }) => {
+    const holderId = ctx?.session?.user?.userInfoId;
+    if (!holderId) {
+      return [];
+    }
+    const users = await prisma.ticket.findMany({
+      where: {
+        holderId,
+        isUsed: false,
+        isScheduled: false,
+        OR: [
+          {
+            expiredDate: null,
+          },
+          {
+            expiredDate: {
+              gte: new Date(),
+            },
+          },
+        ],
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+    return users;
+  }),
+  useList: publicProcedure.query(async ({ ctx }) => {
+    const holderId = ctx?.session?.user?.userInfoId;
+    if (!holderId) {
+      return [];
+    }
+    const users = await prisma.ticket.findMany({
+      where: {
+        holderId,
+        isUsed: true,
+        isScheduled: false,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+    return users;
+  }),
+  listByIds: publicProcedure
+    .input(z.object({ ids: z.array(z.number()) }))
+    .query(async ({ input: { ids } }) => {
+      const users = await prisma.ticket.findMany({
         where: {
-          holderId,
+          id: {
+            in: ids,
+          },
         },
       });
-      console.log("user", user);
-      return user;
+      return users;
     }),
   create: publicProcedure
     .input(
@@ -89,7 +132,6 @@ export const ticketRouter = router({
           },
           [retrieveUser.deviceToken]
         );
-        console.log(response.responses[0].error);
       }
       return ticket;
     }),

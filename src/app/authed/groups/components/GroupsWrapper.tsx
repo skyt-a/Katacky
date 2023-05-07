@@ -1,27 +1,17 @@
-import { useQRCode } from "next-qrcode";
 import { GroupInfo } from "~/app/authed/groups/components/GroupInfo";
 import { GroupsForm } from "~/app/authed/groups/components/GroupsForm";
-import { getUserInfo } from "~/lib/auth/getUser";
-import { getDownloadURLFromStorage } from "~/lib/firebase/storageServer";
-import { prisma } from "~/lib/prisma";
+import { createCaller } from "~/servers";
 
 export const GroupsWrapper = async () => {
-  const user = await getUserInfo();
+  const caller = await createCaller();
+  const user = await caller.user.loggedInUser();
   if (!user) {
     throw new Error("User not found");
   }
-  if (!user.groupId) {
+  const group = await caller.group.group();
+  if (!group || !user.groupId) {
     return <GroupsForm user={user} />;
   }
-  const group = await prisma.group.findFirst({
-    where: {
-      id: user.groupId,
-    },
-  });
-  const imageUrl = await getDownloadURLFromStorage(user?.profileImageUrl);
-
-  if (!group) {
-    return <GroupsForm user={user} />;
-  }
-  return <GroupInfo group={group} user={user} />;
+  const users = await caller.user.byGroup({ groupId: user.groupId });
+  return <GroupInfo group={group} user={user} groupUsers={users} />;
 };
