@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import {
   Button,
   Card,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -40,6 +41,7 @@ export const ManagerCard = ({ manager, ticket }: ManagerCardProps) => {
             <CardTitle>{manager.name}</CardTitle>
             <CardDescription>{manageTypeToText[manager.type]}</CardDescription>
           </CardHeader>
+          <CardContent>宛先: {ticket?.to}</CardContent>
         </Card>
       </SheetTrigger>
       <SheetContent position="bottom" size="content">
