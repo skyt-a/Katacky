@@ -1,24 +1,28 @@
 "use client";
+import { isSupported } from "firebase/messaging";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/common";
 import { Label } from "~/components/common/label";
 import { Switch } from "~/components/common/switch";
+import { requestForToken } from "~/lib/firebase/fcm";
 
 export const ProfileSetting = () => {
   const [notice, setNotice] = useState(false);
+  const [isSupportedMessage, setIsSupportedMessage] = useState<boolean>(false);
   useEffect(() => {
     setNotice(Notification.permission === "granted");
+    isSupported().then((isSupportedThis) => {
+      setIsSupportedMessage(isSupportedThis);
+    });
   }, []);
+  useEffect(() => {}, []);
   const onCheckChange = async () => {
-    if (notice) {
-      return;
-    }
     if (
       typeof window !== "undefined" &&
       Notification.permission !== "granted"
     ) {
-      const permission = await Notification.requestPermission();
-      if (permission === "granted") {
+      const token = requestForToken(isSupportedMessage);
+      if (!token) {
         setNotice(true);
       }
     }
