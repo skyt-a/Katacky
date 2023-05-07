@@ -27,7 +27,8 @@ export const FileUploadButton = ({
       if (file.size > 10 * 1024 * 1024) {
         toast({
           toastType: "error",
-          description: "画像サイズが大きすぎます",
+          description:
+            "画像サイズが大きすぎます。10MB以下の画像を使用してください",
         });
         return;
       }
