@@ -75,8 +75,8 @@ export const GroupInfo = ({ group, user, groupUsers }: GroupInfoProps) => {
             scale: 4,
             width: 200,
             color: {
-              dark: "#fff",
-              light: "#89c4ff",
+              dark: "#000",
+              light: "#fff",
             },
           }}
         />
