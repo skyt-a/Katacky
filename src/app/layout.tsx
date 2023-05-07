@@ -48,7 +48,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           name="twitter:description"
           content="オリジナルチケットを発行して使用したり、他の人に渡すことができるアプリです"
         />
-        <meta name="twitter:image" content="/tw-image.jpeg" />
+        <meta name="twitter:image" content="/tw-image.png" />
         <meta name="twitter:creator" content="@skyt" />
         {/* <meta property="og:type" content="website" />
         <meta property="og:title" content="katacky" />
