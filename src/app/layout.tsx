@@ -21,15 +21,17 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
     <html lang="ja">
       <head>
         <meta name="application-name" content="Katacky" />
+        <meta name="apple-touch-fullscreen" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Katacky" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        <link rel="icon" type="image/png" href="icon-512.png" />
         <link
           href="/icon-256x256.png"
           media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
           rel="apple-touch-startup-image"
         />
-        <link rel="apple-touch-icon" href="images/icon-192x192.png" />
         <link
           href="splashscreens/iphone5_splash.png"
           media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
@@ -80,7 +82,6 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
           rel="apple-touch-startup-image"
         />
-        <link rel="icon" type="image/png" href="images/icon-512x512.png" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         {/* <meta name="msapplication-config" content="/icons/browserconfig.xml" /> */}
@@ -91,7 +92,11 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
         />
-        <link rel="manifest" href="/manifest.json" />
+        <link
+          rel="manifest"
+          href="/manifest.json"
+          crossOrigin="use-credentials"
+        />
 
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content={getBaseUrl()} />
