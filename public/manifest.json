@@ -1,11 +1,12 @@
 {
   "theme_color": "#000000",
   "background_color": "#000000",
-  "display": "fullscreen",
+  "display": "standalone",
   "scope": "/",
   "start_url": "/",
   "name": "Katacky",
   "short_name": "Katacky",
+  "orientation": "any",
   "description": "オリジナルチケットを発行して使用したり、他の人に渡すことができるアプリです",
   "icons": [
     {
