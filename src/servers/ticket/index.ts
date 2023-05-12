@@ -135,4 +135,14 @@ export const ticketRouter = router({
       }
       return ticket;
     }),
+  delete: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input: { id } }) => {
+      const ticket = await prisma.ticket.delete({
+        where: {
+          id,
+        },
+      });
+      return ticket;
+    }),
 });

@@ -1,6 +1,4 @@
-"use client";
 import { Ticket as TicketType } from "@prisma/client";
-import { useRouter } from "next/navigation";
 import { Button } from "~/components/common";
 import { useToast } from "~/components/common/use-toast";
 import { trpc } from "~/lib/trpc/connectNext";
@@ -8,10 +6,13 @@ import { UnionNullToUndefined } from "~/util/types";
 
 type UseTicketButtonProps = {
   ticket: UnionNullToUndefined<TicketType>;
+  onUseSuccess: () => void;
 };
 
-export const UseTicketButton = ({ ticket }: UseTicketButtonProps) => {
-  const router = useRouter();
+export const UseTicketButton = ({
+  ticket,
+  onUseSuccess,
+}: UseTicketButtonProps) => {
   const useTicket = trpc.ticket.use.useMutation();
   const { toast } = useToast();
   const onClickUseTicket = async () => {
@@ -23,8 +24,7 @@ export const UseTicketButton = ({ ticket }: UseTicketButtonProps) => {
       toastType: "info",
       description: "チケット🎫を使用しました",
     });
-    router.refresh();
-    router.push("/authed/ticket/list");
+    onUseSuccess();
   };
   return (
     <>
