@@ -1,9 +1,7 @@
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { CardDescription, CardHeader, CardTitle } from "~/components/common";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
 import { getUserInfo } from "~/lib/auth/getUser";
-import { storage } from "~/lib/firebase/server";
 import { getDownloadURLFromStorage } from "~/lib/firebase/storageServer";
 
 export const ProfileUserInfo = async () => {

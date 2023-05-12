@@ -4,7 +4,7 @@ import { rsc } from "~/lib/trpc/server/trpc";
 import { HydrateClient } from "~/lib/trpc/client/HydrateClient";
 
 export const TicketListWrapper = async () => {
-  const [ticket, group] = await Promise.all([
+  const [tickets, group] = await Promise.all([
     rsc.ticket.holdList.fetch(),
     rsc.group.group.fetch(),
   ]);
@@ -13,7 +13,7 @@ export const TicketListWrapper = async () => {
     : await rsc.user.byGroup.fetch({ groupId: group.id });
   return (
     <HydrateClient state={await rsc.dehydrate()}>
-      <TicketList tickets={ticket ?? []} groupUsers={users} />
+      <TicketList tickets={tickets ?? []} groupUsers={users} />
     </HydrateClient>
   );
 };

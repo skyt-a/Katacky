@@ -2,7 +2,6 @@ import "server-only";
 import { z } from "zod";
 import { prisma } from "~/lib/prisma";
 import { publicProcedure, router } from "~/lib/trpc";
-import { getUserInfo } from "~/lib/auth/getUser";
 import { sendFirebaseCloudMessage } from "~/lib/firebase/sendMessage";
 import { ticketFormLength } from "~/util/setting";
 
@@ -110,8 +109,10 @@ export const ticketRouter = router({
     }),
   send: publicProcedure
     .input(z.object({ id: z.number(), userId: z.number() }))
-    .mutation(async ({ input: { id, userId } }) => {
-      const user = await getUserInfo();
+    .mutation(async ({ input: { id, userId }, ctx }) => {
+      const user = await prisma.user.findUnique({
+        where: { authId: ctx.session.user.uid },
+      });
       const ticket = await prisma.ticket.update({
         where: {
           id,
