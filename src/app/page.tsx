@@ -4,7 +4,7 @@ import { getUser } from "~/lib/auth/getUser";
 export default async function Root() {
   const user = await getUser();
   if (user) {
-    redirect("/authed/profile");
+    redirect("/profile");
   } else {
     redirect("/auth/login");
   }

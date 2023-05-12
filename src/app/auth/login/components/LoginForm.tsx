@@ -29,7 +29,7 @@ export const LoginForm = () => {
       });
       return;
     }
-    router.push("/authed/profile");
+    router.push("/profile");
   };
   const signup = useSignup();
   const onClickButtonSignup = async (e: any) => {

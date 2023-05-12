@@ -1,9 +1,8 @@
 import "server-only";
 import { cache } from "react";
-import { prisma } from "~/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "~/lib/auth/authOption";
-import { createCaller } from "~/servers";
+import { rsc } from "~/lib/trpc/server/trpc";
 
 export const getUser = cache(async () => {
   const session = await getServerSession(authOptions);
@@ -15,7 +14,5 @@ export const getUser = cache(async () => {
 });
 
 export const getUserInfo = cache(async () => {
-  const caller = await createCaller();
-  const userInfo = await caller.user.loggedInUser();
-  return userInfo;
+  return await rsc.user.loggedInUser.fetch();
 });

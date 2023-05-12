@@ -20,11 +20,11 @@ export default function Menu() {
   return (
     <div className="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-secondary border border-gray-200 rounded-full bottom-4 left-1/2">
       <div className="grid h-full max-w-lg grid-cols-5 mx-auto">
-        <MenuLink href="/authed/manager">
+        <MenuLink href="/manager">
           <TimerIcon />
           <span className="sr-only">チケットスケジュール一覧</span>
         </MenuLink>
-        <MenuLink href="/authed/ticket/list">
+        <MenuLink href="/ticket/list">
           <TicketIcon />
           <span className="sr-only">チケット一覧</span>
         </MenuLink>
@@ -32,17 +32,17 @@ export default function Menu() {
         <div className="flex items-center justify-center">
           <Link
             className="inline-flex items-center justify-center w-10 h-10 font-medium bg-primary text-secondary rounded-full hover:bg-primary group focus:ring-4 focus:ring-secondary-300 focus:outline-none"
-            href="/authed/ticket/create"
+            href="/ticket/create"
           >
             <PlusIcon />
             <span className="sr-only">チケット作成</span>
           </Link>
         </div>
-        <MenuLink href="/authed/groups">
+        <MenuLink href="/groups">
           <GroupIcon />
           <span className="sr-only">グループ</span>
         </MenuLink>
-        <MenuLink href="/authed/profile">
+        <MenuLink href="/profile">
           <ProfileIcon />
           <span className="sr-only">プロフィール</span>
         </MenuLink>

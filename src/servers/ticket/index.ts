@@ -43,7 +43,7 @@ export const ticketRouter = router({
     });
     return users;
   }),
-  useList: publicProcedure.query(async ({ ctx }) => {
+  usedList: publicProcedure.query(async ({ ctx }) => {
     const holderId = ctx?.session?.user?.userInfoId;
     if (!holderId) {
       return [];

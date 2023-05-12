@@ -19,7 +19,7 @@ export const useLoginWithEmail: () => (
       const idToken = await userCredential.user.getIdToken();
       const result = await signInByNextAuth("credentials", {
         idToken,
-        callbackUrl: "/authed/profile",
+        callbackUrl: "/profile",
       });
       return result;
     } catch (e) {
