@@ -10,6 +10,7 @@ type TicketProps = {
   from?: string;
   expiredDate?: Date;
   className?: string;
+  isUsed?: boolean;
 };
 
 export const Ticket = ({
@@ -20,6 +21,7 @@ export const Ticket = ({
   from,
   expiredDate,
   className,
+  isUsed,
 }: TicketProps) => {
   const color = getTextColorFromBackgroundColor(backgroundColor);
   return (
@@ -47,51 +49,36 @@ export const Ticket = ({
           <div className="font-medium break-all	">to: {to}</div>
           <div className="text-sm break-all">{message}</div>
         </div>
-        <div className="flex justify-between items-center">
-          <div className="bg-secondary w-3 h-6 rounded-r-md  border-y-[1px] border-r-[1px]"></div>
+        <div
+          className={`flex justify-between ${
+            !isUsed ? `items-center` : `items-end`
+          }`}
+        >
+          <div
+            className={`bg-secondary w-3 h-6 rounded-r-md ${
+              !isUsed
+                ? `border-y-[1px] border-r-[1px]`
+                : `border-t-[1px] border-r-[1px]`
+            }`}
+          ></div>
           <div
             className={`w-full border-t-[2px] border-[${color}] border-dashed`}
           ></div>
-          <div className="bg-secondary w-3 h-6 rounded-l-md border-y-[1px] border-l-[1px]"></div>
+          <div
+            className={`bg-secondary w-3 h-6 rounded-l-md ${
+              !isUsed
+                ? `border-y-[1px] border-l-[1px]`
+                : `border-t-[1px] border-l-[1px]`
+            }`}
+          ></div>
         </div>
-        <div className="flex justify-between font-poppins text-sm px-4 py-3 border-x-[1px] border-b-[1px] rounded-b-lg">
-          <div className="mr-6">from: {from}</div>
-        </div>
+        {!isUsed && (
+          <div className="flex justify-between font-poppins text-sm px-4 py-3 border-x-[1px] border-b-[1px] rounded-b-lg">
+            <div className="mr-6">from: {from}</div>
+          </div>
+        )}
       </div>
     </div>
-    // <div className="flex flex-col">
-    //   <div
-    //     className="bg-white relative drop-shadow-2xl p-4 m-4"
-    //     style={{
-    //       backgroundColor,
-    //       color: getTextColorFromBackgroundColor(backgroundColor),
-    //     }}
-    //   >
-    //     <div className="flex-none sm:flex">
-    //       <div className="flex-auto justify-evenly">
-    //         <div className="flex items-center justify-between">
-    //           <div className="flex items-center  my-1">
-    //             <h2 className="font-bold">{title}</h2>
-    //           </div>
-    //         </div>
-    //         <div className="border-b-2 my-5"></div>
-    //         <div className="">
-    //           <div className="w-full flex-none text-lg leading-none">{to}</div>
-    //         </div>
-    //         <div
-    //           className="border-b border-dashed my-5 pt-5 w-[calc(100%_+_2rem)] relative -left-4"
-    //           style={{
-    //             borderColor: getTextColorFromBackgroundColor(backgroundColor),
-    //           }}
-    //         ></div>
-    //         <div className="pt-1 ">
-    //           <div className="mt-2 text-sm">{message}</div>
-    //           <div className="mt-2 text-xs text-right">from: {from}</div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 };
 
