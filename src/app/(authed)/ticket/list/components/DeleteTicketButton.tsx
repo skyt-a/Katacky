@@ -1,6 +1,6 @@
 import { Button } from "~/components/common";
 import { useToast } from "~/components/common/use-toast";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 
 type DeleteTicketButtonProps = {
   selectedTicketId: number;

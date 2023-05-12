@@ -2,9 +2,9 @@
 import { Ticket as TicketType, User } from "@prisma/client";
 import { useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { AssignTicketButton } from "~/app/authed/ticket/list/components/AssignTicketButton";
-import { DeleteTicketButton } from "~/app/authed/ticket/list/components/DeleteTicketButton";
-import { UseTicketButton } from "~/app/authed/ticket/list/components/UseTicketButton";
+import { AssignTicketButton } from "~/app/(authed)/ticket/list/components/AssignTicketButton";
+import { DeleteTicketButton } from "~/app/(authed)/ticket/list/components/DeleteTicketButton";
+import { UseTicketButton } from "~/app/(authed)/ticket/list/components/UseTicketButton";
 import { Button } from "~/components/common";
 import { Ticket } from "~/components/domain/tickets/Ticket";
 import { UnionNullToUndefined } from "~/util/types";

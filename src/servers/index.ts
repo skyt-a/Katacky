@@ -1,3 +1,4 @@
+import "server-only";
 import { router } from "~/lib/trpc";
 import { createContext } from "~/lib/trpc/context";
 import { groupRouter } from "~/servers/group";
@@ -13,3 +14,7 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
+
+export const trpcServerCaller = appRouter.createCaller;
+
+export const createCaller = async () => trpcServerCaller(await createContext());

@@ -11,7 +11,7 @@ import { useToast } from "~/components/common/use-toast";
 import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
 import { Ticket } from "~/components/domain/tickets/Ticket";
 import { LoadingSpinner } from "~/components/layout/LoadingSpinner";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 import { ph, setDateDayEnd, useInput } from "~/util/form";
 import { ticketFormLength } from "~/util/setting";
 

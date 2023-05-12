@@ -1,13 +1,9 @@
 import { TicketList } from "~/app/(authed)/ticket/list/components/TicketList";
 import "./ticketAnimation.css";
 import { rsc } from "~/lib/trpc/server/trpc";
-import { getUserInfo } from "~/lib/auth/getUser";
+import { HydrateClient } from "~/lib/trpc/client/HydrateClient";
 
 export const TicketListWrapper = async () => {
-  const user = await getUserInfo();
-  if (!user) {
-    return null;
-  }
   const [ticket, group] = await Promise.all([
     rsc.ticket.holdList.fetch(),
     rsc.group.group.fetch(),
@@ -15,5 +11,9 @@ export const TicketListWrapper = async () => {
   const users = !group
     ? []
     : await rsc.user.byGroup.fetch({ groupId: group.id });
-  return <TicketList tickets={ticket ?? []} groupUsers={users} />;
+  return (
+    <HydrateClient state={await rsc.dehydrate()}>
+      <TicketList tickets={ticket ?? []} groupUsers={users} />
+    </HydrateClient>
+  );
 };

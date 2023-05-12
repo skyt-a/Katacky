@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Ticket, TicketManageType, User } from "@prisma/client";
 import { Button, Input } from "~/components/common";
 import { useInput } from "~/util/form";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 import { manageTypeToText } from "~/util/setting";
 import { useRouter } from "next/navigation";
 import { useToast } from "~/components/common/use-toast";

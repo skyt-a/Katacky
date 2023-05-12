@@ -1,3 +1,4 @@
+import "server-only";
 import { z } from "zod";
 import { prisma } from "~/lib/prisma";
 import { publicProcedure, router } from "~/lib/trpc";

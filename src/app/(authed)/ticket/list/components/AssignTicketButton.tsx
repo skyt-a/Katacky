@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "~/components/common/select";
 import { useToast } from "~/components/common/use-toast";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 import { UnionNullToUndefined } from "~/util/types";
 
 type AssignTicketButtonProps = {

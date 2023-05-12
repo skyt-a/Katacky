@@ -1,4 +1,4 @@
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 
 export const useUsersInTargetGroup = (groupId: number | undefined | null) => {
   return trpc.user.byGroup.useQuery(

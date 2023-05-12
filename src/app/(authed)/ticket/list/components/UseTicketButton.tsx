@@ -1,7 +1,7 @@
 import { Ticket as TicketType } from "@prisma/client";
 import { Button } from "~/components/common";
 import { useToast } from "~/components/common/use-toast";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 import { UnionNullToUndefined } from "~/util/types";
 
 type UseTicketButtonProps = {

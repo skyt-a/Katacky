@@ -1,3 +1,4 @@
+import "server-only";
 import type { DehydratedState } from "@tanstack/react-query";
 import {
   AnyProcedure,

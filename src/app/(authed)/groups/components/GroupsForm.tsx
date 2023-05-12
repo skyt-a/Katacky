@@ -6,7 +6,7 @@ import { Button, Input as TextInput } from "~/components/common";
 import { Label } from "~/components/common/label";
 import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 import { useInput } from "~/util/form";
 
 type GroupFormProps = {

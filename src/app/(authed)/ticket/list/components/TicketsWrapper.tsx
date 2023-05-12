@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { TicketHistory } from "~/app/(authed)/ticket/list/components/TicketHistory";
 import { TicketListWrapper } from "~/app/(authed)/ticket/list/components/TicketListWrapper";
-import { Skeleton } from "~/components/common/skeleton";
 import {
   Tabs,
   TabsList,

@@ -12,7 +12,7 @@ import {
 import { Sheet, SheetTrigger, SheetContent } from "~/components/common/sheet";
 import { useToast } from "~/components/common/use-toast";
 import { Ticket } from "~/components/domain/tickets/Ticket";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 import { manageTypeToText } from "~/util/setting";
 import { UnionNullToUndefined } from "~/util/types";
 

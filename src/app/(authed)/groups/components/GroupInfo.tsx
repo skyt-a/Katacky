@@ -3,7 +3,7 @@ import { Group, User } from "@prisma/client";
 import { useQRCode } from "next-qrcode";
 import { useRouter } from "next/navigation";
 import { Button } from "~/components/common";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 
 type GroupInfoProps = {
   group: Group;

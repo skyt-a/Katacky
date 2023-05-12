@@ -1,12 +1,7 @@
 import { Ticket } from "~/components/domain/tickets/Ticket";
-import { getUserInfo } from "~/lib/auth/getUser";
 import { rsc } from "~/lib/trpc/server/trpc";
 
 export const TicketHistory = async () => {
-  const user = await getUserInfo();
-  if (!user) {
-    return null;
-  }
   const ticket = await rsc.ticket.usedList.fetch();
   return (
     <ul>

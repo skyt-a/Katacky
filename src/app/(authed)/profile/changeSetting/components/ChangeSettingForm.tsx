@@ -13,7 +13,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 type ChangeSettingFormProps = {
   user: User;
   imageUrl: string | undefined;
