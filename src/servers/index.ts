@@ -1,5 +1,5 @@
 import { router } from "~/lib/trpc";
-import { Context, createContext } from "~/lib/trpc/context";
+import { createContext } from "~/lib/trpc/context";
 import { groupRouter } from "~/servers/group";
 import { ticketRouter } from "~/servers/ticket";
 import { ticketManagerRouter } from "~/servers/ticketManager";
