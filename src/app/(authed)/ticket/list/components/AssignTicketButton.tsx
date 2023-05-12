@@ -1,4 +1,3 @@
-"use client";
 import { Ticket, User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,27 +17,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/common/select";
+import { useToast } from "~/components/common/use-toast";
 import { trpc } from "~/lib/trpc/connectNext";
 import { UnionNullToUndefined } from "~/util/types";
 
 type AssignTicketButtonProps = {
   users: User[];
   ticket: UnionNullToUndefined<Ticket>;
+  onAssignSuccess: () => void;
 };
 
 export const AssignTicketButton = ({
   ticket,
   users,
+  onAssignSuccess,
 }: AssignTicketButtonProps) => {
-  const router = useRouter();
   const sendTicket = trpc.ticket.send.useMutation();
   const [userId, setUserId] = useState<string>();
+  const { toast } = useToast();
   const onClickSendTicket = async () => {
     if (!ticket.id) {
       return;
     }
     await sendTicket.mutateAsync({ id: ticket.id, userId: Number(userId) });
-    router.refresh();
+    toast({
+      toastType: "info",
+      description: "チケットを送信しました",
+    });
+    onAssignSuccess();
   };
 
   return (

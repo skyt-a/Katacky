@@ -2,8 +2,9 @@
 import { Ticket as TicketType, User } from "@prisma/client";
 import { useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { AssignTicketButton } from "~/app/(authed)/ticket/list/components/AssignTicketButton";
-import { UseTicketButton } from "~/app/(authed)/ticket/list/components/UseTicketButton";
+import { AssignTicketButton } from "~/app/authed/ticket/list/components/AssignTicketButton";
+import { DeleteTicketButton } from "~/app/authed/ticket/list/components/DeleteTicketButton";
+import { UseTicketButton } from "~/app/authed/ticket/list/components/UseTicketButton";
 import { Button } from "~/components/common";
 import { Ticket } from "~/components/domain/tickets/Ticket";
 import { UnionNullToUndefined } from "~/util/types";
@@ -14,15 +15,23 @@ type TicketListProps = {
 };
 
 export const TicketList = ({ tickets, groupUsers }: TicketListProps) => {
+  const [ticketsState, setTicketsState] = useState<TicketType[]>(tickets);
   const [selectedTicket, setSelectedTicket] =
     useState<UnionNullToUndefined<TicketType>>();
   const onClickTicket = (ticket: UnionNullToUndefined<TicketType>) => () => {
     setSelectedTicket(ticket);
   };
+  const onMutateSuccess = () => {
+    setSelectedTicket(undefined);
+    setTicketsState(
+      ticketsState.filter((ticket) => ticket.id !== selectedTicket?.id)
+    );
+  };
+
   return (
     <>
       <ul className="relative">
-        {tickets.map((ticket, index) => (
+        {ticketsState.map((ticket, index) => (
           <CSSTransition
             classNames="ticket"
             timeout={400}
@@ -51,11 +60,21 @@ export const TicketList = ({ tickets, groupUsers }: TicketListProps) => {
               <Ticket key={ticket.id} {...ticket} />
               {selectedTicket && selectedTicket?.id === ticket.id && (
                 <div className="mt-4">
-                  <UseTicketButton ticket={selectedTicket} />
+                  <UseTicketButton
+                    ticket={selectedTicket}
+                    onUseSuccess={onMutateSuccess}
+                  />
                   <div className="mt-2">
                     <AssignTicketButton
                       ticket={selectedTicket}
                       users={groupUsers}
+                      onAssignSuccess={onMutateSuccess}
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <DeleteTicketButton
+                      selectedTicketId={selectedTicket.id}
+                      onDeleteSuccess={onMutateSuccess}
                     />
                   </div>
                   <Button
