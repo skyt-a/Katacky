@@ -1,4 +1,4 @@
-import { TicketList } from "~/app/(authed)/ticket/list/components/TicketList";
+import { TicketList } from "~/app/(authed)/ticket/(list)/components/TicketList";
 import "./ticketAnimation.css";
 import { rsc } from "~/lib/trpc/server/trpc";
 import { HydrateClient } from "~/lib/trpc/client/HydrateClient";

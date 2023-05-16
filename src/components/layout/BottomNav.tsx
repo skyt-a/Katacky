@@ -24,7 +24,7 @@ export default function Menu() {
           <TimerIcon />
           <span className="sr-only">チケットスケジュール一覧</span>
         </MenuLink>
-        <MenuLink href="/ticket/list">
+        <MenuLink href="/ticket/hold">
           <TicketIcon />
           <span className="sr-only">チケット一覧</span>
         </MenuLink>

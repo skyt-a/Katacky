@@ -82,7 +82,7 @@ export const TicketForm = ({ user, groupUsers }: TicketFormProps) => {
       description: "チケットを作成しました",
     });
     router.refresh();
-    router.push("/ticket/list");
+    router.push("/ticket/hold");
   };
   const isDisabledButton =
     titleInput.value.length === 0 ||
