@@ -1,3 +1,4 @@
+import "server-only";
 import { router } from "~/lib/trpc";
 import { createContext } from "~/lib/trpc/context";
 import { groupRouter } from "~/servers/group";

@@ -9,7 +9,7 @@ export default async function CreateUserPage() {
   }
   const userInfo = await getUserInfo();
   if (userInfo) {
-    redirect("/authed/profile");
+    redirect("/profile");
   }
 
   return (

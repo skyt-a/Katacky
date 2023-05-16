@@ -6,7 +6,7 @@ import {
   onMessage,
 } from "firebase/messaging";
 import { app } from "~/lib/firebase/browser";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 
 export const requestForToken = async (isSupported: boolean) => {
   const updateDeviceToken = trpc.user.updateDeviceToken.useMutation();

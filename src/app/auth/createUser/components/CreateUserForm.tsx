@@ -8,10 +8,9 @@ import { FileUploadButton } from "~/components/common/fileUpload";
 import { Label } from "~/components/common/label";
 import { useToast } from "~/components/common/use-toast";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
-import { reloadSession } from "~/lib/auth/session";
 import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 import { useInput } from "~/util/form";
 
 type CreateUserFormProps = {
@@ -29,7 +28,6 @@ export const CreateUserForm = ({ user }: CreateUserFormProps) => {
     },
     { enabled: !!groupToken }
   );
-  const router = useRouter();
   const [imageUrl, setImageUrl] = useState<string>();
   const { toast } = useToast();
   const logout = useLogout();

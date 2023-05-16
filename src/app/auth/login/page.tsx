@@ -5,7 +5,7 @@ import { getUser } from "~/lib/auth/getUser";
 export default async function LoginPage() {
   const session = await getUser();
   if (session) {
-    redirect("/authed/profile");
+    redirect("/profile");
   }
   return (
     <>

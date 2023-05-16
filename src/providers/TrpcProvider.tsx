@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { useState } from "react";
 import superjson from "superjson";
-import { trpc } from "~/lib/trpc/connectNext";
+import { trpc } from "~/lib/trpc/client/connectNext";
 
 function getBaseUrl() {
   if (typeof window !== "undefined")
