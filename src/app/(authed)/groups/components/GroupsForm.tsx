@@ -1,6 +1,5 @@
 "use client";
 import { Group, User } from "@prisma/client";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Button, Input as TextInput } from "~/components/common";
@@ -8,8 +7,8 @@ import { useToast } from "~/components/common/use-toast";
 import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
 import { serverActionHandler } from "~/lib/client/serverActionHandler";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
-import { createGroup } from "~/servers/group/mutation";
 import { groupByToken } from "~/servers/group/query";
+import { createGroup } from "~/servers/group/mutation";
 import { joinGroup } from "~/servers/user/mutation";
 import { useInput } from "~/util/form";
 
@@ -31,7 +30,7 @@ export const GroupsForm = ({ user }: GroupFormProps) => {
     }
   };
   const router = useRouter();
-  const onCreateGroup = async () => {
+  const onCreateGroup = () => {
     if (!groupFromToken) {
       startTransition(() => {
         serverActionHandler(createGroup(groupNameInput.value), () => {
@@ -39,7 +38,6 @@ export const GroupsForm = ({ user }: GroupFormProps) => {
             toastType: "info",
             description: "グループを作成しました",
           });
-          router.refresh();
         });
       });
     } else {
@@ -49,7 +47,6 @@ export const GroupsForm = ({ user }: GroupFormProps) => {
             toastType: "info",
             description: `${groupFromToken.name}に参加しました}`,
           });
-          router.refresh();
         });
       });
     }

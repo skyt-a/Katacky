@@ -16,7 +16,6 @@ export const UseTicketButton = ({
   ticket,
   onUseSuccess,
 }: UseTicketButtonProps) => {
-  const router = useRouter();
   const { toast } = useToast();
   const [, startTransition] = useTransition();
 
@@ -31,7 +30,6 @@ export const UseTicketButton = ({
           description: "チケット🎫を使用しました",
         });
         onUseSuccess();
-        router.refresh();
       });
     });
 

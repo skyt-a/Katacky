@@ -16,7 +16,6 @@ export const DeleteTicketButton = ({
 }: DeleteTicketButtonProps) => {
   const { toast } = useToast();
   const [, startTransition] = useTransition();
-  const router = useRouter();
   const onClickUseTicket = (e: React.MouseEvent<HTMLElement, MouseEvent>) =>
     startTransition(() => {
       e.stopPropagation();
@@ -26,7 +25,6 @@ export const DeleteTicketButton = ({
           description: "チケットを削除しました",
         });
         onDeleteSuccess();
-        router.refresh();
       });
     });
   return (

@@ -24,7 +24,6 @@ export const GroupInfo = ({ group, user, groupUsers }: GroupInfoProps) => {
 
   const onDeleteGroup = async () => {
     await deleteGroup(group.id);
-    router.refresh();
     toast({
       toastType: "info",
       description: "グループを削除しました",
@@ -32,7 +31,6 @@ export const GroupInfo = ({ group, user, groupUsers }: GroupInfoProps) => {
   };
   const onLeaveGroup = async () => {
     await leaveGroup();
-    router.refresh();
     toast({
       toastType: "info",
       description: "グループから退会しました",

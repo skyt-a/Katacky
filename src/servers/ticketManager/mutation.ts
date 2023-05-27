@@ -1,4 +1,5 @@
 "use server";
+import { revalidatePath } from "next/cache";
 
 import { getServerSession } from "~/lib/auth/session";
 import { prisma } from "~/lib/prisma";
@@ -24,5 +25,6 @@ export const deleteTicketManager = async (id: number) => {
       id,
     },
   });
+  revalidatePath("/ticketManager");
   return manager;
 };
