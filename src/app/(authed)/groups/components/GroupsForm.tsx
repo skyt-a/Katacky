@@ -1,12 +1,16 @@
 "use client";
-import { User } from "@prisma/client";
+import { Group, User } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button, Input as TextInput } from "~/components/common";
-import { Label } from "~/components/common/label";
+import { useToast } from "~/components/common/use-toast";
 import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
+import { serverActionHandler } from "~/lib/client/serverActionHandler";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
-import { trpc } from "~/lib/trpc/client/connectNext";
+import { createGroup } from "~/servers/group/mutation";
+import { groupByToken } from "~/servers/group/query";
+import { joinGroup } from "~/servers/user/mutation";
 import { useInput } from "~/util/form";
 
 type GroupFormProps = {
@@ -15,32 +19,40 @@ type GroupFormProps = {
 
 export const GroupsForm = ({ user }: GroupFormProps) => {
   const groupNameInput = useInput("");
-  const createGroup = trpc.group.create.useMutation();
-  const joinGroup = trpc.user.joinGroup.useMutation();
+  const [, startTransition] = useTransition();
+
   const [isGroupRegister, setIsGroupRegister] = useState<boolean>(false);
-  const [groupToken, setGroupToken] = useState<string>();
-  const { isFetching, data: group } = trpc.group.groupByToken.useQuery(
-    {
-      token: groupToken!,
-    },
-    { enabled: !!groupToken }
-  );
+  const { toast } = useToast();
+  const [groupFromToken, setGroupFromToken] = useState<Group>();
+  const detectToken = async (groupToken: string) => {
+    const group = await groupByToken(groupToken);
+    if (group) {
+      setGroupFromToken(group);
+    }
+  };
   const router = useRouter();
-  const onClickButton = async () => {
-    if (!user) {
-      return;
-    }
-    const targetGroup = isGroupRegister
-      ? group
-      : await createGroup.mutateAsync({
-          name: groupNameInput.value,
-          creatorId: user.id,
+  const onCreateGroup = async () => {
+    if (!groupFromToken) {
+      startTransition(() => {
+        serverActionHandler(createGroup(groupNameInput.value), () => {
+          toast({
+            toastType: "info",
+            description: "グループを作成しました",
+          });
+          router.refresh();
         });
-    if (!targetGroup) {
-      return;
+      });
+    } else {
+      startTransition(() => {
+        serverActionHandler(joinGroup(groupFromToken.id), () => {
+          toast({
+            toastType: "info",
+            description: `${groupFromToken.name}に参加しました}`,
+          });
+          router.refresh();
+        });
+      });
     }
-    await joinGroup.mutateAsync({ id: user?.id, groupId: targetGroup.id });
-    router.refresh();
   };
 
   return (
@@ -57,12 +69,11 @@ export const GroupsForm = ({ user }: GroupFormProps) => {
         </FormControlWrapper>
       ) : (
         <>
-          {isFetching && <p>グループを検索中...</p>}
-          {group && <p>グループ名: {group.name}</p>}
-          {!isFetching && !group && <QRCodeScanner setData={setGroupToken} />}
+          {groupFromToken && <p>グループ名: {groupFromToken.name}</p>}
+          {!groupFromToken && <QRCodeScanner setData={detectToken} />}
         </>
       )}
-      <Button type="button" onClick={onClickButton}>
+      <Button type="button" onClick={onCreateGroup}>
         登録
       </Button>
       <Button type="button" onClick={() => setIsGroupRegister((now) => !now)}>

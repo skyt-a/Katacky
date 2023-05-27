@@ -1,6 +1,7 @@
 import { Ticket, User } from "@prisma/client";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "~/components/common";
 import {
   Dialog,
@@ -18,7 +19,8 @@ import {
   SelectValue,
 } from "~/components/common/select";
 import { useToast } from "~/components/common/use-toast";
-import { trpc } from "~/lib/trpc/client/connectNext";
+import { serverActionHandler } from "~/lib/client/serverActionHandler";
+import { sendTicket } from "~/servers/ticket/mutation";
 import { UnionNullToUndefined } from "~/util/types";
 
 type AssignTicketButtonProps = {
@@ -32,20 +34,30 @@ export const AssignTicketButton = ({
   users,
   onAssignSuccess,
 }: AssignTicketButtonProps) => {
-  const sendTicket = trpc.ticket.send.useMutation();
   const [userId, setUserId] = useState<string>();
   const { toast } = useToast();
-  const onClickSendTicket = async () => {
-    if (!ticket.id) {
-      return;
-    }
-    await sendTicket.mutateAsync({ id: ticket.id, userId: Number(userId) });
-    toast({
-      toastType: "info",
-      description: "チケットを送信しました",
+  const [, startTransition] = useTransition();
+  const session = useSession();
+
+  const router = useRouter();
+  const onClickSendTicket = () =>
+    startTransition(() => {
+      if (!ticket.id) {
+        return;
+      }
+      const user = users.find((u) => u.id === session.data?.user.userInfoId);
+      if (!user) {
+        return;
+      }
+      serverActionHandler(sendTicket(user, ticket.id, Number(userId)), () => {
+        toast({
+          toastType: "info",
+          description: "チケットを送信しました",
+        });
+        onAssignSuccess();
+        router.refresh();
+      });
     });
-    onAssignSuccess();
-  };
 
   return (
     <Dialog>

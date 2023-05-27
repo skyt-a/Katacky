@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 import { ChangeSettingForm } from "~/app/(authed)/profile/changeSetting/components/ChangeSettingForm";
-import { getUserInfo } from "~/lib/auth/getUser";
 import { getDownloadURLFromStorage } from "~/lib/firebase/storageServer";
+import { getLoginUser } from "~/servers/user/query";
 
 export default async function ChangeSettingPage() {
-  const userInfo = await getUserInfo();
+  const userInfo = await getLoginUser();
   if (!userInfo) {
     redirect("/auth/login");
   }

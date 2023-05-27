@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { LoginForm } from "~/app/auth/login/components/LoginForm";
-import { getUser } from "~/lib/auth/getUser";
+import { getLoginUser } from "~/servers/user/query";
 
 export default async function LoginPage() {
-  const session = await getUser();
+  const session = await getLoginUser();
   if (session) {
     redirect("/profile");
   }

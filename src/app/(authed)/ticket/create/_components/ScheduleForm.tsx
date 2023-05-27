@@ -9,18 +9,27 @@ import { useState } from "react";
 import { Ticket, TicketManageType, User } from "@prisma/client";
 import { Button, Input } from "~/components/common";
 import { useInput } from "~/util/form";
-import { trpc } from "~/lib/trpc/client/connectNext";
 import { manageTypeToText } from "~/util/setting";
 import { useRouter } from "next/navigation";
 import { useToast } from "~/components/common/use-toast";
 import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
+import { createTicketManager } from "~/servers/ticketManager/mutation";
+import { CreateTicketSchema } from "~/servers/ticket/createTicketSchema";
 
 type ScheduleFormProps = {
   users: User[];
-  createTicket: (isScheduled: boolean) => Promise<Ticket | undefined>;
+  createTicket: (
+    value: CreateTicketSchema,
+    isScheduled: boolean
+  ) => Promise<Ticket | undefined>;
+  value: CreateTicketSchema;
 };
 
-export const ScheduleForm = ({ createTicket, users }: ScheduleFormProps) => {
+export const ScheduleForm = ({
+  value,
+  createTicket,
+  users,
+}: ScheduleFormProps) => {
   const router = useRouter();
   const [selectedType, setSelectedType] = useState<string>(
     TicketManageType.ONCE_MONTH
@@ -29,14 +38,13 @@ export const ScheduleForm = ({ createTicket, users }: ScheduleFormProps) => {
   const nameInput = useInput("");
   const [userId, setUserId] = useState<string>();
 
-  const createTicketManager = trpc.ticketManager.create.useMutation();
   const { toast } = useToast();
   const onConfirm = async () => {
-    const ticket = await createTicket(true);
+    const ticket = await createTicket(value, true);
     if (!ticket) {
       return;
     }
-    await createTicketManager.mutateAsync({
+    await createTicketManager({
       retrieveUserId: Number(userId),
       type: selectedType as TicketManageType,
       count: Number(countInput.value),
