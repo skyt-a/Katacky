@@ -24,8 +24,5 @@ export const getServerSession = async () => {
 
   // @ts-ignore - The type used in next-auth for the req object doesn't match, but it still works
   const session = await originalGetServerSession(req, res, authOptions);
-  if (!session?.user.userInfoId) {
-    throw new Error("Session not found");
-  }
   return session;
 };
