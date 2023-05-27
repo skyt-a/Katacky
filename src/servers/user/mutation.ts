@@ -1,5 +1,5 @@
 "use server";
-
+import { revalidatePath } from "next/cache";
 import { getServerSession } from "~/lib/auth/session";
 import { prisma } from "~/lib/prisma";
 import { CreateUserSchema } from "~/servers/user/createUserSchema";
@@ -40,6 +40,7 @@ export const leaveGroup = async () => {
       id: session?.user.userInfoId,
     },
   });
+  revalidatePath("/group");
   return user;
 };
 
@@ -72,6 +73,7 @@ export const updateName = async (name: string) => {
       id: session?.user.userInfoId,
     },
   });
+  revalidatePath("/profile");
   return user;
 };
 
@@ -88,5 +90,6 @@ export const updateProfileImage = async (url: string) => {
       id: session?.user.userInfoId,
     },
   });
+  revalidatePath("/profile");
   return updatedUser;
 };

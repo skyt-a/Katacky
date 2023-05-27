@@ -9,10 +9,11 @@ import { auth } from "~/lib/firebase/browser";
 import { ProfileSetting } from "~/app/(authed)/profile/components/ProfileSetting";
 import { useRouter } from "next/navigation";
 import { FileUploadButton } from "~/components/common/fileUpload";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
 import { updateName, updateProfileImage } from "~/servers/user/mutation";
+import { serverActionHandler } from "~/lib/client/serverActionHandler";
 
 type ChangeSettingFormProps = {
   user: User;
@@ -27,27 +28,31 @@ export const ChangeSettingForm = ({
   const { toast } = useToast();
   const [imageUrl, setImageUrl] = useState<string | undefined>(imageUrlNow);
   const router = useRouter();
-  const onClickImageChangeButton = async (e: any) => {
-    e.preventDefault();
+  const [, startTransition] = useTransition();
+
+  const onClickImageChangeButton = async () => {
     if (!imageUrl) {
       return;
     }
     const profileImageUrl = await uploadFileToStorage(user.authId, imageUrl);
-    await updateProfileImage(profileImageUrl);
-    toast({
-      toastType: "info",
-      description: "プロフィールを変更しました",
+    startTransition(() => {
+      serverActionHandler(updateProfileImage(profileImageUrl), () =>
+        toast({
+          toastType: "info",
+          description: "プロフィール画像を変更しました",
+        })
+      );
     });
-    router.refresh();
   };
-  const onClickNameChangeButton = async (e: any) => {
-    e.preventDefault();
-    await updateName(nameInput.value);
-    toast({
-      toastType: "info",
-      description: "ユーザーネームを変更しました",
+  const onClickNameChangeButton = async () => {
+    startTransition(() => {
+      serverActionHandler(updateName(nameInput.value), () => {
+        toast({
+          toastType: "info",
+          description: "ユーザーネームを変更しました",
+        });
+      });
     });
-    router.refresh();
   };
   const onClickPasswordChangeButton = async (e: any) => {
     e.preventDefault();
@@ -64,7 +69,11 @@ export const ChangeSettingForm = ({
         新しいプロフィール画像をアップロード
       </FileUploadButton>
       {imageUrlNow !== imageUrl && (
-        <Button className="w-full" onClick={onClickImageChangeButton}>
+        <Button
+          type="button"
+          className="w-full"
+          onClick={onClickImageChangeButton}
+        >
           プロフィール画像の変更を反映する
         </Button>
       )}
@@ -81,7 +90,7 @@ export const ChangeSettingForm = ({
         />
       </div>
       <Button
-        type="submit"
+        type="button"
         onClick={onClickNameChangeButton}
         className="w-full"
       >

@@ -1,6 +1,7 @@
 "use client";
 import { Ticket as TicketType, TicketManager } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import {
   Button,
   Card,
@@ -12,6 +13,7 @@ import {
 import { Sheet, SheetTrigger, SheetContent } from "~/components/common/sheet";
 import { useToast } from "~/components/common/use-toast";
 import { Ticket } from "~/components/domain/tickets/Ticket";
+import { serverActionHandler } from "~/lib/client/serverActionHandler";
 import { deleteTicketManager } from "~/servers/ticketManager/mutation";
 import { manageTypeToText } from "~/util/setting";
 import { UnionNullToUndefined } from "~/util/types";
@@ -23,15 +25,17 @@ type ManagerCardProps = {
 
 export const ManagerCard = ({ manager, ticket }: ManagerCardProps) => {
   const { toast } = useToast();
-  const router = useRouter();
-  const onClickDeleteSchedule = async () => {
-    await deleteTicketManager(manager.id);
-    toast({
-      toastType: "info",
-      description: "チケットスケジュールを削除しました",
+  const [, startTransition] = useTransition();
+  const onClickDeleteSchedule = () =>
+    startTransition(() => {
+      serverActionHandler(deleteTicketManager(manager.id), () => {
+        toast({
+          toastType: "info",
+          description: "チケットスケジュールを削除しました",
+        });
+      });
     });
-    router.refresh();
-  };
+
   return (
     <Sheet>
       <SheetTrigger className="w-full">

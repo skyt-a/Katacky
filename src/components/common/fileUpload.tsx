@@ -18,12 +18,6 @@ export const FileUploadButton = ({
       if (!file) {
         return;
       }
-      //   if (!["JPEG", "GIF"].includes(await getImageFileFormat(file))) {
-      //     toast({
-      //         description: ""
-      //     });
-      //     return;
-      //   }
       if (file.size > 10 * 1024 * 1024) {
         toast({
           toastType: "error",

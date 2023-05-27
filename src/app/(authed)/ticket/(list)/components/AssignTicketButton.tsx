@@ -39,7 +39,6 @@ export const AssignTicketButton = ({
   const [, startTransition] = useTransition();
   const session = useSession();
 
-  const router = useRouter();
   const onClickSendTicket = () =>
     startTransition(() => {
       if (!ticket.id) {
@@ -55,7 +54,6 @@ export const AssignTicketButton = ({
           description: "チケットを送信しました",
         });
         onAssignSuccess();
-        router.refresh();
       });
     });
 

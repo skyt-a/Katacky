@@ -3,6 +3,7 @@
 import { v4 } from "uuid";
 import { getServerSession } from "~/lib/auth/session";
 import { prisma } from "~/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export const createGroup = async (name: string) => {
   const session = await getServerSession();
@@ -25,6 +26,7 @@ export const createGroup = async (name: string) => {
       id: session?.user.userInfoId,
     },
   });
+  revalidatePath("/group");
   return [group, user];
 };
 
@@ -34,5 +36,6 @@ export const deleteGroup = async (groupId: number) => {
       id: groupId,
     },
   });
+  revalidatePath("/group");
   return group;
 };

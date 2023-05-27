@@ -1,4 +1,5 @@
 "use server";
+import { revalidatePath } from "next/cache";
 
 import { User } from "@prisma/client";
 import { isBefore } from "date-fns";
@@ -52,6 +53,7 @@ export const useTicket = async (id: number) => {
       usedDate: new Date(),
     },
   });
+  revalidatePath("/ticket/hold");
   return ticket;
 };
 
@@ -82,6 +84,7 @@ export const sendTicket = async (
       [retrieveUser.deviceToken]
     );
   }
+  revalidatePath("/ticket/hold");
   return ticket;
 };
 
@@ -91,5 +94,6 @@ export const deleteTicket = async (id: number) => {
       id,
     },
   });
+  revalidatePath("/ticket/hold");
   return ticket;
 };
