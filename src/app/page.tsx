@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
-import { getUser } from "~/lib/auth/getUser";
+import { getLoginUser } from "~/servers/user/query";
 
 export default async function Root() {
-  const user = await getUser();
+  const user = await getLoginUser();
   if (user) {
     redirect("/profile");
   } else {

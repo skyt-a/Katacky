@@ -2,8 +2,12 @@
 import { Group, User } from "@prisma/client";
 import { useQRCode } from "next-qrcode";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { Button } from "~/components/common";
-import { trpc } from "~/lib/trpc/client/connectNext";
+import { useToast } from "~/components/common/use-toast";
+import { serverActionHandler } from "~/lib/client/serverActionHandler";
+import { deleteGroup } from "~/servers/group/mutation";
+import { leaveGroup } from "~/servers/user/mutation";
 
 type GroupInfoProps = {
   group: Group;
@@ -14,17 +18,27 @@ type GroupInfoProps = {
 
 export const GroupInfo = ({ group, user, groupUsers }: GroupInfoProps) => {
   const { Canvas } = useQRCode();
-  const deleteGroup = trpc.group.delete.useMutation();
-  const leaveGroup = trpc.user.leaveGroup.useMutation();
+  const [, startTransition] = useTransition();
+  const { toast } = useToast();
   const router = useRouter();
-  const onClickDelete = async () => {
-    await deleteGroup.mutateAsync({ groupId: group.id });
+
+  const onDeleteGroup = async () => {
+    await deleteGroup(group.id);
     router.refresh();
+    toast({
+      toastType: "info",
+      description: "グループを削除しました",
+    });
   };
-  const onClickLeave = async () => {
-    await leaveGroup.mutateAsync();
+  const onLeaveGroup = async () => {
+    await leaveGroup();
     router.refresh();
+    toast({
+      toastType: "info",
+      description: "グループから退会しました",
+    });
   };
+
   return (
     <>
       <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight border-b-stone-950 border-b-2">
@@ -40,7 +54,7 @@ export const GroupInfo = ({ group, user, groupUsers }: GroupInfoProps) => {
       </ul>
       {group.creatorId === user?.id ? (
         <Button
-          onClick={onClickDelete}
+          onClick={onDeleteGroup}
           className="mt-4 w-full"
           variant="destructive"
         >
@@ -48,7 +62,7 @@ export const GroupInfo = ({ group, user, groupUsers }: GroupInfoProps) => {
         </Button>
       ) : (
         <Button
-          onClick={onClickLeave}
+          onClick={onLeaveGroup}
           className="mt-4 w-full"
           variant="destructive"
         >

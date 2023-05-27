@@ -1,5 +1,3 @@
-"use client";
-
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -15,12 +13,14 @@ import { ja } from "date-fns/locale";
 
 type DatePickerProps = {
   value: Date | undefined;
+  name: string;
   onChange: (date: Date | undefined) => void;
   placeHolder?: string;
 } & CalendarProps;
 
 export function CalendarDatePicker({
   value,
+  name,
   onChange,
   placeHolder,
   ...rest
@@ -44,9 +44,11 @@ export function CalendarDatePicker({
           {...rest}
           mode="single"
           selected={value}
-          onSelect={onChange}
+          onSelect={onChange as any}
           initialFocus
           locale={ja}
+          // @ts-ignore
+          name={name}
         />
       </PopoverContent>
     </Popover>

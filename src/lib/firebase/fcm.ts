@@ -6,10 +6,9 @@ import {
   onMessage,
 } from "firebase/messaging";
 import { app } from "~/lib/firebase/browser";
-import { trpc } from "~/lib/trpc/client/connectNext";
+import { updateDeviceToken } from "~/servers/user/mutation";
 
 export const requestForToken = async (isSupported: boolean) => {
-  const updateDeviceToken = trpc.user.updateDeviceToken.useMutation();
   if (!isSupported) {
     return null;
   }
@@ -36,7 +35,7 @@ export const requestForToken = async (isSupported: boolean) => {
   }
   console.log("current token for client: ", token);
   localStorage.setItem("fcm_token", token);
-  await updateDeviceToken.mutateAsync({ deviceToken: token });
+  await updateDeviceToken(token);
   return token;
 };
 

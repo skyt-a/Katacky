@@ -1,6 +1,9 @@
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { Button } from "~/components/common";
 import { useToast } from "~/components/common/use-toast";
-import { trpc } from "~/lib/trpc/client/connectNext";
+import { serverActionHandler } from "~/lib/client/serverActionHandler";
+import { deleteTicket } from "~/servers/ticket/mutation";
 
 type DeleteTicketButtonProps = {
   selectedTicketId: number;
@@ -11,24 +14,26 @@ export const DeleteTicketButton = ({
   selectedTicketId,
   onDeleteSuccess,
 }: DeleteTicketButtonProps) => {
-  const deleteTicket = trpc.ticket.delete.useMutation();
   const { toast } = useToast();
-  const onClickTicketDelete = async (id: number) => {
-    await deleteTicket.mutateAsync({ id });
-    toast({
-      toastType: "info",
-      description: "チケットを破棄しました",
+  const [, startTransition] = useTransition();
+  const router = useRouter();
+  const onClickUseTicket = (e: React.MouseEvent<HTMLElement, MouseEvent>) =>
+    startTransition(() => {
+      e.stopPropagation();
+      serverActionHandler(deleteTicket(selectedTicketId), () => {
+        toast({
+          toastType: "info",
+          description: "チケットを削除しました",
+        });
+        onDeleteSuccess();
+        router.refresh();
+      });
     });
-    onDeleteSuccess();
-  };
   return (
     <Button
       className="w-full mt-2"
       variant="destructive"
-      onClick={async (e) => {
-        e.stopPropagation();
-        await onClickTicketDelete(selectedTicketId);
-      }}
+      onClick={onClickUseTicket}
     >
       チケットを破棄する
     </Button>

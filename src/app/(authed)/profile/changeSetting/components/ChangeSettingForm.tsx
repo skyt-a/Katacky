@@ -10,10 +10,10 @@ import { ProfileSetting } from "~/app/(authed)/profile/components/ProfileSetting
 import { useRouter } from "next/navigation";
 import { FileUploadButton } from "~/components/common/fileUpload";
 import { useState } from "react";
-import Image from "next/image";
 import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
-import { trpc } from "~/lib/trpc/client/connectNext";
+import { updateName, updateProfileImage } from "~/servers/user/mutation";
+
 type ChangeSettingFormProps = {
   user: User;
   imageUrl: string | undefined;
@@ -25,8 +25,6 @@ export const ChangeSettingForm = ({
 }: ChangeSettingFormProps) => {
   const nameInput = useInput(user.name);
   const { toast } = useToast();
-  const updateName = trpc.user.updateName.useMutation();
-  const updateImage = trpc.user.updateProfileImage.useMutation();
   const [imageUrl, setImageUrl] = useState<string | undefined>(imageUrlNow);
   const router = useRouter();
   const onClickImageChangeButton = async (e: any) => {
@@ -35,7 +33,7 @@ export const ChangeSettingForm = ({
       return;
     }
     const profileImageUrl = await uploadFileToStorage(user.authId, imageUrl);
-    await updateImage.mutateAsync({ url: profileImageUrl });
+    await updateProfileImage(profileImageUrl);
     toast({
       toastType: "info",
       description: "プロフィールを変更しました",
@@ -44,7 +42,7 @@ export const ChangeSettingForm = ({
   };
   const onClickNameChangeButton = async (e: any) => {
     e.preventDefault();
-    await updateName.mutateAsync({ name: nameInput.value });
+    await updateName(nameInput.value);
     toast({
       toastType: "info",
       description: "ユーザーネームを変更しました",

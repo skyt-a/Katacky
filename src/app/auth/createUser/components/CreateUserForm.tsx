@@ -1,16 +1,19 @@
 "use client";
+import { Group } from "@prisma/client";
+import { group } from "console";
 import { User } from "firebase/auth";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useLogout } from "~/app/auth/hooks/useLogout";
 import { Button, Input as TextInput } from "~/components/common";
 import { FileUploadButton } from "~/components/common/fileUpload";
 import { Label } from "~/components/common/label";
 import { useToast } from "~/components/common/use-toast";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
+import { serverActionHandler } from "~/lib/client/serverActionHandler";
 import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
-import { trpc } from "~/lib/trpc/client/connectNext";
+import { groupByToken } from "~/servers/group/query";
+import { createUser } from "~/servers/user/mutation";
 import { useInput } from "~/util/form";
 
 type CreateUserFormProps = {
@@ -19,15 +22,14 @@ type CreateUserFormProps = {
 
 export const CreateUserForm = ({ user }: CreateUserFormProps) => {
   const userNameInput = useInput("");
-  const createUser = trpc.user.create.useMutation();
   const [isGroupRegister, setIsGroupRegister] = useState<boolean>();
-  const [groupToken, setGroupToken] = useState<string>();
-  const { isFetching, data: group } = trpc.group.groupByToken.useQuery(
-    {
-      token: groupToken!,
-    },
-    { enabled: !!groupToken }
-  );
+  const [groupFromToken, setGroupFromToken] = useState<Group>();
+  const detectToken = async (groupToken: string) => {
+    const group = await groupByToken(groupToken);
+    if (group) {
+      setGroupFromToken(group);
+    }
+  };
   const [imageUrl, setImageUrl] = useState<string>();
   const { toast } = useToast();
   const logout = useLogout();
@@ -37,11 +39,11 @@ export const CreateUserForm = ({ user }: CreateUserFormProps) => {
       return;
     }
     const profileImageUrl = await uploadFileToStorage(user.uid, imageUrl!);
-    await createUser.mutateAsync({
+    await createUser({
       name: userNameInput.value,
       authId: user.uid,
       email: user.email,
-      groupId: group?.id,
+      groupId: groupFromToken?.id,
       profileImageUrl,
     });
     toast({
@@ -67,16 +69,15 @@ export const CreateUserForm = ({ user }: CreateUserFormProps) => {
       <Button type="button" onClick={() => setIsGroupRegister(true)}>
         グループを登録する
       </Button>
-      {isFetching && <p>グループを検索中...</p>}
-      {group && <p>グループ名: {group.name}</p>}
-      {isGroupRegister && !isFetching && !group && (
-        <QRCodeScanner setData={setGroupToken} />
+      {groupFromToken && <p>グループ名: {groupFromToken.name}</p>}
+      {isGroupRegister && !groupFromToken && (
+        <QRCodeScanner setData={detectToken} />
       )}
       <FileUploadButton setValue={setImageUrl}>
         プロフィール画像アップロード
       </FileUploadButton>
       <AvatarImage imageUrl={imageUrl} />
-      <Button type="submit" onClick={onClickButton}>
+      <Button type="button" onClick={onClickButton}>
         登録
       </Button>
     </form>

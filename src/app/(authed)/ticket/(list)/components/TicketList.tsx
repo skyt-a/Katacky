@@ -30,6 +30,9 @@ export const TicketList = ({ tickets, groupUsers }: TicketListProps) => {
 
   return (
     <>
+      {ticketsState.length === 0 && (
+        <p className="mt-4 text-center">チケットはありません</p>
+      )}
       <ul className="relative">
         {ticketsState.map((ticket, index) => (
           <CSSTransition

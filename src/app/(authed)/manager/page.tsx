@@ -1,13 +1,14 @@
 import { Ticket } from "@prisma/client";
 import { ManagerCard } from "~/app/(authed)/manager/components/ManagerCard";
 import { UnionNullToUndefined } from "~/util/types";
-import { rsc } from "~/lib/trpc/server/trpc";
+import { getTicketManagers } from "~/servers/ticketManager/query";
+import { ticketsByIds } from "~/servers/ticket/query";
 
 export default async function ManagerPage() {
-  const managers = await rsc.ticketManager.list.fetch();
-  const tickets = await rsc.ticket.listByIds.fetch({
-    ids: managers.map((manager) => manager.ticketId),
-  });
+  const managers = await getTicketManagers();
+  const tickets = await ticketsByIds(
+    managers.map((manager) => manager.ticketId)
+  );
 
   return (
     <ul>

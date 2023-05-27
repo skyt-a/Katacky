@@ -1,8 +1,8 @@
 import { Ticket } from "~/components/domain/tickets/Ticket";
-import { rsc } from "~/lib/trpc/server/trpc";
+import { ticketUsed } from "~/servers/ticket/query";
 
 export const TicketHistory = async () => {
-  const ticket = await rsc.ticket.usedList.fetch();
+  const ticket = await ticketUsed();
   return (
     <ul>
       {ticket.length === 0 && (

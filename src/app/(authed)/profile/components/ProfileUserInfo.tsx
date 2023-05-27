@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
 import { CardDescription, CardHeader, CardTitle } from "~/components/common";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
-import { getUserInfo } from "~/lib/auth/getUser";
 import { getDownloadURLFromStorage } from "~/lib/firebase/storageServer";
+import { getLoginUser } from "~/servers/user/query";
 
 export const ProfileUserInfo = async () => {
-  const user = await getUserInfo();
+  const user = await getLoginUser();
   if (!user) {
     redirect("/auth/createUser");
   }

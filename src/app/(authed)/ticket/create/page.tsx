@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { CreateTicket } from "~/app/(authed)/ticket/create/components/CreateTicket";
+import { CreateTicket } from "~/app/(authed)/ticket/create/_components/CreateTicket";
 import { LoadingSpinner } from "~/components/layout/LoadingSpinner";
 
 export default function CreateTicketPage() {

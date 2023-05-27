@@ -12,7 +12,7 @@ import {
 import { Sheet, SheetTrigger, SheetContent } from "~/components/common/sheet";
 import { useToast } from "~/components/common/use-toast";
 import { Ticket } from "~/components/domain/tickets/Ticket";
-import { trpc } from "~/lib/trpc/client/connectNext";
+import { deleteTicketManager } from "~/servers/ticketManager/mutation";
 import { manageTypeToText } from "~/util/setting";
 import { UnionNullToUndefined } from "~/util/types";
 
@@ -22,11 +22,10 @@ type ManagerCardProps = {
 };
 
 export const ManagerCard = ({ manager, ticket }: ManagerCardProps) => {
-  const deleteSchedule = trpc.ticketManager.delete.useMutation();
   const { toast } = useToast();
   const router = useRouter();
   const onClickDeleteSchedule = async () => {
-    await deleteSchedule.mutateAsync({ id: manager.id });
+    await deleteTicketManager(manager.id);
     toast({
       toastType: "info",
       description: "チケットスケジュールを削除しました",

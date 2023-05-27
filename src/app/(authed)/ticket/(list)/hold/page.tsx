@@ -4,3 +4,5 @@ export default function TicketListHoldPage() {
   /** @ts-expect-error Async Component  */
   return <TicketListWrapper />;
 }
+
+export const revalidate = 0;
