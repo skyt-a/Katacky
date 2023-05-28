@@ -1,6 +1,7 @@
 import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getStorage } from "firebase-admin/storage";
+import "firebase/compat/messaging";
 
 const serviceAccount = process.env.NEXT_PUBLIC_ADMIN_SECRET
   ? JSON.parse(process.env.NEXT_PUBLIC_ADMIN_SECRET)
