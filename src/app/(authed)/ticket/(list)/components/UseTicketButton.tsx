@@ -47,7 +47,7 @@ export const UseTicketButton = ({
             チケットを使う
           </SheetTrigger>
           <SheetContent position="bottom" size="content">
-            <FormControlWrapper id="message" label="メッセージ">
+            <FormControlWrapper id="message" label="コメント">
               <Input id="message" type="text" {...messageInput} />
             </FormControlWrapper>
             <Button
