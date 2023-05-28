@@ -19,12 +19,19 @@ export const createTicketManager = async (input: CreateTicketManageInput) => {
   return ticketManager;
 };
 
-export const deleteTicketManager = async (id: number) => {
-  const manager = await prisma.ticketManager.delete({
-    where: {
-      id,
-    },
-  });
+export const deleteTicketManager = async (id: number, ticketId: number) => {
+  const result = await prisma.$transaction([
+    prisma.ticketManager.delete({
+      where: {
+        id,
+      },
+    }),
+    prisma.ticket.delete({
+      where: {
+        id: ticketId,
+      },
+    }),
+  ]);
   revalidatePath("/ticketManager");
-  return manager;
+  return result;
 };

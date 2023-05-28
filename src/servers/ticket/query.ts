@@ -8,6 +8,7 @@ export const ticketHolds = async () => {
     where: {
       holderId: session?.user.userInfoId,
       isUsed: false,
+      isScheduled: false,
     },
     orderBy: {
       updatedAt: "desc",
@@ -22,6 +23,7 @@ export const ticketUsed = async () => {
     where: {
       holderId: session?.user.userInfoId,
       isUsed: true,
+      isScheduled: false,
     },
     orderBy: {
       usedDate: "desc",

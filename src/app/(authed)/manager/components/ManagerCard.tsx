@@ -20,7 +20,7 @@ import { UnionNullToUndefined } from "~/util/types";
 
 type ManagerCardProps = {
   manager: TicketManager;
-  ticket: UnionNullToUndefined<TicketType> | null;
+  ticket: UnionNullToUndefined<TicketType>;
 };
 
 export const ManagerCard = ({ manager, ticket }: ManagerCardProps) => {
@@ -28,7 +28,7 @@ export const ManagerCard = ({ manager, ticket }: ManagerCardProps) => {
   const [, startTransition] = useTransition();
   const onClickDeleteSchedule = () =>
     startTransition(() => {
-      serverActionHandler(deleteTicketManager(manager.id), () => {
+      serverActionHandler(deleteTicketManager(manager.id, ticket.id), () => {
         toast({
           toastType: "info",
           description: "チケットスケジュールを削除しました",
