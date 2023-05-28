@@ -8,13 +8,6 @@ datasource db {
   relationMode = "prisma"
 }
 
-enum TicketManageType {
-  ONCE_YEAR
-  ONCE_MONTH
-  ONCE_WEEK
-  ONCE_DAY
-}
-
 model TicketManager {
   id             Int              @id @default(autoincrement())
   name           String
@@ -22,10 +15,10 @@ model TicketManager {
   type           TicketManageType
   creatorId      Int
   retrieveUserId Int
-  retrieveUser   User             @relation(fields: [retrieveUserId], references: [id])
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   ticketId       Int
+  retrieveUser   User             @relation(fields: [retrieveUserId], references: [id])
   ticket         Ticket           @relation(fields: [ticketId], references: [id])
 }
 
@@ -43,7 +36,9 @@ model Ticket {
   expiredDate       DateTime?
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
-  usedDate          DateTime?       @updatedAt()
+  usedDate          DateTime?       @updatedAt
+  effect            String?
+  useMessage        String?
   from              String
   to                String
   creator           User            @relation("author", fields: [creatorId], references: [id])
@@ -75,4 +70,11 @@ model User {
   ticketsOwned    Ticket[]        @relation("holder")
   group           Group?          @relation("userGroup", fields: [groupId], references: [id])
   TicketManager   TicketManager[]
+}
+
+enum TicketManageType {
+  ONCE_YEAR
+  ONCE_MONTH
+  ONCE_WEEK
+  ONCE_DAY
 }

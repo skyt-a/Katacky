@@ -1,10 +1,13 @@
 import { Ticket as TicketType } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { Button } from "~/components/common";
+import { Button, Input } from "~/components/common";
+import { Sheet, SheetContent, SheetTrigger } from "~/components/common/sheet";
 import { useToast } from "~/components/common/use-toast";
+import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
 import { serverActionHandler } from "~/lib/client/serverActionHandler";
 import { useTicket } from "~/servers/ticket/mutation";
+import { useInput } from "~/util/form";
 import { UnionNullToUndefined } from "~/util/types";
 
 type UseTicketButtonProps = {
@@ -20,12 +23,13 @@ export const UseTicketButton = ({
   const [, startTransition] = useTransition();
 
   const router = useRouter();
+  const messageInput = useInput("");
   const onClickUseTicket = () =>
     startTransition(() => {
       if (!ticket.id) {
         return;
       }
-      serverActionHandler(useTicket(ticket.id), () => {
+      serverActionHandler(useTicket(ticket.id, messageInput.value), () => {
         toast({
           toastType: "info",
           description: "チケット🎫を使用しました",
@@ -38,9 +42,23 @@ export const UseTicketButton = ({
   return (
     <>
       {!ticket.isUsed && (
-        <Button type="button" className="w-full" onClick={onClickUseTicket}>
-          チケットを使う
-        </Button>
+        <Sheet>
+          <SheetTrigger className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-10 py-2 px-4 w-full">
+            チケットを使う
+          </SheetTrigger>
+          <SheetContent position="bottom" size="content">
+            <FormControlWrapper id="message" label="コメント">
+              <Input id="message" type="text" {...messageInput} />
+            </FormControlWrapper>
+            <Button
+              type="button"
+              className="w-full mt-4"
+              onClick={onClickUseTicket}
+            >
+              チケットを使う
+            </Button>
+          </SheetContent>
+        </Sheet>
       )}
     </>
   );

@@ -29,7 +29,6 @@ export const GroupsForm = ({ user }: GroupFormProps) => {
       setGroupFromToken(group);
     }
   };
-  const router = useRouter();
   const onCreateGroup = () => {
     if (!groupFromToken) {
       startTransition(() => {

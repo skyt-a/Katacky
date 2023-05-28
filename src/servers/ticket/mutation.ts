@@ -43,7 +43,7 @@ export const createTicket = async (
   return ticket;
 };
 
-export const useTicket = async (id: number) => {
+export const useTicket = async (id: number, message?: string) => {
   const ticket = await prisma.ticket.update({
     where: {
       id,
@@ -51,6 +51,7 @@ export const useTicket = async (id: number) => {
     data: {
       isUsed: true,
       usedDate: new Date(),
+      useMessage: message,
     },
   });
   revalidatePath("/ticket/hold");
