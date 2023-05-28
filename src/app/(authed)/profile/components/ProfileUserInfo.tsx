@@ -15,7 +15,7 @@ export const ProfileUserInfo = async () => {
       <CardHeader>
         <AvatarImage imageUrl={imageUrl} />
         <div>
-          <CardTitle className="mt-4">{user?.name}</CardTitle>
+          <CardTitle className="mt-4 break-all">{user?.name}</CardTitle>
           <CardDescription>{user?.email}</CardDescription>
         </div>
       </CardHeader>
