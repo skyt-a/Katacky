@@ -3,9 +3,8 @@ import { isSupported } from "firebase/messaging";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/common";
 import { Label } from "~/components/common/label";
-import { Switch } from "~/components/common/switch";
 import { useToast } from "~/components/common/use-toast";
-import { requestForToken } from "~/lib/firebase/fcm";
+import { requestForToken, updateToken } from "~/lib/firebase/fcm";
 
 export const ProfileSetting = () => {
   const { toast } = useToast();
@@ -18,8 +17,8 @@ export const ProfileSetting = () => {
     });
   }, []);
   useEffect(() => {}, []);
-  const updateToken = async () => {
-    return await requestForToken(isSupportedMessage);
+  const onClickUpdateToken = async () => {
+    await updateToken();
     toast({
       toastType: "info",
       description: "トークンを更新しました",
@@ -47,7 +46,7 @@ export const ProfileSetting = () => {
       ) : (
         <>
           <div>オン(オフにする場合はブラウザの設定で変更してください)</div>
-          <Button onClick={updateToken} className="w-full">
+          <Button onClick={onClickUpdateToken} className="w-full">
             トークンを更新する(通知が届かない時に押してください)
           </Button>
         </>
