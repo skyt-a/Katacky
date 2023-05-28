@@ -1,5 +1,6 @@
 import { BatchResponse } from "firebase-admin/lib/messaging/messaging-api";
-import * as firebaseAdmin from "firebase-admin";
+import * as fa from "firebase-admin";
+import { firebaseAdmin } from "~/lib/firebase/server";
 
 export const sendFirebaseCloudMessage = async (
   notification: { title: string; body: string },
@@ -10,5 +11,5 @@ export const sendFirebaseCloudMessage = async (
     tokens,
   };
 
-  return await firebaseAdmin.messaging().sendEachForMulticast(params);
+  return await fa.messaging(firebaseAdmin).sendEachForMulticast(params);
 };
