@@ -42,6 +42,7 @@ export const ChangeSettingForm = ({
           description: "プロフィール画像を変更しました",
         })
       );
+      router.refresh();
     });
   };
   const onClickNameChangeButton = async () => {
@@ -52,6 +53,7 @@ export const ChangeSettingForm = ({
           description: "ユーザーネームを変更しました",
         });
       });
+      router.refresh();
     });
   };
   const onClickPasswordChangeButton = async (e: any) => {

@@ -73,7 +73,6 @@ export const updateName = async (name: string) => {
       id: session?.user.userInfoId,
     },
   });
-  revalidatePath("/profile");
   return user;
 };
 
@@ -90,6 +89,5 @@ export const updateProfileImage = async (url: string) => {
       id: session?.user.userInfoId,
     },
   });
-  revalidatePath("/profile");
   return updatedUser;
 };
