@@ -18,11 +18,18 @@ export const ProfileSetting = () => {
   }, []);
   useEffect(() => {}, []);
   const onClickUpdateToken = async () => {
-    await updateToken();
-    toast({
-      toastType: "info",
-      description: "トークンを更新しました",
-    });
+    const token = await updateToken();
+    if (token) {
+      toast({
+        toastType: "info",
+        description: "トークンを更新しました",
+      });
+    } else {
+      toast({
+        toastType: "error",
+        description: "トークンの更新に失敗しました",
+      });
+    }
   };
   const onCheckChange = async () => {
     if (
@@ -46,9 +53,14 @@ export const ProfileSetting = () => {
       ) : (
         <>
           <div>オン(オフにする場合はブラウザの設定で変更してください)</div>
-          <Button type="button" onClick={onClickUpdateToken} className="w-full">
-            トークンを更新する(通知が届かない時に押してください)
+          <Button
+            type="button"
+            onClick={onClickUpdateToken}
+            className="w-full mt-4"
+          >
+            トークンを更新する
           </Button>
+          <div className="text-xs mt-2">※通知が届かない時に押してください</div>
         </>
       )}
     </div>

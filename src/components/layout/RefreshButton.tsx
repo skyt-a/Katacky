@@ -1,7 +1,9 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { RefreshIcon } from "~/components/icons/refresh";
 
 export const RefreshButton = () => {
+  const router = useRouter();
   return (
     <button
       onClick={() => {
