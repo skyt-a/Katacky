@@ -40,13 +40,13 @@ export const ProfileSetting = () => {
     <div>
       <Label>通知設定</Label>
       {!notice ? (
-        <Button onClick={onCheckChange} className="w-full">
+        <Button type="button" onClick={onCheckChange} className="w-full">
           オンにする
         </Button>
       ) : (
         <>
           <div>オン(オフにする場合はブラウザの設定で変更してください)</div>
-          <Button onClick={onClickUpdateToken} className="w-full">
+          <Button type="button" onClick={onClickUpdateToken} className="w-full">
             トークンを更新する(通知が届かない時に押してください)
           </Button>
         </>

@@ -24,6 +24,7 @@ export const requestForToken = async (isSupported: boolean) => {
   const token = await getToken(messaging, {
     vapidKey: process.env.NEXT_PUBLIC_FCM_TOKEN,
   }).catch((err) => {
+    debugger;
     console.error("An error occurred while retrieving token. ", err);
     return null;
   });
