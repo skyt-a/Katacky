@@ -62,7 +62,7 @@ model User {
   name            String
   authId          String          @unique
   groupId         Int?
-  deviceToken     String?         @unique
+  deviceToken     String?         
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   profileImageUrl String?

@@ -24,8 +24,10 @@ export const UseTicketButton = ({
 
   const router = useRouter();
   const messageInput = useInput("");
-  const onClickUseTicket = () =>
+  const onClickUseTicket = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.stopPropagation();
     startTransition(() => {
+      debugger;
       if (!ticket.id) {
         return;
       }
@@ -38,6 +40,7 @@ export const UseTicketButton = ({
         router.refresh();
       });
     });
+  };
 
   return (
     <>
