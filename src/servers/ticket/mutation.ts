@@ -54,6 +54,7 @@ export const useTicket = async (id: number) => {
     },
   });
   revalidatePath("/ticket/hold");
+  revalidatePath("/group");
   return ticket;
 };
 

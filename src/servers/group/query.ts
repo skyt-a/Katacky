@@ -29,3 +29,22 @@ export const groupByToken = async (token: string) => {
   });
   return group;
 };
+
+export const groupHistory = async (userIds: number[]) => {
+  const groupHistory = await prisma.ticket.findMany({
+    take: 10,
+    include: {
+      holder: true,
+    },
+    where: {
+      holderId: {
+        in: userIds,
+      },
+      isUsed: true,
+    },
+    orderBy: {
+      usedDate: "desc",
+    },
+  });
+  return groupHistory;
+};

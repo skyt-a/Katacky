@@ -19,6 +19,7 @@ export const UseTicketButton = ({
   const { toast } = useToast();
   const [, startTransition] = useTransition();
 
+  const router = useRouter();
   const onClickUseTicket = () =>
     startTransition(() => {
       if (!ticket.id) {
@@ -30,6 +31,7 @@ export const UseTicketButton = ({
           description: "チケット🎫を使用しました",
         });
         onUseSuccess();
+        router.refresh();
       });
     });
 
