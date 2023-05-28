@@ -11,5 +11,8 @@ export const sendFirebaseCloudMessage = async (
     tokens,
   };
 
-  return await fa.messaging().sendEachForMulticast(params);
+  console.log(fa.messaging);
+  const message = await fa.messaging().sendEachForMulticast(params);
+  console.log(message.successCount, message.failureCount, message.responses);
+  return message;
 };
