@@ -73,8 +73,8 @@ export const GroupInfo = ({
                 <div>{ticket.title}</div>
                 <div>{format(ticket.usedDate!, "yyyy/MM/dd")}</div>
               </div>
-              {ticket.message && ticket.message.length > 0 && (
-                <div className="break-all">{ticket.message}</div>
+              {ticket.useMessage && ticket.useMessage.length > 0 && (
+                <div className="break-all">{ticket.useMessage}</div>
               )}
             </li>
           ))}
