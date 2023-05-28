@@ -11,5 +11,5 @@ export const sendFirebaseCloudMessage = async (
     tokens,
   };
 
-  return await fa.messaging(firebaseAdmin).sendEachForMulticast(params);
+  return await fa.messaging().sendEachForMulticast(params);
 };
