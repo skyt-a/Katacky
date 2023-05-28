@@ -56,7 +56,7 @@ export const updateToken = async () => {
   }
   console.log("current token for client: ", token);
   localStorage.setItem("fcm_token", token);
-  await updateDeviceToken(token);
+  return await updateDeviceToken(token);
 };
 
 export const onMessageListener: (
