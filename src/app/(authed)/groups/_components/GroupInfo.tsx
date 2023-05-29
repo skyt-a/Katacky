@@ -5,6 +5,7 @@ import { useQRCode } from "next-qrcode";
 import { GroupInviteButton } from "~/app/(authed)/groups/_components/info/GroupInviteButton";
 import { Button } from "~/components/common";
 import { useToast } from "~/components/common/use-toast";
+import { GroupAvatarImage } from "~/components/domain/group/GroupAvatarImage";
 import { deleteGroup } from "~/servers/group/mutation";
 import { leaveGroup } from "~/servers/user/mutation";
 
@@ -50,9 +51,14 @@ export const GroupInfo = ({
         <h4 className="mt-4 text-xl font-semibold tracking-tight">
           グループメンバー
         </h4>
-        <ul className="mt-2">
+        <ul className="flex items-center mt-2 gap-2 flex-wrap">
           {groupUsers?.map((user) => (
-            <li key={user.id}>{user.name}</li>
+            <li key={user.id}>
+              <GroupAvatarImage
+                imageUrl={user.profileImageUrl!}
+                name={user.name}
+              />
+            </li>
           ))}
         </ul>
         <div className="mt-2">

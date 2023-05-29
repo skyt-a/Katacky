@@ -1,5 +1,6 @@
 import { GroupInfo } from "~/app/(authed)/groups/_components/GroupInfo";
 import { GroupsForm } from "~/app/(authed)/groups/_components/GroupsForm";
+import { getDownloadURLFromStorage } from "~/lib/firebase/storageServer";
 import { getGroup, groupHistory } from "~/servers/group/query";
 import { getLoginUser, getUserByGroup } from "~/servers/user/query";
 
@@ -12,12 +13,21 @@ export const GroupsWrapper = async () => {
     return <GroupsForm user={user} />;
   }
   const users = await getUserByGroup(user.groupId);
-  const ticketGroupHistory = await groupHistory(users.map((u) => u.id));
+  const [ticketGroupHistory, ...usesrWithProfileImage] = await Promise.all([
+    groupHistory(users.map((u) => u.id)),
+    ...users.map(async (u) => {
+      const imageUrl = await getDownloadURLFromStorage(u?.profileImageUrl);
+      return {
+        ...u,
+        profileImageUrl: imageUrl ?? null,
+      };
+    }),
+  ]);
   return (
     <GroupInfo
       group={group}
       user={user}
-      groupUsers={users}
+      groupUsers={usesrWithProfileImage}
       ticketGroupHistory={ticketGroupHistory}
     />
   );
