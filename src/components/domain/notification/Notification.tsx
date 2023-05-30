@@ -1,6 +1,5 @@
-"use client";
-import { useQuery } from "@tanstack/react-query";
 import { isSupported } from "firebase/messaging";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { requestForToken, onMessageListener } from "~/lib/firebase/fcm";
 
@@ -10,16 +9,6 @@ const checkSupport = async () => {
 };
 
 export const Notification = () => {
-  const [notification, setNotification] = useState<{
-    title: string | undefined;
-    body: string | undefined;
-  }>({ title: "", body: "" });
-  useEffect(() => {
-    if (notification?.title) {
-      alert("title: " + notification?.title + "\nbody: " + notification?.body);
-    }
-  }, [notification]);
-
   const [isSupportedMessage, setIsSupportedMessage] = useState<Boolean>(false);
   useEffect(() => {
     checkSupport().then((isSupportedThis) => {
@@ -27,13 +16,11 @@ export const Notification = () => {
     });
   }, []);
 
+  const router = useRouter();
   requestForToken(Boolean(isSupportedMessage));
   onMessageListener(Boolean(isSupportedMessage))
-    .then((payload) => {
-      setNotification({
-        title: payload?.notification?.title,
-        body: payload?.notification?.body,
-      });
+    .then(() => {
+      router.refresh();
     })
     .catch((err) => console.log("failed: ", err));
 
