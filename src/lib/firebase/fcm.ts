@@ -8,13 +8,16 @@ import {
 import { app } from "~/lib/firebase/browser";
 import { updateDeviceToken } from "~/servers/user/mutation";
 
-export const requestForToken = async (isSupported: boolean) => {
+export const requestForToken = async (
+  isSupported: boolean,
+  refresh = false
+) => {
   if (!isSupported) {
     return null;
   }
   const messaging = getMessaging();
   const tokenInLocalForage = localStorage.getItem("fcm_token");
-  if (tokenInLocalForage) {
+  if (!refresh && tokenInLocalForage) {
     return tokenInLocalForage;
   }
   const status = await Notification.requestPermission();
