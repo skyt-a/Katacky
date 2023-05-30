@@ -37,7 +37,7 @@ export const ProfileSetting = () => {
       Notification.permission !== "granted"
     ) {
       const token = await requestForToken(isSupportedMessage, true);
-      if (!token) {
+      if (token) {
         setNotice(true);
       }
     }
