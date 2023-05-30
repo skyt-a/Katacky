@@ -1,3 +1,4 @@
+"use client";
 import { isSupported } from "firebase/messaging";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
