@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { requestForToken, onMessageListener } from "~/lib/firebase/fcm";
 
-const checkSupport = async () => {
+export const checkSupport = async () => {
   const isSupportedThis = await isSupported();
   return isSupportedThis;
 };

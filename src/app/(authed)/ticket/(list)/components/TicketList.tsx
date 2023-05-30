@@ -1,12 +1,15 @@
 "use client";
 import { Ticket as TicketType, User } from "@prisma/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { AssignTicketButton } from "~/app/(authed)/ticket/(list)/components/AssignTicketButton";
 import { DeleteTicketButton } from "~/app/(authed)/ticket/(list)/components/DeleteTicketButton";
 import { UseTicketButton } from "~/app/(authed)/ticket/(list)/components/UseTicketButton";
 import { Button } from "~/components/common";
+import { checkSupport } from "~/components/domain/notification/Notification";
 import { Ticket } from "~/components/domain/tickets/Ticket";
+import { onMessageListener } from "~/lib/firebase/fcm";
+import { ticketHolds } from "~/servers/ticket/query";
 import { UnionNullToUndefined } from "~/util/types";
 
 type TicketListProps = {
@@ -16,6 +19,17 @@ type TicketListProps = {
 
 export const TicketList = ({ tickets, groupUsers }: TicketListProps) => {
   const [ticketsState, setTicketsState] = useState<TicketType[]>(tickets);
+  const [isSupportedMessage, setIsSupportedMessage] = useState<Boolean>(false);
+  useEffect(() => {
+    checkSupport().then((isSupportedThis) => {
+      setIsSupportedMessage(isSupportedThis);
+    });
+  }, []);
+  onMessageListener(Boolean(isSupportedMessage))
+    .then(async () => {
+      setTicketsState(await ticketHolds());
+    })
+    .catch((err) => console.log("failed: ", err));
   const [selectedTicket, setSelectedTicket] =
     useState<UnionNullToUndefined<TicketType>>();
   const onClickTicket = (ticket: UnionNullToUndefined<TicketType>) => () => {
