@@ -18,7 +18,7 @@ export const requestForToken = async (
   const messaging = getMessaging();
   const tokenInLocalForage = localStorage.getItem("fcm_token");
   if (!refresh && tokenInLocalForage) {
-    return tokenInLocalForage;
+    return [tokenInLocalForage, Notification.permission];
   }
   const status = await Notification.requestPermission();
   if (!status || status !== "granted") {
@@ -40,7 +40,7 @@ export const requestForToken = async (
   console.log("current token for client: ", token);
   localStorage.setItem("fcm_token", token);
   await updateDeviceToken(token);
-  return token;
+  return [token, status] as const;
 };
 
 export const updateToken = async () => {
