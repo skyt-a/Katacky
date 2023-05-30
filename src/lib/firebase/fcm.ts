@@ -8,14 +8,17 @@ import {
 import { app } from "~/lib/firebase/browser";
 import { updateDeviceToken } from "~/servers/user/mutation";
 
-export const requestForToken = async (isSupported: boolean) => {
+export const requestForToken = async (
+  isSupported: boolean,
+  refresh = false
+) => {
   if (!isSupported) {
     return null;
   }
   const messaging = getMessaging();
   const tokenInLocalForage = localStorage.getItem("fcm_token");
-  if (tokenInLocalForage) {
-    return tokenInLocalForage;
+  if (!refresh && tokenInLocalForage) {
+    return [tokenInLocalForage, Notification.permission];
   }
   const status = await Notification.requestPermission();
   if (!status || status !== "granted") {
@@ -37,7 +40,7 @@ export const requestForToken = async (isSupported: boolean) => {
   console.log("current token for client: ", token);
   localStorage.setItem("fcm_token", token);
   await updateDeviceToken(token);
-  return token;
+  return [token, status] as const;
 };
 
 export const updateToken = async () => {

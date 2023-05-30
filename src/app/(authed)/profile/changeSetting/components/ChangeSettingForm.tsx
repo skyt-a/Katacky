@@ -6,7 +6,6 @@ import { useInput } from "~/util/form";
 import { User } from "@prisma/client";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "~/lib/firebase/browser";
-import { ProfileSetting } from "~/app/(authed)/profile/components/ProfileSetting";
 import { useRouter } from "next/navigation";
 import { FileUploadButton } from "~/components/common/fileUpload";
 import { useState, useTransition } from "react";
@@ -14,6 +13,7 @@ import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
 import { updateName, updateProfileImage } from "~/servers/user/mutation";
 import { serverActionHandler } from "~/lib/client/serverActionHandler";
+import { ProfileSetting } from "~/app/(authed)/profile/components/ProfileSetting";
 
 type ChangeSettingFormProps = {
   user: User;

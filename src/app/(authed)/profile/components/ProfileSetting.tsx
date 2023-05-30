@@ -8,10 +8,10 @@ import { requestForToken, updateToken } from "~/lib/firebase/fcm";
 
 export const ProfileSetting = () => {
   const { toast } = useToast();
-  const [notice, setNotice] = useState(false);
+  const [notice, setNotice] = useState("");
   const [isSupportedMessage, setIsSupportedMessage] = useState<boolean>(false);
   useEffect(() => {
-    setNotice(Notification.permission === "granted");
+    setNotice(Notification.permission);
     isSupported().then((isSupportedThis) => {
       setIsSupportedMessage(isSupportedThis);
     });
@@ -32,13 +32,15 @@ export const ProfileSetting = () => {
     }
   };
   const onCheckChange = async () => {
+    debugger;
     if (
       typeof window !== "undefined" &&
       Notification.permission !== "granted"
     ) {
-      const token = await requestForToken(isSupportedMessage);
-      if (!token) {
-        setNotice(true);
+      const [token, status] =
+        (await requestForToken(isSupportedMessage, true)) ?? [];
+      if (token) {
+        setNotice(status);
       }
     }
   };
@@ -46,23 +48,40 @@ export const ProfileSetting = () => {
   return (
     <div>
       <Label>通知設定</Label>
-      {!notice ? (
-        <Button type="button" onClick={onCheckChange} className="w-full">
-          オンにする
-        </Button>
-      ) : (
-        <>
-          <div>オン(オフにする場合はブラウザの設定で変更してください)</div>
-          <Button
-            type="button"
-            onClick={onClickUpdateToken}
-            className="w-full mt-4"
-          >
-            トークンを更新する
+      <div className="mt-2">
+        {notice === "denied" && (
+          <div>
+            通知権限が拒否されています。通知をオンにしたい場合は以下の手順に従ってください。
+            <ol>
+              <li>1. アプリ・ブラウザの設定で変更</li>
+              <li>2. ヘッダーの更新ボタンを押下</li>
+              <li>3. トークンを更新するボタンを押下</li>
+            </ol>
+          </div>
+        )}
+        {notice === "default" && (
+          <Button type="button" onClick={onCheckChange} className="w-full">
+            オンにする
           </Button>
-          <div className="text-xs mt-2">※通知が届かない時に押してください</div>
-        </>
-      )}
+        )}
+        {notice === "granted" && (
+          <>
+            <div>
+              オン(オフにする場合はアプリ・ブラウザの設定で変更してください)
+            </div>
+            <Button
+              type="button"
+              onClick={onClickUpdateToken}
+              className="w-full mt-4"
+            >
+              トークンを更新する
+            </Button>
+            <div className="text-xs mt-2">
+              ※通知が届かない時に押してください
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };
