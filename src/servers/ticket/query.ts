@@ -1,4 +1,4 @@
-import "server-only";
+"use server";
 import { prisma } from "~/lib/prisma";
 import { getServerSession } from "~/lib/auth/session";
 
