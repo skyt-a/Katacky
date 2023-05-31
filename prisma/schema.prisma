@@ -8,6 +8,11 @@ datasource db {
   relationMode = "prisma"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "scheme.md"
+}
+
 model TicketManager {
   id             Int              @id @default(autoincrement())
   name           String

@@ -69,6 +69,7 @@
     "@types/react-transition-group": "^4.4.6",
     "@types/uuid": "^9.0.1",
     "local-ssl-proxy": "^2.0.5",
-    "prisma": "^4.13.0"
+    "prisma": "^4.13.0",
+    "prisma-erd-generator": "^1.6.0"
   }
 }
