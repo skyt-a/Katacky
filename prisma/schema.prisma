@@ -25,6 +25,7 @@ model TicketManager {
   ticketId       Int
   retrieveUser   User             @relation(fields: [retrieveUserId], references: [id])
   ticket         Ticket           @relation(fields: [ticketId], references: [id])
+  @@index([creatorId])
 }
 
 model Ticket {
@@ -41,7 +42,7 @@ model Ticket {
   expiredDate       DateTime?
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
-  usedDate          DateTime?       @updatedAt
+  usedDate          DateTime?
   effect            String?
   useMessage        String?
   from              String
@@ -49,6 +50,7 @@ model Ticket {
   creator           User            @relation("author", fields: [creatorId], references: [id])
   holder            User?           @relation("holder", fields: [holderId], references: [id])
   TicketManager     TicketManager[]
+  @@index([holderId, isUsed, isScheduled])
 }
 
 model Group {
@@ -57,7 +59,7 @@ model Group {
   token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  creatorId Int
+  creatorId Int      
   user      User[]   @relation("userGroup")
 }
 
@@ -67,7 +69,7 @@ model User {
   name            String
   authId          String          @unique
   groupId         Int?
-  deviceToken     String?         
+  deviceToken     String?
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   profileImageUrl String?
@@ -75,6 +77,8 @@ model User {
   ticketsOwned    Ticket[]        @relation("holder")
   group           Group?          @relation("userGroup", fields: [groupId], references: [id])
   TicketManager   TicketManager[]
+  @@index([authId])
+  @@index([groupId])
 }
 
 enum TicketManageType {
