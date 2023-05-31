@@ -44,7 +44,10 @@ export const ManagerCard = ({ manager, ticket }: ManagerCardProps) => {
             <CardTitle>{manager.name}</CardTitle>
             <CardDescription>{manageTypeToText[manager.type]}</CardDescription>
           </CardHeader>
-          <CardContent>宛先: {ticket?.to}</CardContent>
+          <CardContent>
+            <p>宛先: {ticket?.to}</p>
+            <p>枚数: {manager.count}</p>
+          </CardContent>
         </Card>
       </SheetTrigger>
       <SheetContent position="bottom" size="content">
