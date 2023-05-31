@@ -4,7 +4,7 @@
 サービス名のKatackyというのはこういう身内だけで運用するチケットといえば、肩叩き券だなと思ったのでそこから考えました。
 
 ## データベース
-[ER図](./prisma/schema.md)
+[ER図](./prisma/scheme.md)
 
 ### 記事で詳しく書いています
 https://zenn.dev/ringoku/articles/e5be4aeca24fbd
