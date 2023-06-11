@@ -11,6 +11,7 @@ import Link from "next/link";
 import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
 import { ZodError, z } from "zod";
 import { passwordSchema } from "~/util/setting";
+import Image from "next/image";
 
 export const LoginForm = () => {
   const emailInput = useInput("");
@@ -61,36 +62,41 @@ export const LoginForm = () => {
     router.push("/auth/createUser");
   };
   return (
-    <form className="flex flex-col gap-4">
-      <FormControlWrapper label="メールアドレス" id="email">
-        <TextInput
-          id="email"
-          type="email"
-          placeholder="メールアドレスを入力してください"
-          required={true}
-          {...emailInput}
-        />
-      </FormControlWrapper>
-      <FormControlWrapper label="パスワード" id="password" className="mt-2">
-        <TextInput
-          id="password"
-          type="password"
-          required={true}
-          {...passwordInput}
-        />
-      </FormControlWrapper>
-      <Button type="submit" onClick={onClickButton}>
-        ログイン
-      </Button>
-      <Button type="submit" onClick={onClickButtonSignup}>
-        新規登録
-      </Button>
-      <p className="text-center mt-2">
-        ログインパスワードを忘れた方は
-        <Link href="/auth/login/forgotPassword" className="underline">
-          こちら
-        </Link>
-      </p>
-    </form>
+    <div>
+      <div className="flex justify-center">
+        <Image src="/brand_dark.png" width={200} height={82} alt="Katacky" />
+      </div>
+      <form className="flex flex-col gap-4 mt-8">
+        <FormControlWrapper label="メールアドレス" id="email">
+          <TextInput
+            id="email"
+            type="email"
+            placeholder="メールアドレスを入力してください"
+            required={true}
+            {...emailInput}
+          />
+        </FormControlWrapper>
+        <FormControlWrapper label="パスワード" id="password" className="mt-2">
+          <TextInput
+            id="password"
+            type="password"
+            required={true}
+            {...passwordInput}
+          />
+        </FormControlWrapper>
+        <Button type="submit" onClick={onClickButton}>
+          ログイン
+        </Button>
+        <Button type="submit" onClick={onClickButtonSignup}>
+          新規登録
+        </Button>
+        <p className="text-center mt-2">
+          ログインパスワードを忘れた方は
+          <Link href="/auth/login/forgotPassword" className="underline">
+            こちら
+          </Link>
+        </p>
+      </form>
+    </div>
   );
 };
