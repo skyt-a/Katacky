@@ -51,6 +51,7 @@
     "react-day-picker": "^8.7.1",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.44.0",
+    "react-rewards": "^2.0.4",
     "react-transition-group": "^4.4.5",
     "server-only": "^0.0.1",
     "superjson": "^1.12.3",

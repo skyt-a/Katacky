@@ -29,7 +29,7 @@ export default function Menu() {
           <span className="sr-only">チケット一覧</span>
         </MenuLink>
 
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center" id="animation-target">
           <Link
             className="inline-flex items-center justify-center w-10 h-10 font-medium bg-primary text-secondary rounded-full hover:bg-primary group focus:ring-4 focus:ring-secondary-300 focus:outline-none"
             href="/ticket/create"

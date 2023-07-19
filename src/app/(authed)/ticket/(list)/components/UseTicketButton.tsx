@@ -1,6 +1,7 @@
 import { Ticket as TicketType } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { useReward } from "react-rewards";
 import { Button, Input } from "~/components/common";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/common/sheet";
 import { useToast } from "~/components/common/use-toast";
@@ -24,10 +25,11 @@ export const UseTicketButton = ({
 
   const router = useRouter();
   const messageInput = useInput("");
+  const { reward } = useReward("animation-target", "confetti");
+
   const onClickUseTicket = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.stopPropagation();
     startTransition(() => {
-      debugger;
       if (!ticket.id) {
         return;
       }
@@ -37,6 +39,7 @@ export const UseTicketButton = ({
           description: "チケット🎫を使用しました",
         });
         onUseSuccess();
+        reward();
         router.refresh();
       });
     });
