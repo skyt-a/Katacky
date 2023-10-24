@@ -3,8 +3,8 @@ import { getAuth } from "firebase-admin/auth";
 import { getStorage } from "firebase-admin/storage";
 import "firebase/compat/messaging";
 
-const serviceAccount = process.env.NEXT_PUBLIC_ADMIN_SECRET
-  ? JSON.parse(process.env.NEXT_PUBLIC_ADMIN_SECRET)
+const serviceAccount = process.env.ADMIN_SECRET
+  ? JSON.parse(process.env.ADMIN_SECRET)
   : undefined;
 export const firebaseAdmin =
   getApps()[0] ??
