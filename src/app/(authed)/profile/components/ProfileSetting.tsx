@@ -16,7 +16,6 @@ export const ProfileSetting = () => {
       setIsSupportedMessage(isSupportedThis);
     });
   }, []);
-  useEffect(() => {}, []);
   const onClickUpdateToken = async () => {
     const token = await updateToken();
     if (token) {

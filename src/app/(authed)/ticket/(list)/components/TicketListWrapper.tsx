@@ -1,5 +1,4 @@
 import { TicketList } from "~/app/(authed)/ticket/(list)/components/TicketList";
-import "./ticketAnimation.css";
 import { ticketHolds } from "~/servers/ticket/query";
 import { getGroup } from "~/servers/group/query";
 import { getUserByGroup } from "~/servers/user/query";

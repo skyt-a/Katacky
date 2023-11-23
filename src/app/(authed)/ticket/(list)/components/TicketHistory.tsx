@@ -10,7 +10,6 @@ export const TicketHistory = async () => {
       )}
       {ticket.map((ticket) => (
         <li key={ticket.id} className="[&:not(:first-of-type)]:mt-2">
-          {}
           <Ticket key={ticket.id} {...ticket} />
         </li>
       ))}

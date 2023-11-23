@@ -12,7 +12,6 @@ export const Profile = () => {
     <div>
       <Card className="w-full">
         <Suspense fallback={<CardSkelton />}>
-          {}
           <ProfileUserInfo />
         </Suspense>
       </Card>

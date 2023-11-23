@@ -1,6 +1,8 @@
 import "server-only";
 import { prisma } from "~/lib/prisma";
 import { getServerSession } from "~/lib/auth/session";
+import { UnionNullToUndefined } from "~/util/types";
+import { Ticket } from "@prisma/client";
 
 export const ticketHolds = async () => {
   const session = await getServerSession();
@@ -17,9 +19,9 @@ export const ticketHolds = async () => {
   return ticket;
 };
 
-export const ticketUsed = async () => {
+export const ticketUsed = async (): Promise<UnionNullToUndefined<Ticket>[]> => {
   const session = await getServerSession();
-  const ticket = await prisma.ticket.findMany({
+  const tickets = await prisma.ticket.findMany({
     where: {
       holderId: session?.user.userInfoId,
       isUsed: true,
@@ -29,7 +31,18 @@ export const ticketUsed = async () => {
       usedDate: "desc",
     },
   });
-  return ticket;
+  const ticketsWithUndefined = tickets.map((ticket) => {
+    const ticketEntries = Object.entries(ticket);
+    const partialTicket: Partial<Ticket> = ticket;
+    for (let [key, value] of ticketEntries) {
+      if (value === null) {
+        partialTicket[key as keyof Ticket] = undefined;
+      }
+    }
+    return partialTicket as UnionNullToUndefined<Ticket>;
+  });
+
+  return ticketsWithUndefined;
 };
 
 export const ticketsByIds = async (ids: number[]) => {
