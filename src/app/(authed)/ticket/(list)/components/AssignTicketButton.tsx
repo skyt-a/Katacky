@@ -20,19 +20,20 @@ import {
 } from "~/components/common/select";
 import { useToast } from "~/components/common/use-toast";
 import { serverActionHandler } from "~/lib/client/serverActionHandler";
-import { sendTicket } from "~/servers/ticket/mutation";
 import { UnionNullToUndefined } from "~/util/types";
 
 type AssignTicketButtonProps = {
   users: User[];
   ticket: UnionNullToUndefined<Ticket>;
   onAssignSuccess: () => void;
+  sendTicket(user: User, ticketId: number, toId: number): Promise<Ticket>;
 };
 
 export const AssignTicketButton = ({
   ticket,
   users,
   onAssignSuccess,
+  sendTicket,
 }: AssignTicketButtonProps) => {
   const [userId, setUserId] = useState<string>();
   const { toast } = useToast();

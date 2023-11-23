@@ -3,6 +3,8 @@ import { GroupsForm } from "~/app/(authed)/groups/_components/GroupsForm";
 import { getDownloadURLFromStorage } from "~/lib/firebase/storageServer";
 import { getGroup, groupHistory } from "~/servers/group/query";
 import { getLoginUser, getUserByGroup } from "~/servers/user/query";
+import { createGroup } from "~/servers/group/mutation";
+import { joinGroup } from "~/servers/user/mutation";
 
 export const GroupsWrapper = async () => {
   const [user, group] = await Promise.all([getLoginUser(), getGroup()]);
@@ -10,7 +12,7 @@ export const GroupsWrapper = async () => {
     throw new Error("User not found");
   }
   if (!group || !user.groupId) {
-    return <GroupsForm user={user} />;
+    return <GroupsForm createGroup={createGroup} joinGroup={joinGroup} />;
   }
   const users = await getUserByGroup(user.groupId);
   const [ticketGroupHistory, ...usesrWithProfileImage] = await Promise.all([

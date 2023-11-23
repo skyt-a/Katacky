@@ -8,15 +8,15 @@ import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper"
 import { serverActionHandler } from "~/lib/client/serverActionHandler";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
 import { groupByToken } from "~/servers/group/query";
-import { createGroup } from "~/servers/group/mutation";
-import { joinGroup } from "~/servers/user/mutation";
+
 import { useInput } from "~/util/form";
 
 type GroupFormProps = {
-  user: User;
+  createGroup(name: string): Promise<(User | Group)[]>;
+  joinGroup(groupId: number): Promise<User>;
 };
 
-export const GroupsForm = ({ user }: GroupFormProps) => {
+export const GroupsForm = ({ createGroup, joinGroup }: GroupFormProps) => {
   const groupNameInput = useInput("");
   const [, startTransition] = useTransition();
 

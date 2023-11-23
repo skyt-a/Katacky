@@ -7,18 +7,19 @@ import { Sheet, SheetContent, SheetTrigger } from "~/components/common/sheet";
 import { useToast } from "~/components/common/use-toast";
 import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper";
 import { serverActionHandler } from "~/lib/client/serverActionHandler";
-import { useTicket } from "~/servers/ticket/mutation";
 import { useInput } from "~/util/form";
 import { UnionNullToUndefined } from "~/util/types";
 
 type UseTicketButtonProps = {
   ticket: UnionNullToUndefined<TicketType>;
   onUseSuccess: () => void;
+  useTicket(id: number, message?: string | undefined): Promise<TicketType>;
 };
 
 export const UseTicketButton = ({
   ticket,
   onUseSuccess,
+  useTicket,
 }: UseTicketButtonProps) => {
   const { toast } = useToast();
   const [, startTransition] = useTransition();

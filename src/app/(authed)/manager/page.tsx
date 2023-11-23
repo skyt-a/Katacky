@@ -3,6 +3,7 @@ import { ManagerCard } from "~/app/(authed)/manager/components/ManagerCard";
 import { UnionNullToUndefined } from "~/util/types";
 import { getTicketManagers } from "~/servers/ticketManager/query";
 import { ticketsByIds } from "~/servers/ticket/query";
+import { deleteTicketManager } from "~/servers/ticketManager/mutation";
 
 export default async function ManagerPage() {
   const managers = await getTicketManagers();
@@ -19,6 +20,7 @@ export default async function ManagerPage() {
         <div key={manager.id} className="mt-2">
           <ManagerCard
             manager={manager}
+            deleteTicketManager={deleteTicketManager}
             ticket={
               tickets.find(
                 (ticket) => ticket.id === manager.ticketId

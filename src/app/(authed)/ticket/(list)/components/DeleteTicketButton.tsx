@@ -1,18 +1,19 @@
-import { useRouter } from "next/navigation";
+import { Ticket } from "@prisma/client";
 import { useTransition } from "react";
 import { Button } from "~/components/common";
 import { useToast } from "~/components/common/use-toast";
 import { serverActionHandler } from "~/lib/client/serverActionHandler";
-import { deleteTicket } from "~/servers/ticket/mutation";
 
 type DeleteTicketButtonProps = {
   selectedTicketId: number;
   onDeleteSuccess: () => void;
+  deleteTicket(id: number): Promise<Ticket>;
 };
 
 export const DeleteTicketButton = ({
   selectedTicketId,
   onDeleteSuccess,
+  deleteTicket,
 }: DeleteTicketButtonProps) => {
   const { toast } = useToast();
   const [, startTransition] = useTransition();

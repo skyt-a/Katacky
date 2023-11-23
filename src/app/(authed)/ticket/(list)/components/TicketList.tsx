@@ -8,6 +8,8 @@ import { UseTicketButton } from "~/app/(authed)/ticket/(list)/components/UseTick
 import { Button } from "~/components/common";
 import { Ticket } from "~/components/domain/tickets/Ticket";
 import { UnionNullToUndefined } from "~/util/types";
+import { sendTicket } from "~/servers/ticket/mutation";
+import { deleteTicket, useTicket } from "~/servers/ticket/mutation";
 
 type TicketListProps = {
   tickets: TicketType[];
@@ -66,18 +68,21 @@ export const TicketList = ({ tickets, groupUsers }: TicketListProps) => {
                   <UseTicketButton
                     ticket={selectedTicket}
                     onUseSuccess={onMutateSuccess}
+                    useTicket={useTicket}
                   />
                   <div className="mt-2">
                     <AssignTicketButton
                       ticket={selectedTicket}
                       users={groupUsers}
                       onAssignSuccess={onMutateSuccess}
+                      sendTicket={sendTicket}
                     />
                   </div>
                   <div className="mt-2">
                     <DeleteTicketButton
                       selectedTicketId={selectedTicket.id}
                       onDeleteSuccess={onMutateSuccess}
+                      deleteTicket={deleteTicket}
                     />
                   </div>
                   <Button

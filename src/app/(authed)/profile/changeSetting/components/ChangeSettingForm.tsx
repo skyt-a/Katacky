@@ -11,18 +11,21 @@ import { FileUploadButton } from "~/components/common/fileUpload";
 import { useState, useTransition } from "react";
 import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
-import { updateName, updateProfileImage } from "~/servers/user/mutation";
 import { serverActionHandler } from "~/lib/client/serverActionHandler";
 import { ProfileSetting } from "~/app/(authed)/profile/components/ProfileSetting";
 
 type ChangeSettingFormProps = {
   user: User;
   imageUrl: string | undefined;
+  updateProfileImage(url: string): Promise<User>;
+  updateName(name: string): Promise<User>;
 };
 
 export const ChangeSettingForm = ({
   user,
   imageUrl: imageUrlNow,
+  updateProfileImage,
+  updateName,
 }: ChangeSettingFormProps) => {
   const nameInput = useInput(user.name);
   const { toast } = useToast();

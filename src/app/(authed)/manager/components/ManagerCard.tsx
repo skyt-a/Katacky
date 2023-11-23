@@ -14,16 +14,23 @@ import { Sheet, SheetTrigger, SheetContent } from "~/components/common/sheet";
 import { useToast } from "~/components/common/use-toast";
 import { Ticket } from "~/components/domain/tickets/Ticket";
 import { serverActionHandler } from "~/lib/client/serverActionHandler";
-import { deleteTicketManager } from "~/servers/ticketManager/mutation";
 import { manageTypeToText } from "~/util/setting";
 import { UnionNullToUndefined } from "~/util/types";
 
 type ManagerCardProps = {
   manager: TicketManager;
   ticket: UnionNullToUndefined<TicketType>;
+  deleteTicketManager(
+    id: number,
+    ticketId: number
+  ): Promise<[TicketManager, TicketType]>;
 };
 
-export const ManagerCard = ({ manager, ticket }: ManagerCardProps) => {
+export const ManagerCard = ({
+  manager,
+  ticket,
+  deleteTicketManager,
+}: ManagerCardProps) => {
   const { toast } = useToast();
   const [, startTransition] = useTransition();
   const onClickDeleteSchedule = () =>

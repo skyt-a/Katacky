@@ -9,7 +9,6 @@ import { FileUploadButton } from "~/components/common/fileUpload";
 import { Label } from "~/components/common/label";
 import { useToast } from "~/components/common/use-toast";
 import { AvatarImage } from "~/components/domain/profile/AvatarImage";
-import { serverActionHandler } from "~/lib/client/serverActionHandler";
 import { uploadFileToStorage } from "~/lib/firebase/storage";
 import { QRCodeScanner } from "~/lib/qr/QRCodeScanner";
 import { groupByToken } from "~/servers/group/query";
