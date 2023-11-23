@@ -18,7 +18,6 @@ export const TicketsWrapper = () => {
       </TabsList>
       <TabsContent value="list">
         <Suspense fallback={<CardSkelton />}>
-          {}
           <TicketListWrapper />
         </Suspense>
       </TabsContent>
