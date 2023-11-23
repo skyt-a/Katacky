@@ -18,13 +18,12 @@ export const TicketsWrapper = () => {
       </TabsList>
       <TabsContent value="list">
         <Suspense fallback={<CardSkelton />}>
-          {/** @ts-expect-error Async Component  */}
+          {}
           <TicketListWrapper />
         </Suspense>
       </TabsContent>
       <TabsContent value="history">
         <Suspense fallback={<CardSkelton />}>
-          {/** @ts-expect-error Async Component  */}
           <TicketHistory />
         </Suspense>
       </TabsContent>

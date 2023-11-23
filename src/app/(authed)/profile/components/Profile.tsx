@@ -12,7 +12,7 @@ export const Profile = () => {
     <div>
       <Card className="w-full">
         <Suspense fallback={<CardSkelton />}>
-          {/** @ts-expect-error Async Component  */}
+          {}
           <ProfileUserInfo />
         </Suspense>
       </Card>

@@ -10,7 +10,7 @@ export const TicketHistory = async () => {
       )}
       {ticket.map((ticket) => (
         <li key={ticket.id} className="[&:not(:first-of-type)]:mt-2">
-          {/** @ts-expect-error Async Component  */}
+          {}
           <Ticket key={ticket.id} {...ticket} />
         </li>
       ))}
