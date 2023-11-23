@@ -8,6 +8,7 @@ import { UseTicketButton } from "~/app/(authed)/ticket/(list)/components/UseTick
 import { Button } from "~/components/common";
 import { Ticket } from "~/components/domain/tickets/Ticket";
 import { UnionNullToUndefined } from "~/util/types";
+import "./ticketAnimation.css";
 
 type TicketListProps = {
   tickets: TicketType[];
