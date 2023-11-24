@@ -67,6 +67,7 @@ export const TicketList = ({ tickets, groupUsers }: TicketListProps) => {
                   <UseTicketButton
                     ticket={selectedTicket}
                     onUseSuccess={onMutateSuccess}
+                    groupUsers={groupUsers}
                   />
                   <div className="mt-2">
                     <AssignTicketButton
