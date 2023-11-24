@@ -1,4 +1,4 @@
-import { Ticket as TicketType } from "@prisma/client";
+import { Ticket as TicketType, User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useReward } from "react-rewards";
@@ -13,11 +13,13 @@ import { UnionNullToUndefined } from "~/util/types";
 
 type UseTicketButtonProps = {
   ticket: UnionNullToUndefined<TicketType>;
+  groupUsers: User[];
   onUseSuccess: () => void;
 };
 
 export const UseTicketButton = ({
   ticket,
+  groupUsers,
   onUseSuccess,
 }: UseTicketButtonProps) => {
   const { toast } = useToast();
@@ -33,15 +35,18 @@ export const UseTicketButton = ({
       if (!ticket.id) {
         return;
       }
-      serverActionHandler(useTicket(ticket.id, messageInput.value), () => {
-        toast({
-          toastType: "info",
-          description: "チケット🎫を使用しました",
-        });
-        onUseSuccess();
-        reward();
-        router.refresh();
-      });
+      serverActionHandler(
+        useTicket(ticket.id, groupUsers, messageInput.value),
+        () => {
+          toast({
+            toastType: "info",
+            description: "チケット🎫を使用しました",
+          });
+          onUseSuccess();
+          reward();
+          router.refresh();
+        }
+      );
     });
   };
 

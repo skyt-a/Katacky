@@ -43,7 +43,11 @@ export const createTicket = async (
   return ticket;
 };
 
-export const useTicket = async (id: number, message?: string) => {
+export const useTicket = async (
+  id: number,
+  groupUsers: User[],
+  message?: string
+) => {
   const ticket = await prisma.ticket.update({
     where: {
       id,
@@ -56,6 +60,21 @@ export const useTicket = async (id: number, message?: string) => {
   });
   revalidatePath("/ticket/hold");
   revalidatePath("/group");
+  const session = await getServerSession();
+  if (!session?.user.userInfoId) {
+    throw new Error("userInfoId not found");
+  }
+  await sendFirebaseCloudMessage(
+    {
+      title: `${session.user.name}さんがチケット「${ticket.title}」を使いました`,
+      body: `${session.user.name}さんがチケット「${ticket.title}」を使いました`,
+    },
+    groupUsers
+      .filter((user): user is User & { deviceToken: string } =>
+        Boolean(user.id !== session.user.userInfoId && user.deviceToken)
+      )
+      .map((user) => user.deviceToken)
+  );
   return ticket;
 };
 

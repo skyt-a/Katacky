@@ -15,7 +15,12 @@ export const authOptions: NextAuthOptions = {
             const userInfo = await prisma.user.findUnique({
               where: { authId: decoded.uid },
             });
-            return { ...decoded, userInfoId: userInfo?.id, id: decoded.uid };
+            return {
+              ...decoded,
+              userInfoId: userInfo?.id,
+              id: decoded.uid,
+              name: userInfo?.name,
+            };
           } catch (err) {
             console.error(err);
           }
@@ -33,6 +38,7 @@ export const authOptions: NextAuthOptions = {
         token.uid = user.id;
         token.userInfoId = user.userInfoId;
         token.emailVerified = user.emailVerified as boolean;
+        token.name = user.name;
       }
       return token;
     },
@@ -44,6 +50,7 @@ export const authOptions: NextAuthOptions = {
       session.user.emailVerified = token.emailVerified;
       session.user.uid = token.uid;
       session.user.userInfoId = token.userInfoId;
+      session.user.name = token.name;
       return session;
     },
   },
