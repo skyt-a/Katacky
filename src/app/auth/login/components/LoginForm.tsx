@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { Button, Input as TextInput } from "~/components/common";
-import { Label } from "~/components/common/label";
 import { useToast } from "~/components/common/use-toast";
 import { useLoginWithEmail } from "~/app/auth/hooks/useLoginWithEmail";
 import { useSignup } from "~/app/auth/hooks/useSignup";
@@ -61,10 +60,19 @@ export const LoginForm = () => {
     await login(emailInput.value, passwordInput.value);
     router.push("/auth/createUser");
   };
+
   return (
     <div>
       <div className="flex justify-center">
-        <Image src="/brand_dark.png" width={200} height={82} alt="Katacky" />
+        <picture>
+          <source
+            srcSet="/logo.png"
+            media="(prefers-color-scheme: dark)"
+            width={200}
+            height={82}
+          />
+          <Image src="/brand_dark.png" width={200} height={82} alt="Katacky" />
+        </picture>
       </div>
       <form className="flex flex-col gap-4 mt-8">
         <FormControlWrapper label="メールアドレス" id="email">
