@@ -69,7 +69,7 @@ export const LoginForm = () => {
     <div>
       <div className="flex justify-center">
         <Image
-          src={theme === "dark" ? "/brand_dark.png" : "/logo.png"}
+          src={theme === "dark" ? "/logo.png" : "/brand_dark.png"}
           width={200}
           height={82}
           alt="Katacky"
