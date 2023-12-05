@@ -12,6 +12,7 @@ import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper"
 import { ZodError, z } from "zod";
 import { passwordSchema } from "~/util/setting";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 
 export const LoginForm = () => {
   const emailInput = useInput("");
@@ -61,10 +62,18 @@ export const LoginForm = () => {
     await login(emailInput.value, passwordInput.value);
     router.push("/auth/createUser");
   };
+
+  const { theme } = useTheme();
+
   return (
     <div>
       <div className="flex justify-center">
-        <Image src="/brand_dark.png" width={200} height={82} alt="Katacky" />
+        <Image
+          src={theme === "dark" ? "/brand_dark.png" : "/logo.png"}
+          width={200}
+          height={82}
+          alt="Katacky"
+        />
       </div>
       <form className="flex flex-col gap-4 mt-8">
         <FormControlWrapper label="メールアドレス" id="email">
