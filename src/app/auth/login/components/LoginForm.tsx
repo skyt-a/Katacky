@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { Button, Input as TextInput } from "~/components/common";
-import { Label } from "~/components/common/label";
 import { useToast } from "~/components/common/use-toast";
 import { useLoginWithEmail } from "~/app/auth/hooks/useLoginWithEmail";
 import { useSignup } from "~/app/auth/hooks/useSignup";
@@ -12,7 +11,6 @@ import { FormControlWrapper } from "~/components/domain/form/FormControlWrapper"
 import { ZodError, z } from "zod";
 import { passwordSchema } from "~/util/setting";
 import Image from "next/image";
-import { useTheme } from "next-themes";
 
 export const LoginForm = () => {
   const emailInput = useInput("");
@@ -63,17 +61,19 @@ export const LoginForm = () => {
     router.push("/auth/createUser");
   };
 
-  const { theme } = useTheme();
-
   return (
     <div>
       <div className="flex justify-center">
-        <Image
-          src={theme === "dark" ? "/logo.png" : "/brand_dark.png"}
-          width={200}
-          height={82}
-          alt="Katacky"
-        />
+        <picture>
+          <source
+            srcset="/logo.png"
+            media="(prefers-color-scheme: dark)"
+            width={200}
+            height={82}
+            alt="Katacky"
+          />
+          <Image src="/brand_dark.png" width={200} height={82} alt="Katacky" />
+        </picture>
       </div>
       <form className="flex flex-col gap-4 mt-8">
         <FormControlWrapper label="メールアドレス" id="email">

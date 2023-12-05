@@ -6,5 +6,9 @@ import { PropsWithChildren } from "react";
 export type ThemeProviderProps = PropsWithChildren;
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  return <NextThemeProvider attribute="class">{children}</NextThemeProvider>;
+  return (
+    <NextThemeProvider attribute="class" defaultTheme="system">
+      {children}
+    </NextThemeProvider>
+  );
 };
