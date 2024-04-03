@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator erd {
@@ -25,6 +25,7 @@ model TicketManager {
   ticketId       Int
   retrieveUser   User             @relation(fields: [retrieveUserId], references: [id])
   ticket         Ticket           @relation(fields: [ticketId], references: [id])
+
   @@index([creatorId])
 }
 
@@ -50,6 +51,7 @@ model Ticket {
   creator           User            @relation("author", fields: [creatorId], references: [id])
   holder            User?           @relation("holder", fields: [holderId], references: [id])
   TicketManager     TicketManager[]
+
   @@index([holderId, isUsed, isScheduled])
 }
 
@@ -59,7 +61,7 @@ model Group {
   token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  creatorId Int      
+  creatorId Int
   user      User[]   @relation("userGroup")
 }
 
@@ -77,6 +79,7 @@ model User {
   ticketsOwned    Ticket[]        @relation("holder")
   group           Group?          @relation("userGroup", fields: [groupId], references: [id])
   TicketManager   TicketManager[]
+
   @@index([authId])
   @@index([groupId])
 }
